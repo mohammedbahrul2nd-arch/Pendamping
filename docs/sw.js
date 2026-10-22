@@ -1,7 +1,7 @@
-/* Pendamping service worker — offline + pembaruan otomatis.
+/* Sinregado service worker — offline + pembaruan otomatis.
    Strategi: ONLINE → selalu ambil versi terbaru dari GitHub Pages (jadi tak perlu mengubah angka apa pun
    tiap rilis). OFFLINE / jaringan lambat (>4 dtk) → pakai salinan tersimpan. */
-const CACHE='pendamping-shell-v1';
+const CACHE='sinregado-shell-v1';
 const SCOPE=self.registration.scope;
 const SHELL=['index.html','manifest.webmanifest','icons/icon.svg','icons/icon-192.png','icons/icon-512.png','icons/apple-touch-icon.png'];
 /* semua permintaan halaman utama disimpan di satu kunci: .../index.html (tanpa ?query) */
@@ -12,7 +12,7 @@ self.addEventListener('install',e=>{e.waitUntil((async()=>{
   await self.skipWaiting();
 })())});
 self.addEventListener('activate',e=>{e.waitUntil((async()=>{
-  for(const k of await caches.keys())if(k.startsWith('pendamping-')&&k!==CACHE)await caches.delete(k);
+  for(const k of await caches.keys())if((k.startsWith('pendamping-')||k.startsWith('sinregado-'))&&k!==CACHE)await caches.delete(k);
   await self.clients.claim();
 })())});
 self.addEventListener('message',e=>{if(e.data==='skip')self.skipWaiting()});

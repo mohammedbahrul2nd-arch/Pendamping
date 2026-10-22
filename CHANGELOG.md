@@ -1,5 +1,20 @@
 # Riwayat Perubahan
 
+## 2.0.0 — 22 Okt 2026
+Aplikasi diganti nama menjadi **Sinregado** (sebelumnya Pendamping). Isi mencakup semua perubahan 1.1–1.5 (kebiasaan, kerentanan saat ini, rencana jika–maka, skala 1–5, dst.) ditambah perbaikan berikut. Kunci penyimpanan tidak berubah, jadi data lama tetap terbaca di alamat yang sama.
+
+- **Algoritma**
+  - Saran aktivitas di Mode Dorongan: bandit kontekstual dengan peluruhan waktu (paruh 60 hari) dan penyusutan hierarkis ke laju aktivitas dan laju dasar, ditambah bonus eksplorasi.
+  - Kurva jam rawan: prior agar data sedikit tidak memunculkan puncak palsu, dan pemisahan hari kerja/akhir pekan.
+  - Sorotan asosiasi diurutkan dengan z-skor; tren memakai Theil–Sen; hubungan check-in memakai Spearman dengan penanda bermakna.
+- **Integrasi**
+  - Statistik jika–maka dihitung dari episode nyata dan konsisten di Rencana, Pola, dan Tinjauan.
+  - Check-in menandai "ada kejadian" otomatis bila hari itu ada kejadian tercatat.
+- **Ekspor/Impor Excel**
+  - Perbaikan: impor sheet `statistik_mingguan` sebelumnya membuat pratinjau gagal.
+  - ID baru selalu diawali huruf agar tidak rusak jadi angka di Excel. Versi skema ekspor 5.
+- `manifest.webmanifest`: nama jadi Sinregado (`id`, `start_url`, `scope` tetap). `sw.js`: cache `sinregado-shell-v1`; cache lama dibersihkan otomatis.
+
 ## 1.0.0 — 22 Okt 2026
 Rilis pertama sebagai aplikasi (PWA). Isi aplikasi sama dengan `pendamping (4).html`; kunci penyimpanan `pendamping_v3` tidak berubah.
 

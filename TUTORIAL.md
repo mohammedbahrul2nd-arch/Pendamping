@@ -1,7 +1,7 @@
-# Tutorial Lengkap Pendamping — dari Nol sampai Jadi Aplikasi di HP
+# Tutorial Lengkap Sinregado — dari Nol sampai Jadi Aplikasi di HP
 
 Mengasumsikan kamu **belum pernah memakai GitHub**. Sekitar 15 menit.
-Hasil akhirnya: Pendamping terpasang di HP seperti aplikasi biasa, jalan offline, punya tombol **Cek pembaruan**, dan bisa mengekspor CSV dari HP.
+Hasil akhirnya: Sinregado (sebelumnya bernama Sinregado) terpasang di HP seperti aplikasi biasa, jalan offline, punya tombol **Cek pembaruan**, dan bisa mengekspor CSV dari HP.
 
 **Isi:** 1 Gambaran · 2 Akun GitHub · 3 Repositori & unggah · 4 GitHub Pages · 5 Pasang di HP · 6 Pindahkan data lama · 7 Ekspor CSV di HP · 8 Memperbarui · 9 Git (opsional) · 10 Masalah umum · 11 Privasi
 
@@ -56,7 +56,7 @@ Cek: di repositori terlihat folder `docs` berisi `index.html`, `sw.js`, `manifes
 1. Repositori → **Settings** → **Pages**.
 2. **Source:** *Deploy from a branch*. **Branch:** `main`, folder **`/docs`** (bukan `/ (root)`) → **Save**.
 3. Tunggu 1–3 menit, muat ulang halaman. Muncul: *"Your site is live at `https://USERNAME.github.io/pendamping/`"*.
-4. Klik **Visit site**. Pendamping terbuka. 🎉
+4. Klik **Visit site**. Sinregado terbuka. 🎉
 
 Alamat itu adalah aplikasimu. Simpan/bookmark.
 
@@ -78,7 +78,7 @@ Buka alamat itu, **biarkan termuat penuh sekali** (agar tersimpan untuk offline)
 
 > Dari browser di dalam aplikasi lain (WhatsApp, Instagram, dll.) pemasangan tidak muncul. Salin alamat dan buka di Chrome/Safari.
 
-Nama di layar utama adalah **Pendamping** (netral). Mau ganti? Ubah `name` dan `short_name` di `docs/manifest.webmanifest`.
+Nama di layar utama adalah **Sinregado**. Mau ganti? Ubah `name` dan `short_name` di `docs/manifest.webmanifest`.
 
 ---
 
@@ -116,9 +116,17 @@ Catatan: beberapa ponsel tidak bisa membagikan banyak CSV sekaligus atau file ZI
 ### Sebagai pengguna: tombol Cek pembaruan
 **Lainnya → Aplikasi & pembaruan → Cek pembaruan.** Bila ada versi baru muncul tombol **Perbarui sekarang**. Aplikasi juga memeriksa sendiri sesekali dan memberi titik kuning di tombol **Lainnya**. Data tidak terhapus.
 
+### Pembaruan dari Pendamping 1.x ke Sinregado 2.0
+Tidak perlu membuat repositori baru, dan **jangan mengganti nama repositori** (alamat berubah = data lama tidak terbaca).
+1. Ekstrak `sinregado-v2.0.0.zip`.
+2. Di repositori GitHub-mu, buka folder `docs` → **Add file → Upload files**. Seret **`index.html`, `sw.js`, dan `manifest.webmanifest`** dari folder `docs` hasil ekstrak (timpa yang lama). `icons/` boleh dilewati karena tidak berubah. Opsional: unggah juga `README.md`, `TUTORIAL.md`, `CHANGELOG.md` di akar repositori.
+3. **Commit changes**, tunggu Pages selesai (1–3 menit).
+4. Di HP: **Lainnya → Aplikasi & pembaruan → Cek pembaruan → Perbarui sekarang**. Data tidak terhapus.
+5. Bila ikon masih bernama lama di layar utama, hapus ikon lalu pasang ulang dari browser (nama diambil saat pemasangan). Data tetap aman selama alamat sama; untuk berjaga-jaga, ekspor dulu lewat **Lainnya → Ekspor data**.
+
 ### Sebagai pemilik: merilis versi baru
 1. Di GitHub buka `docs/index.html` → ikon ✏️ **Edit** (atau **Add file → Upload files** untuk menimpa dengan file baru).
-2. Cari `const APP_VERSION='1.0.0'` dan naikkan (mis. `1.0.1`), lalu tambahkan catatan di `RELEASES` tepat di bawahnya.
+2. Cari `const APP_VERSION='2.0.0'` dan naikkan (mis. `2.0.1`), lalu tambahkan catatan di `RELEASES` tepat di bawahnya.
 3. **Commit changes**. Tunggu 1–3 menit sampai Pages selesai (tab **Actions** menampilkan *pages build and deployment* hijau).
 4. Di HP: **Cek pembaruan** → **Perbarui sekarang**.
 
@@ -134,7 +142,7 @@ Catatan: beberapa ponsel tidak bisa membagikan banyak CSV sekaligus atau file ZI
 cd pendamping
 git init -b main
 git add .
-git commit -m "Pendamping 1.0.0"
+git commit -m "Sinregado 2.0.0"
 git remote add origin https://github.com/USERNAME/pendamping.git
 git push -u origin main
 ```
