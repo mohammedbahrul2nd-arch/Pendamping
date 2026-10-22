@@ -1,0 +1,956 @@
+<!doctype html>
+<html lang="id" data-tema="gelap">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<title>Pendamping</title>
+<meta name="theme-color" content="#0f1720">
+<meta name="description" content="Pendamping perubahan kebiasaan. Data tersimpan di perangkat ini.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Pendamping"><meta name="apple-mobile-web-app-status-bar-style" content="default">
+<style>
+:root{--bg:#0f1720;--bg2:#16212c;--card:#1a2733;--line:#2a3c4f;--tx:#e6edf3;--mu:#97a8b9;--ac:#6cc5b8;--ac2:#3d8f85;--wa:#e0b66a;--dn:#d98282;--r:16px}
+html[data-tema=terang]{--bg:#f4f6f8;--bg2:#e9eef2;--card:#fff;--line:#d3dce5;--tx:#18222c;--mu:#566574;--ac:#2a8a7e;--ac2:#1a5c53;--wa:#9a6b12;--dn:#b04646}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{font-size:16px}html[data-besar=ya]{font-size:19px}
+body{margin:0;background:var(--bg);color:var(--tx);font:1rem/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;min-height:100vh}
+#app{max-width:560px;margin:0 auto;padding:14px 16px 110px}
+h1{font-size:1.4rem;margin:.3rem 0 .5rem}h2{font-size:1.15rem;margin:1rem 0 .4rem}h3{font-size:1rem;margin:.9rem 0 .3rem}
+p{margin:.35rem 0}.muted{color:var(--mu);font-size:.9rem}.c{text-align:center}.sm{font-size:.85rem}
+.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;gap:8px}.top b{font-size:1.05rem}
+.ib{background:none;border:1px solid var(--line);color:var(--tx);border-radius:12px;padding:.45rem .75rem;font:inherit;font-size:.88rem;cursor:pointer}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px;margin:12px 0}
+.card.hl{border-color:var(--ac2)}.card h3:first-child{margin-top:0}
+.btn{display:inline-block;background:var(--ac);color:#06201c;border:0;border-radius:14px;padding:.75rem 1.1rem;font:inherit;font-weight:600;cursor:pointer;text-align:center}
+.btn.ghost{background:transparent;color:var(--tx);border:1px solid var(--line)}
+.btn.lock{opacity:.45;cursor:not-allowed}
+.btn.big{width:100%;margin-top:8px}.btn.warn{background:var(--dn);color:#fff}.btn.s{padding:.45rem .8rem;font-size:.88rem}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.row>*{flex:1}
+.tap{width:min(62vw,230px);height:min(62vw,230px);border-radius:50%;border:0;margin:14px auto 6px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;color:#06201c;background:radial-gradient(circle at 35% 30%,var(--ac),var(--ac2));box-shadow:0 0 0 10px rgba(108,197,184,.10),0 14px 40px rgba(0,0,0,.3)}
+.tap:active{transform:scale(.97)}.tap .t1{font-size:1.5rem;font-weight:700}.tap .t2{font-size:1rem;opacity:.85}
+.tap.cd{background:radial-gradient(circle at 35% 30%,#d9b56c,#9a7a35)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
+.chip{background:transparent;border:1px solid var(--line);color:var(--tx);border-radius:999px;padding:.4rem .8rem;font:inherit;font-size:.9rem;cursor:pointer}
+.chip.on{background:var(--ac);color:#06201c;border-color:var(--ac)}
+.chips.col .chip.x:not(.on){display:none}
+.chip.tg{border-style:dashed;color:var(--mu)}
+.addchip{display:inline-flex;gap:4px}.addchip input{width:110px;padding:.35rem .6rem}
+input[type=text],input[type=number],input[type=date],input[type=datetime-local],input[type=password],textarea,select{width:100%;background:var(--bg);color:var(--tx);border:1px solid var(--line);border-radius:12px;padding:.6rem .75rem;font:inherit}
+textarea{min-height:70px;resize:vertical}label{display:block;font-size:.9rem;color:var(--mu);margin:.7rem 0 .2rem}
+.rng{display:flex;align-items:center;gap:10px}.rng input{flex:1;accent-color:var(--ac)}.rng b{min-width:2ch;text-align:center}
+#nav{position:fixed;left:0;right:0;bottom:0;background:var(--bg2);border-top:1px solid var(--line);display:flex;justify-content:center;padding-bottom:env(safe-area-inset-bottom);z-index:20}
+#nav button{flex:1;max-width:112px;background:none;border:0;color:var(--mu);padding:.85rem .2rem;font:inherit;font-size:.82rem;cursor:pointer}
+#nav button.on{color:var(--ac);font-weight:700}
+#sheet,#full{position:fixed;inset:0;z-index:50;display:none}
+#sheet.open{display:block}#full.open{display:block;background:var(--bg);overflow:auto}
+#sheet .back{position:absolute;inset:0;background:rgba(0,0,0,.5)}
+#sheet .panel{position:absolute;left:0;right:0;bottom:0;max-height:90vh;overflow:auto;background:var(--bg2);border-radius:20px 20px 0 0;padding:10px 16px calc(20px + env(safe-area-inset-bottom));max-width:560px;margin:0 auto;border:1px solid var(--line)}
+.grab{width:44px;height:4px;border-radius:4px;background:var(--line);margin:0 auto 10px}
+.fw{max-width:560px;margin:0 auto;padding:16px 16px 40px}
+.sh-h{display:flex;justify-content:space-between;align-items:center;gap:8px}
+#toast{position:fixed;left:12px;right:12px;bottom:84px;z-index:80;display:none;max-width:536px;margin:0 auto;background:var(--card);border:1px solid var(--ac2);border-radius:14px;padding:10px 14px;box-shadow:0 8px 30px rgba(0,0,0,.35);align-items:center;gap:10px}
+#toast.open{display:flex}#toast span{flex:1;font-size:.92rem}#toast button{background:none;border:0;color:var(--ac);font:inherit;font-weight:700;cursor:pointer}
+#lock{position:fixed;inset:0;z-index:100;background:var(--bg);display:none;align-items:center;justify-content:center;flex-direction:column;padding:24px;text-align:center}
+#lock.open{display:flex}#lock input{max-width:200px;text-align:center;font-size:1.3rem;letter-spacing:.3em}
+.timer{font-size:3.2rem;font-weight:700;text-align:center;margin:18px 0;font-variant-numeric:tabular-nums}.timer.done{color:var(--ac)}
+.item{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin:6px 0;cursor:pointer}
+.item .l1{display:flex;justify-content:space-between;gap:8px;font-size:.95rem}.badge{font-size:.75rem;border:1px solid var(--line);border-radius:999px;padding:.05rem .5rem;color:var(--mu)}
+.dayh{font-size:.8rem;color:var(--mu);margin:14px 0 2px;text-transform:uppercase;letter-spacing:.05em}
+.chart{width:100%;height:auto}.bar{fill:var(--ac)}.barlow{fill:var(--ac2);opacity:.45}.bt{fill:var(--tx);font-size:10px}.bl{fill:var(--mu);font-size:9px}.bline{stroke:var(--wa);stroke-dasharray:4 3}
+.hm{display:grid;grid-template-columns:2.2em repeat(24,1fr);gap:2px;font-size:.62rem;color:var(--mu)}.hm i{display:block;height:15px;border-radius:3px}
+.hb{height:8px;border-radius:6px;background:var(--line);overflow:hidden;margin:3px 0 8px}.hb div{height:100%;background:var(--ac)}
+.menu{display:block;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);color:var(--tx);border-radius:14px;padding:12px 14px;margin:6px 0;font:inherit;cursor:pointer}
+.menu small{display:block;color:var(--mu)}
+.tag{display:inline-block;font-size:.72rem;color:var(--wa);border:1px solid var(--wa);border-radius:6px;padding:0 .35rem;margin-left:4px}
+table{border-collapse:collapse;width:100%;font-size:.85rem}td,th{border-bottom:1px solid var(--line);padding:5px 4px;text-align:left}
+
+:root{--acrgb:108,197,184}html[data-tema=terang]{--acrgb:42,138,126}
+body{background:radial-gradient(1200px 500px at 50% -10%,rgba(var(--acrgb),.10),transparent 60%),var(--bg)}
+#app>*{animation:fi .28s ease both}@keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+#sheet .panel{animation:up .26s cubic-bezier(.2,.8,.2,1)}@keyframes up{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
+.card{transition:border-color .2s,transform .2s;box-shadow:0 1px 0 rgba(255,255,255,.03) inset}
+.btn{transition:transform .12s,filter .2s}.btn:active{transform:scale(.97)}.btn:hover{filter:brightness(1.08)}
+.tap{animation:pulse 3.2s ease-in-out infinite}.tap.cd{animation:none}@keyframes pulse{50%{box-shadow:0 0 0 18px rgba(var(--acrgb),.05),0 14px 40px rgba(0,0,0,.3)}}
+#nav{backdrop-filter:blur(14px);background:color-mix(in srgb,var(--bg2) 85%,transparent)}
+#nav button{display:flex;flex-direction:column;align-items:center;gap:2px;position:relative}#nav button i{font-style:normal;font-size:1.15rem;line-height:1}
+#nav button.on::before{content:"";position:absolute;top:0;width:28px;height:3px;border-radius:0 0 4px 4px;background:var(--ac)}
+:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+.chip{position:relative;overflow:hidden;transition:background .3s,border-color .3s,box-shadow .3s,transform .12s,color .3s}.chip:active{transform:scale(.94)}
+.chip[data-h]:not(.on){background:rgba(var(--acrgb),calc(.05 + var(--h)*.05));border-color:rgba(var(--acrgb),calc(.3 + var(--h)*.11));box-shadow:0 0 calc(var(--h)*3px) rgba(var(--acrgb),calc(var(--h)*.1))}
+.chip[data-h="4"]:not(.on),.chip[data-h="5"]:not(.on),.chip[data-h="6"]:not(.on){color:var(--ac);font-weight:600}
+.chip[data-h="6"]:not(.on){border-color:var(--ac)}
+.chip[data-p]:not(.on)::after{content:"";position:absolute;left:12px;bottom:2px;height:2px;border-radius:2px;width:calc(var(--p)*(100% - 24px));background:rgba(var(--acrgb),.85)}
+.seg{display:flex;gap:6px;overflow-x:auto;padding:4px 0 8px;scrollbar-width:none;position:sticky;top:0;z-index:5;background:var(--bg)}.seg::-webkit-scrollbar{display:none}
+.seg button{flex:none;background:var(--card);border:1px solid var(--line);color:var(--mu);border-radius:999px;padding:.45rem .9rem;font:inherit;font-size:.88rem;cursor:pointer}.seg button.on{background:var(--ac);color:#06201c;border-color:var(--ac);font-weight:700}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}.tile{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px}.tile b{display:block;font-size:1.6rem;line-height:1.1;color:var(--ac)}.tile span{font-size:.8rem;color:var(--mu)}
+.ins{border-left:3px solid var(--ac);padding:2px 0 2px 12px;margin:12px 0}.ins small{color:var(--wa);font-size:.72rem;letter-spacing:.04em;text-transform:uppercase}.ins p{margin:.15rem 0}
+.dv{position:relative;height:10px;background:var(--line);border-radius:6px;margin:3px 0 9px}.dv i{position:absolute;top:0;height:100%;border-radius:6px}.dv:after{content:"";position:absolute;left:50%;top:-2px;bottom:-2px;width:1px;background:var(--mu)}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.dot{display:inline-block;width:.55em;height:.55em;border-radius:50%;background:var(--wa);margin-left:.4em;vertical-align:middle}
+.kv{display:flex;justify-content:space-between;gap:12px;padding:.4rem 0;border-bottom:1px solid var(--line);font-size:.92rem}.kv:last-of-type{border-bottom:0}.kv span{color:var(--mu)}
+.rel{margin:.3rem 0 0;padding-left:1.1rem}.rel li{margin:.2rem 0;font-size:.9rem}
+.fl{display:flex;justify-content:space-between;gap:10px;font-size:.88rem;padding:.3rem 0}
+button:disabled{opacity:.55}
+</style>
+</head>
+<body>
+<div id="app"></div><nav id="nav"></nav><div id="sheet"></div><div id="full"></div><div id="toast"></div><div id="lock"></div>
+<script>
+'use strict';
+/* ================= util ================= */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pad=n=>String(n).padStart(2,'0');
+const uid=()=>Math.random().toString(36).slice(2,6).padEnd(4,'x');
+function newId(list){let i;do{i=uid()}while(list.some(x=>x.id===i));return i}
+const T=x=>new Date(x).getTime();
+function isoTz(d){d=d||new Date();const o=-d.getTimezoneOffset(),s=o>=0?'+':'-',a=Math.abs(o);return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'T'+pad(d.getHours())+':'+pad(d.getMinutes())+':'+pad(d.getSeconds())+s+pad(Math.floor(a/60))+':'+pad(a%60)}
+function dtLocal(x){const d=new Date(x);return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'T'+pad(d.getHours())+':'+pad(d.getMinutes())}
+function tzName(){try{return Intl.DateTimeFormat().resolvedOptions().timeZone}catch(e){return ''}}
+const med=a=>{a=a.filter(x=>x!==''&&x!=null&&!isNaN(x)).map(Number).sort((x,y)=>x-y);if(!a.length)return null;const m=a.length>>1;return a.length%2?a[m]:(a[m-1]+a[m])/2};
+const r1=x=>Math.round(x*10)/10;
+function fmtMs(ms){const s=Math.ceil(ms/1000);return pad(Math.floor(s/60))+':'+pad(s%60)}
+function fmtT(iso){return iso?new Date(iso).toLocaleString('id-ID',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}):''}
+function fmtHM(iso){const d=new Date(iso);return pad(d.getHours())+':'+pad(d.getMinutes())}
+function dayLabel(ds){return new Date(ds+'T12:00:00').toLocaleDateString('id-ID',{weekday:'short',day:'numeric',month:'short'})}
+
+/* ================= data pilihan ================= */
+const L=x=>x.split('|');
+const OPT={
+konteks:L('bosan|capek|stres|kesepian|cemas|sedih|marah|sendirian di kamar|sebelum tidur|habis lihat medsos|baru bangun tidur|tidak bisa tidur|tengah malam|sendirian di rumah|tidak ada kegiatan|menunda tugas atau pekerjaan|tekanan deadline|habis bertengkar|merasa ditolak atau kecewa|merasa gagal|merasa tidak berharga|iri atau membandingkan diri|rindu seseorang|scroll tanpa tujuan|habis lihat konten sensual|nonton film atau serial|akhir pekan atau libur|setelah mandi|di kamar mandi|ponsel di tangan|internet bebas tanpa batas|ingin menghadiahi diri|setelah hari yang berat|lapar|kurang tidur|sakit atau tidak enak badan|pikiran berulang|teringat kenangan|jauh dari keluarga atau pasangan|tekanan dari lingkungan|merasa tidak punya tujuan|setelah minum kopi atau kafein|menunggu lama|baru pulang bepergian|gelisah tanpa sebab jelas'),
+kebutuhan:L('lapar|marah|kesepian|capek|ingin dihibur|ingin rileks|butuh istirahat|butuh tidur nyenyak|butuh kasih sayang|butuh diterima|butuh diperhatikan|butuh pelarian|butuh rasa kendali|butuh kesenangan|butuh rasa aman|butuh teman bicara|butuh sentuhan atau kedekatan|butuh bergerak|butuh makan atau minum|butuh mengalihkan pikiran|butuh melepas stres|butuh merasa mampu|butuh tantangan|butuh makna atau tujuan|butuh dihargai|butuh ruang sendiri|butuh menenangkan cemas|butuh melepas sedih|butuh melepas amarah|butuh kepastian'),
+lokasi:L('kamar|ruang lain|di luar|kasur|kamar mandi|ruang tamu|ruang kerja atau belajar|dapur|kos atau asrama|rumah sendiri|rumah keluarga|rumah teman|kantor|kampus atau sekolah|kendaraan|hotel atau penginapan|tempat umum|toilet umum|balkon atau halaman|sofa'),
+tubuh:L('dada|perut|bawah perut|kemaluan|anus atau area sekitarnya|selangkangan atau panggul|tenggorokan|wajah terasa panas|jantung berdebar|napas pendek|otot tegang|seluruh tubuh|gelisah ingin bergerak|tidak terasa di tubuh'),
+ling:L('Bangkit dari tempat|Turun dari kasur|Pindah ke ruang tamu atau ruang bersama|Tinggalkan ponsel di ruangan lain|Taruh ponsel di luar kamar dan isi daya di sana|Letakkan ponsel menghadap bawah, jauh dari jangkauan|Keluar rumah sebentar|Buka pintu kamar lebar-lebar|Buka jendela atau pintu|Nyalakan lampu terang|Tutup laptop atau matikan layar|Aktifkan mode pesawat|Nyalakan pemblokir situs atau filter konten|Tutup semua tab dan aplikasi yang terbuka|Keluar dari akun medsos atau streaming|Matikan notifikasi untuk sementara|Serahkan perangkat ke orang serumah|Pindah ke tempat ramai|Duduk dekat orang lain|Cuci muka atau berwudu|Mandi|Ganti pakaian yang rapat dan nyaman|Pakai sepatu lalu keluar|Rapikan tempat tidur|Putar musik atau podcast|Minum segelas air|Berdiri dan peregangan|Pergi ke warung atau minimarket|Pindah ke teras atau halaman|Nyalakan musik dan lakukan pekerjaan rumah')};
+const OLDDEF={tubuh:L('dada|perut|tangan|kepala|seluruh tubuh|tenggorokan|leher|bahu|punggung|rahang|wajah|mata|jantung berdebar|napas pendek|kaki|paha|bawah perut|telapak tangan|tidak terasa di tubuh|gelisah ingin bergerak|pantat'),ling:L('Bangkit dari tempat|Pindah ruangan|Tinggalkan ponsel di tempat lain|Keluar rumah sebentar|Duduk di ruang bersama|Buka jendela atau pintu|Nyalakan lampu terang|Tutup laptop atau matikan layar|Taruh ponsel di luar kamar|Aktifkan mode pesawat|Pindah ke tempat ramai|Cuci muka atau berwudu|Ganti pakaian|Rapikan meja atau tempat tidur|Nyalakan pemblokir situs|Putar musik atau podcast|Nyalakan TV di ruang tengah|Minum segelas air|Berdiri dan peregangan|Duduk menghadap pintu terbuka|Pindah ke teras atau halaman|Tinggalkan perangkat di ruangan lain')};
+const ADD2={konteks:L('ruangan gelap atau sepi|notifikasi atau iklan memicu|setelah makan besar|merasa bersalah atau malu|melihat orang lain tampak bahagia'),kebutuhan:L('butuh jeda dari tugas|butuh rasa nyaman|butuh validasi atau pengakuan')};
+const OPTL=[['konteks','Konteks'],['kebutuhan','Kebutuhan di baliknya'],['lokasi','Lokasi umum'],['tubuh','Di mana terasa'],['ling','Ubah lingkungan']];
+const OPTD=()=>{const o={};for(const k in OPT)o[k]=[...OPT[k],...(ADD2[k]||[])];return o};
+const OP=k=>S.opts[k];
+const OK={konteks:'konteks',h_k:'konteks',p_k:'konteks',kebutuhan:'kebutuhan',h_n:'kebutuhan',p_n:'kebutuhan',lokasi:'lokasi',h_l:'lokasi',md_body:'tubuh',md_ling:'ling'};
+const LV=[['Samar','Baru terasa, mudah diabaikan. Pikiran masih jernih dan kamu bisa fokus ke hal lain.'],['Ringan','Mulai mengganggu tapi masih mudah dialihkan. Sesekali pikiran kembali ke sana.'],['Sedang','Perhatian mulai tersedot. Sulit fokus, tubuh mulai gelisah, mulai muncul pikiran “sekali saja”.'],['Kuat','Mendesak. Sulit berpikir jernih, tubuh tegang atau hangat, ingin segera bertindak.'],['Sangat kuat','Hampir menguasai. Terasa harus sekarang juga, pikiran menyempit, sulit membayangkan menolak.']];
+const JIKA=L('aku sudah di kasur dan ingin membuka ponsel|aku merasa bosan dan tidak ada kegiatan|aku sendirian di kamar malam hari|aku baru selesai scroll medsos dan mulai tergoda|aku stres setelah kerja atau kuliah|aku merasa kesepian|aku terbangun tengah malam dan sulit tidur lagi|aku capek dan ingin melepas penat|aku merasa cemas|aku merasa sedih atau kecewa|aku marah setelah bertengkar|aku melihat konten yang memicu|aku memegang ponsel tanpa tujuan|aku masuk kamar mandi membawa ponsel|aku sendirian di rumah|aku merasa gagal atau tidak berharga|aku menunda tugas penting|aku baru bangun dan masih di kasur|aku sedang libur dan tidak ada rencana|aku mulai mencari konten yang tidak seharusnya|aku merasa lapar atau haus|aku ingin dihibur|aku rindu seseorang|aku mulai berpikir “sekali ini saja”|aku merasa dorongan naik ke level 4–5|aku mendapat notifikasi yang memicu|aku menunggu lama (antre atau macet)|aku pulang larut dan sangat lelah|aku mulai merasa terangsang saat sendirian|aku berbaring dengan ponsel di tangan|aku membuka browser tanpa tujuan jelas|aku merasa sangat tegang setelah seharian bekerja|aku sedang kesal dan tidak bisa melampiaskannya|aku ingin lari dari masalah|aku melihat foto atau video yang membuatku tergoda|aku menerima tautan atau pesan yang memicu|aku menunggu seseorang membalas pesan|tidak ada orang lain di rumah|aku ingin membuka mode penyamaran atau VPN|aku ingin menghapus riwayat browser|aku mengecek ponsel lewat tengah malam|aku baru makan dan santai sendirian di kamar|aku merasa bersalah atas hal lain|laptop terbuka dan aku sendirian|aku merasa lelah tapi belum mengantuk|aku merasa ingin menghadiahi diri setelah hari yang berat|aku merasa tidak punya kegiatan di akhir pekan');
+const MAKA=L('aku taruh ponsel di meja dan baca 10 halaman|aku keluar kamar dan minum segelas air|aku berdiri dan pindah ke ruang tamu|aku jalan kaki 10 menit di luar|aku cuci muka lalu tarik napas pelan 10 kali|aku chat atau telepon teman atau keluarga|aku mandi dan ganti pakaian|aku taruh ponsel di luar kamar dan isi daya di sana|aku tutup laptop dan matikan layar|aku peregangan 5 menit|aku tulis tiga hal yang kurasakan|aku berdoa, ibadah, atau meditasi 5 menit|aku dengar musik atau podcast di ruang tengah|aku kerjakan satu tugas kecil 10 menit|aku siapkan makanan atau camilan sehat|aku olahraga ringan 5 menit|aku nyalakan timer 10 menit dan tidak melakukan apa-apa|aku buka Mode Dorongan di aplikasi ini|aku rapikan meja atau kamar 10 menit|aku nonton video yang menenangkan|aku menggambar atau main alat musik|aku bilang pada diriku “ini akan reda”|aku baca alasanku di aplikasi ini|aku nyalakan pemblokir situs atau mode pesawat|aku matikan lampu dan tidur lebih awal|aku mandi air hangat|aku main puzzle atau game ringan 10 menit|aku siram tanaman atau kerjakan pekerjaan rumah|aku tutup mode penyamaran dan keluar dari browser|aku pindah ke ruang yang ada orang lain|aku masukkan laptop ke tas dan tutup|aku nyalakan pemblokir situs dan tidak mengubah pengaturannya malam ini|aku berwudu lalu salat atau berdoa|aku telepon orang yang kupercaya dan bilang aku sedang tergoda|aku tulis apa yang sebenarnya kubutuhkan (istirahat, teman, hiburan)|aku tarik napas 4 hitungan, tahan 4, buang 6 selama 5 menit|aku keluar beli minuman di warung|aku ganti pakaian dan keluar rumah 10 menit|aku mandi lalu tidur di tempat tidur yang rapi|aku push-up 10 kali lalu tunggu 10 menit|aku seduh minuman hangat dan duduk di ruang tengah|aku buka daftar aktivitas penggantiku dan pilih satu|aku catat perasaanku di Catatanku|aku bersihkan kamar mandi atau cuci piring|aku nonton video komedi di ruang bersama|aku kirim pesan ke teman: “temani aku ngobrol 10 menit”|aku turun dari kasur dan berdiri sampai napas tenang|aku matikan wifi atau mode data selama 30 menit');
+const ALT=L('Jalan kaki 10 menit|Peregangan atau yoga ringan|Push-up atau sit-up|Lari ringan|Bersepeda|Mandi air hangat|Cuci muka dan sikat gigi|Minum segelas air|Makan camilan sehat|Memasak sesuatu yang sederhana|Membaca buku|Menulis jurnal|Menggambar atau mewarnai|Memainkan alat musik|Mendengarkan musik|Mendengarkan podcast|Berdoa atau ibadah|Meditasi atau latihan napas|Menelepon teman atau keluarga|Mengobrol dengan orang serumah|Bermain dengan hewan peliharaan|Merapikan kamar atau meja|Mencuci piring atau pekerjaan rumah|Menyiram tanaman|Mengerjakan tugas kecil|Belajar bahasa atau kursus online|Main game ringan atau puzzle|Teka-teki silang atau sudoku|Menonton video edukasi|Menyusun rencana besok|Menulis tiga hal yang disyukuri|Memijat leher dan bahu|Tidur siang 20 menit|Mengerjakan proyek sampingan atau coding|Olahraga bersama teman|Pergi ke warung atau minimarket|Merawat diri (skincare, potong kuku)|Mencuci atau menyetrika pakaian|Berkebun|Membuat kerajinan tangan|Bernyanyi|Membaca buku motivasi atau kitab|Latihan napas 4-6 selama 5 menit|Relaksasi otot progresif 10 menit|Mandi dan ganti pakaian bersih|Membuat teh atau minuman hangat|Duduk atau berjemur di luar 10 menit|Mengirim pesan ke teman atau keluarga|Menonton video lucu atau komedi|Mendengarkan murottal atau musik rohani|Membaca artikel yang menarik|Membersihkan kamar mandi atau menyapu|Berlatih skill baru (desain, menulis, memasak)|Bermain board game atau kartu bersama orang lain|Futsal, badminton, atau basket|Naik turun tangga atau lompat tali 5 menit|Menyetel playlist semangat dan bergerak|Menulis surat untuk diri sendiri|Memotret hal menarik di sekitar|Merapikan file dan foto di ponsel|Membuat daftar tugas besok|Ikut kelas atau komunitas hobi|Menyiapkan bekal atau makanan besok|Duduk tenang dan mengamati napas 5 menit');
+const RIT=L('Taruh ponsel di pengisi daya di luar kamar|Sikat gigi|Cuci muka|Siapkan baju dan tas besok|Minum segelas air|Tulis tiga hal baik hari ini|Baca buku 10 halaman|Peregangan ringan|Berdoa atau ibadah malam|Matikan layar 30 menit sebelum tidur|Redupkan lampu|Latihan napas 5 menit|Nyalakan pemblokir situs sebelum tidur|Letakkan pengisi daya jauh dari kasur|Tutup semua tab dan aplikasi|Tulis rencana besok|Matikan notifikasi media sosial|Pasang alarm di seberang ruangan|Ganti piyama yang nyaman|Dzikir atau doa sebelum tidur|Relaksasi otot 5 menit|Rapikan tempat tidur|Minum teh hangat tanpa kafein');
+const ISY=L('setelah menyikat gigi malam|setelah makan|saat aku mulai memegang ponsel di kasur|saat alarm berbunyi|setelah pulang kerja atau kuliah|setelah salat|saat merasa bosan|sebelum tidur|saat mematikan lampu kamar|setelah mandi|saat pertama bangun tidur|saat masuk kamar malam hari|setelah salat subuh|setelah salat isya|saat mengisi daya ponsel|saat membuka kunci ponsel|saat masuk kamar mandi|saat membuka laptop|saat merasa tegang atau gelisah|saat notifikasi atau iklan memicu muncul|saat tinggal sendirian di rumah|setelah scroll medsos 10 menit|saat azan berkumandang|saat jam sebelum tidur tiba|setelah makan malam|saat sudah berbaring di kasur|saat selesai kerja atau kuliah|saat terbangun tengah malam|saat tanganku mulai meraih ponsel|saat dorongan naik ke level 3|saat membuka aplikasi yang biasa memicu|saat menunggu (antre atau macet)');
+const NJ=L('pemicu baru|strategi berhasil|strategi tidak berhasil|kebutuhan di balik dorongan|perasaan hari ini|hal yang disyukuri|pelajaran|rencana besok|pengingat untuk diri sendiri|catatan bebas');
+const BASE={jika:JIKA,maka:MAKA,alt:ALT,rit:RIT,isy:ISY,njenis:NJ};
+const SARAN=L('Minum segelas air|Jalan kaki 10 menit|Mandi dan ganti pakaian bersih|Latihan napas 4-6 selama 5 menit|Menelepon teman atau keluarga|Peregangan atau yoga ringan|Mengerjakan tugas kecil|Mendengarkan musik|Membuat teh atau minuman hangat|Berdoa atau ibadah|Naik turun tangga atau lompat tali 5 menit|Menulis jurnal');
+const KBD=L('istirahat|kontak|penghiburan|stimulasi|gerak tubuh|rasa pencapaian|ketenangan|pengalihan|kreativitas|makna spiritual|rasa aman|perawatan diri');
+const SK5=['1','2','3','4','5'];
+const CKQ=[['kualitas_tidur','Kualitas tidur semalam','1 buruk – 5 baik',SK5,1],['lama_tidur','Lama tidur semalam','',['<5 jam','5–6 jam','7–8 jam','>8 jam']],['suasana_hati','Suasana hati hari ini','1 buruk – 5 baik',SK5,1],['stres','Tingkat stres','1 rendah – 5 tinggi',SK5,1],['kecemasan','Tingkat cemas atau gelisah','1 rendah – 5 tinggi',SK5,1],['energi','Tingkat energi','1 habis – 5 penuh',SK5,1],['kesepian','Rasa kesepian','1 tidak – 5 sangat',SK5,1],['interaksi_sosial','Interaksi dengan orang lain hari ini','',['tidak ada','sedikit','cukup','banyak']],['aktivitas_fisik','Bergerak atau berolahraga hari ini','',['tidak','ringan','sedang','berat']],['ada_kejadian','Hari ini ada kejadian?','',['ya','tidak','lewati']]];
+const AKS=['pornografi','masturbasi','orgasme'];
+/* ================= state ================= */
+const KEY='pendamping_v3',PINKEY='pendamping_pin_v3';
+const DS={cooldown_menit:10,pengingat_penutupan_jam:2,jam_mulai_hari:4,pengingat_ekspor_minggu:4,pemisah_csv:',',tema:'gelap',huruf_besar:'tidak',haptic:'ya',jeda_menit:10,nama_netral:'Pendamping',kunci_otomatis_menit:1,notifikasi:'tidak',tampilkan_hari_sesuai:'tidak',jam_ritual:21,kontak_tepercaya:'',jendela_eskalasi_menit:45};
+function DEF(){return{v:4,onboarded:false,opts:OPTD(),settings:{...DS},contracts:[],goalHistory:[],pending:null,episodes:[],events:[],checkins:[],pauses:[],plans:[],activities:[],activityLog:[],reviews:[],notes:[],experiments:[],customKonteks:[],lastExport:null,optv:3,usage:{},usageN:{},custom:{jika:[],maka:[],alt:[],rit:[],kbd:[],isy:[],njenis:[]}}}
+function migrate(o){const d=DEF();for(const k in d)if(!(k in o))o[k]=d[k];o.settings={...DS,...o.settings};o.custom={...d.custom,...(o.custom||{})};for(const k in d.custom)if(!Array.isArray(o.custom[k]))o.custom[k]=[];
+ if((o.optv||0)<3){['tubuh','ling'].forEach(k=>{const cur=Array.isArray(o.opts[k])?o.opts[k]:[];o.opts[k]=[...cur.filter(x=>!OLDDEF[k].includes(x)||OPT[k].includes(x))];if((o.optv||0)<2||k==='tubuh')OPT[k].forEach(x=>{if(!o.opts[k].includes(x))o.opts[k].push(x)})});
+  if((o.optv||0)<2)for(const k in ADD2){if(!Array.isArray(o.opts[k]))o.opts[k]=[...OPT[k]];ADD2[k].forEach(x=>{if(!o.opts[k].includes(x))o.opts[k].push(x)})}o.optv=3}for(const k in d.opts)if(!Array.isArray(o.opts[k])||!o.opts[k].length)o.opts[k]=d.opts[k];(o.customKonteks||[]).forEach(x=>{if(!o.opts.konteks.includes(x))o.opts.konteks.push(x)});
+ if((o.v||0)<4){const m=x=>x===''||x==null?x:Math.min(5,Math.max(1,Math.ceil(Number(x)/2)));o.episodes.forEach(e=>{e.intensitas_awal=m(e.intensitas_awal);e.intensitas_puncak=m(e.intensitas_puncak)});o.v=4}
+ if(!o.seeded){const U=o.usage=o.usage||{},C={};const add=(k,v)=>{if(!v)return;const m=C[k]=C[k]||{};m[v]=(m[v]||0)+1};[...o.episodes.map(e=>[e.konteks,e.kebutuhan,e.lokasi_umum]),...o.events.filter(v=>!v.auto).map(v=>[v.konteks,v.kebutuhan,v.lokasi_umum])].forEach(([a,b,c])=>{(a||[]).forEach(v=>add('konteks',v));(b||[]).forEach(v=>add('kebutuhan',v));add('lokasi',c)});o.usageN=o.usageN||{};for(const k in C){const m=U[k]=U[k]||{};for(const v in C[k]){const x=m[v]=m[v]||{n:0,t:Date.now(),s:0,b:[0,0,0,0]};x.n=Math.max(x.n,C[k][v]);x.s=Math.max(x.s||0,C[k][v])}o.usageN[k]=Math.max(o.usageN[k]||0,2)}o.seeded=1}
+ return o}
+function load(){try{const r=localStorage.getItem(KEY);if(r)return migrate(JSON.parse(r))}catch(e){}return DEF()}
+let S=load(),saveFail=false;
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S));saveFail=false}catch(e){saveFail=true}}
+const UI={view:'home',rf:'semua',rl:60,expSel:null,expRange:'semua',expNoText:false,expBom:true,undoImport:null,impPrev:null};
+
+/* ================= tanggal & hari kustom ================= */
+function dayOf(d){const x=new Date(T(d)-S.settings.jam_mulai_hari*3600000);return x.getFullYear()+'-'+pad(x.getMonth()+1)+'-'+pad(x.getDate())}
+function addDays(ds,n){const[y,m,d]=ds.split('-').map(Number);const x=new Date(Date.UTC(y,m-1,d+n));return x.getUTCFullYear()+'-'+pad(x.getUTCMonth()+1)+'-'+pad(x.getUTCDate())}
+function dow(ds){const[y,m,d]=ds.split('-').map(Number);return(new Date(Date.UTC(y,m-1,d)).getUTCDay()+6)%7}
+const weekStart=ds=>addDays(ds,-dow(ds));
+const today=()=>dayOf(new Date());
+function pausedSet(){const s=new Set();S.pauses.forEach(p=>{let d=p.mulai;const e=p.selesai||p.mulai;let g=0;while(d&&d<=e&&g<900){s.add(d);d=addDays(d,1);g++}});return s}
+
+/* ================= kontrak ================= */
+const GOALS=[
+{n:'Abstinensi dari perilaku tertentu',i:'Kejadian sesuai/tidak sesuai kontrak; lama kembali ke rencana setelah kejadian'},
+{n:'Mengurangi frekuensi',i:'Kejadian per minggu dibanding baseline'},
+{n:'Mengurangi durasi',i:'Menit per kejadian'},
+{n:'Mengurangi ketergantungan pada pemicu/konteks',i:'Proporsi kejadian dalam konteks sasaran'},
+{n:'Menghindari pornografi saja',i:'Kejadian pornografi (masturbasi tidak dicatat sebagai pelanggaran)'},
+{n:'Meningkatkan kontrol menghadapi dorongan',i:'Proporsi dorongan yang dilewati dan rating kontrol'},
+{n:'Memperbaiki tidur/rutinitas',i:'Jam tidur dan konsistensi rutinitas'},
+{n:'Memahami pola dulu (2 minggu tanpa target)',i:'Kelengkapan data dan pola awal'}];
+const OBS=GOALS[7].n;
+const JALUR=['Aku ingin selaras dengan nilai pribadi/agamaku','Aku sulit mengendalikan dorongan','Belum tahu / lewati'];
+const KONTEKS=['bosan','capek','stres','kesepian','cemas','sedih','marah','sendirian di kamar','sebelum tidur','habis lihat medsos'];
+const KEBUTUHAN=['lapar','marah','kesepian','capek'];
+const LOKASI=['kamar','ruang lain','di luar'];
+const kHint=()=>{const c=AC();return`<p class="muted sm">Kontrak = kesepakatan dengan dirimu sendiri yang kamu tulis di awal: tujuan, perilaku sasaran, dan alasan (lihat Lainnya → Tujuan saya). “Sesuai” berarti kejadian ini tidak melanggar kesepakatan itu.${c?` Kontrakmu saat ini: “${esc(c.jenis_tujuan)}”, sasaran: ${esc(behaviors().join(', '))}.`:''}</p>`};
+const AC=()=>S.contracts.filter(c=>c.status==='aktif').slice(-1)[0]||null;
+const behaviors=()=>{const c=AC();return c&&c.perilaku_sasaran?c.perilaku_sasaran.split('|'):['perilaku']};
+const konteksList=()=>S.opts.konteks;
+function applyPending(){const p=S.pending;if(!p||Date.now()<p.applyAt)return;const c=S.contracts.find(x=>x.id===p.kontrak_id);if(c)for(const k in p.changes){if(c[k]!==p.changes[k]){S.goalHistory.push({id:newId(S.goalHistory),waktu:isoTz(),kontrak_id:c.id,kolom_diubah:k,nilai_lama:c[k],nilai_baru:p.changes[k],alasan:p.alasan||''});c[k]=p.changes[k]}}S.pending=null;save()}
+
+/* ================= UI helpers ================= */
+/* pemakaian opsi: yang pernah dipilih naik ke depan; daftar panjang diciutkan mulai pemakaian ke-2 */
+function recUse(key,vals){vals=(vals||[]).filter(Boolean);if(!key||!vals.length)return;S.usage=S.usage||{};S.usageN=S.usageN||{};const u=S.usage[key]=S.usage[key]||{};const now=Date.now(),hb=Math.floor(new Date().getHours()/6);vals.forEach(v=>{const x=u[v]||{n:0,t:now,s:0,b:[0,0,0,0]};x.s=(x.s||x.n||0)*Math.pow(.5,(now-(x.t||now))/(21*864e5))+1;x.b=x.b||[0,0,0,0];x.b[hb]++;x.n++;x.t=now;u[v]=x});S.usageN[key]=(S.usageN[key]||0)+1}
+/* warna hidup: tiap 5 pemilihan yang sama naik satu tingkat (maks 6) */
+function heat(key,v){const n=(((S.usage||{})[key]||{})[v]||{}).n||0;if(!n)return'';const lv=Math.min(6,Math.floor(n/5));return`${lv?` data-h="${lv}"`:''} data-p style="--h:${lv};--p:${lv>=6?1:(n%5)/5}" title="dipilih ${n}×${lv<6?' · '+(5-n%5)+' lagi untuk naik warna':' · warna maksimal'}"`}
+const recNew=(key,nw,old)=>recUse(key,(nw||[]).filter(x=>!(old||[]).includes(x)));
+/* urutan cerdas: frecency (frekuensi dengan peluruhan waktu, paruh 21 hari) x kecocokan jam saat ini */
+function rankList(list,key){const u=(S.usage||{})[key]||{};if(!((S.usageN||{})[key]>=1))return[...list];const now=Date.now(),hb=Math.floor(new Date().getHours()/6);const sc=x=>{const o=u[x];if(!o)return 0;return(o.s||o.n)*Math.pow(.5,(now-o.t)/(21*864e5))*(1+.8*(o.b&&o.n?o.b[hb]/o.n:0))};return list.map((x,i)=>({x,i,s:sc(x)})).sort((a,b)=>(b.s>0)-(a.s>0)||b.s-a.s||a.i-b.i).map(o=>o.x)}
+const canCollapse=(key,len)=>!!key&&((S.usageN||{})[key]>=2)&&len>10;
+function visCount(key,ranked){const u=(S.usage||{})[key]||{};const used=ranked.filter(x=>u[x]).length;return Math.min(12,Math.max(6,used))}
+const tgBtn=(n)=>`<button type="button" class="chip tg" data-a="chiptog">Tampilkan lainnya (${n})</button>`;
+function chips(g,list,sel,max,extra,key){sel=(sel||[]).filter(Boolean);list=[...list,...sel.filter(x=>!list.includes(x))];key=key||OK[g];const hk=key||(g.slice(0,3)==='oo_'?g.slice(3):'');
+ let ranked=rankList(list,key),col=canCollapse(key,ranked.length),vis=col?visCount(key,ranked):ranked.length,hid=0;
+ const out=ranked.map((x,i)=>{const hide=col&&i>=vis;if(hide&&!sel.includes(x))hid++;return`<button type="button" class="chip${sel.includes(x)?' on':''}${hide?' x':''}" data-a="chip" data-v="${esc(x)}"${heat(hk,x)}>${esc(x)}</button>`}).join('');
+ return`<div class="chips${col&&hid?' col':''}" data-g="${g}" data-max="${max||0}">${out}${col&&hid?tgBtn(hid):''}${extra||''}</div>`}const addChipUi=`<span class="addchip"><input type="text" maxlength="24" placeholder="isi sendiri"><button type="button" class="chip" data-a="addchip">+</button></span>`;
+const scope=()=>$('#full').classList.contains('open')?$('#full'):$('#sheet').classList.contains('open')?$('#sheet'):document;
+const picked=g=>[...scope().querySelectorAll('.chips[data-g="'+g+'"] .chip.on')].map(b=>b.dataset.v);
+const one=g=>picked(g)[0]||'';
+const val=id=>{const e=scope().querySelector('#'+id)||document.getElementById(id);return e?e.value:''};
+const lvT=v=>`<b>${v} · ${LV[v-1][0]}</b> — ${LV[v-1][1]}`;
+function slider(id,v,touched,lo,hi,lv){return`<div class="rng"><input type="range" id="${id}" min="${lo}" max="${hi}" value="${v}" ${touched?'data-t="1"':''}${lv?' data-lv="1"':''}><b data-for="${id}">${touched?v:'–'}</b></div>`+(lv?`<p class="muted sm" data-desc="${id}">${touched?lvT(v):'Geser untuk memilih level 1–5.'}</p>`:'')}
+const sliderVal=id=>{const e=scope().querySelector('#'+id);return e&&e.dataset.t?Number(e.value):null};
+let toastT=null;
+function toast(msg,acts){const t=$('#toast');t.innerHTML=`<span>${esc(msg)}</span>`+(acts||[]).map((a,i)=>`<button data-a="toastact" data-i="${i}">${esc(a.t)}</button>`).join('');t._acts=acts||[];t.classList.add('open');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('open'),(acts&&acts.length)?7000:3200)}
+let sheetClose=null;
+function openSheet(html,onClose){if(sheetClose)closeSheet();sheetClose=onClose||null;$('#sheet').innerHTML=`<div class="back" data-a="sheetx"></div><div class="panel"><div class="grab"></div>${html}</div>`;$('#sheet').classList.add('open')}
+function closeSheet(silent){const f=sheetClose;sheetClose=null;if(f&&!silent){try{f()}catch(e){console.error(e)}}$('#sheet').classList.remove('open');$('#sheet').innerHTML=''}
+function openFull(html){closeSheet(true);$('#full').innerHTML=`<div class="fw">${html}</div>`;$('#full').classList.add('open');$('#full').scrollTop=0}
+function closeFull(){$('#full').classList.remove('open');$('#full').innerHTML=''}
+function haptic(){if(S.settings.haptic==='ya'&&navigator.vibrate)try{navigator.vibrate(15)}catch(e){}}
+const A={};
+document.addEventListener('click',e=>{const el=e.target.closest('[data-a]');if(!el)return;const f=A[el.dataset.a];if(f)f(el,e)});
+document.addEventListener('input',e=>{const t=e.target;if(t.type==='range'){t.dataset.t='1';const b=document.querySelector('[data-for="'+t.id+'"]');if(b)b.textContent=t.value;if(t.dataset.lv){const d=document.querySelector('[data-desc="'+t.id+'"]');if(d)d.innerHTML=lvT(t.value)}}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#sheet').classList.contains('open'))closeSheet()});
+A.toastact=el=>{const t=$('#toast');const a=t._acts[+el.dataset.i];t.classList.remove('open');if(a)a.f()};
+A.sheetx=()=>closeSheet();
+A.chiptog=el=>{const box=el.closest('.chips');const c=box.classList.toggle('col');const n=box.querySelectorAll('.chip.x:not(.on)').length;el.textContent=c?'Tampilkan lainnya ('+n+')':'Sembunyikan'};
+A.chip=el=>{const box=el.closest('.chips');const max=+box.dataset.max;if(el.classList.contains('on')){el.classList.remove('on');return}if(max===1)box.querySelectorAll('.chip.on').forEach(b=>b.classList.remove('on'));else if(max&&box.querySelectorAll('.chip.on').length>=max){toast('Maksimal '+max+' pilihan');return}el.classList.add('on')};
+A.addchip=el=>{const box=el.closest('.chips');const inp=el.parentElement.querySelector('input');const v=inp.value.trim();if(!v)return;const max=+box.dataset.max;if(max===1)box.querySelectorAll('.chip.on').forEach(b=>b.classList.remove('on'));else if(max&&box.querySelectorAll('.chip.on').length>=max){toast('Maksimal '+max+' pilihan');return}
+ const g=box.dataset.g,k=OK[g]||(g.startsWith('oo_')?g.slice(3):'');if(S.opts[k]&&!S.opts[k].includes(v)){S.opts[k].push(v);save()}
+ if(['nt_j','ne_j','n_j','p_j'].includes(g)&&!BASE.njenis.includes(v)&&!S.custom.njenis.includes(v)){S.custom.njenis.push(v);save()}
+ if(g==='ac_k'&&!KBD.includes(v)&&!S.custom.kbd.includes(v)){S.custom.kbd.push(v);save()}
+ if(g==='oo_alt'&&!ALT.includes(v)&&!S.custom.alt.includes(v)){S.custom.alt.push(v);save()}
+ const ex=[...box.querySelectorAll('.chip')].find(b=>b.dataset.v===v);if(ex){ex.classList.add('on');inp.value='';return}
+ const b=document.createElement('button');b.type='button';b.className='chip on';b.dataset.a='chip';b.dataset.v=v;b.textContent=v;box.insertBefore(b,el.parentElement);inp.value=''};
+const listFor=key=>{const c=(S.custom&&S.custom[key])||[];return[...c,...BASE[key].filter(x=>!c.includes(x))]};
+const sug=(key,t)=>{const ranked=rankList(listFor(key),key),col=canCollapse(key,ranked.length),vis=col?visCount(key,ranked):ranked.length,hid=col?ranked.length-vis:0;
+ return`<div class="chips${hid?' col':''}">${ranked.map((x,i)=>`<button type="button" class="chip${col&&i>=vis?' x':''}" data-a="fill" data-for="${t}" data-k="${key}" data-v="${esc(x)}"${heat(key,x)}>${esc(x)}</button>`).join('')}${hid?tgBtn(hid):''}</div>`};
+A.fill=el=>{const i=scope().querySelector('#'+el.dataset.for);if(i){i.value=el.dataset.v;i.focus()}
+ const k=el.dataset.k;if(k==='rit'||k==='alt'){const want=k==='rit'?'ritual':'alternatif';scope().querySelectorAll('.chips[data-g="ac_j"] .chip').forEach(b=>b.classList.toggle('on',b.dataset.v===want))}};
+function optsUI(){return OPTL.map(([k,l])=>`<details class="card"><summary>${l} (${S.opts[k].length})</summary>${chips('oo_'+k,S.opts[k],S.opts[k],0,addChipUi)}</details>`).join('')}
+function vOpsi(){return`<div class="top">${back()}</div><h1>Sesuaikan pilihan</h1><p class="muted">Ketuk pilihan untuk menyembunyikannya (abu-abu), atau tambahkan milikmu lewat kolom “isi sendiri”. Data lama di riwayat tetap aman.</p><div class="card"><h3>Warna hidup</h3><p class="muted sm">Pilihan yang sering kamu ketuk berubah warna: tiap 5 kali dipilih, warnanya naik satu tingkat (sampai tingkat 6). Garis tipis di bawah menunjukkan kemajuan menuju tingkat berikutnya. Urutan juga menyesuaikan jam dan kebiasaan terbaru.</p><div class="chips">${[1,2,3,4,5,6].map(l=>`<span class="chip" data-h="${l}" style="--h:${l}">${l*5}×</span>`).join('')}</div></div>${optsUI()}<button class="btn big" data-a="optsave">Simpan</button><button class="btn ghost big" data-a="optreset">Pulihkan semua pilihan bawaan</button>`}
+A.optsave=()=>{OPTL.forEach(([k])=>{const v=picked('oo_'+k);if(v.length)S.opts[k]=v});save();toast('Pilihan tersimpan.');render()};
+A.optreset=()=>{OPTL.forEach(([k])=>{S.opts[k]=[...new Set([...OPT[k],...S.opts[k]])]});save();render();toast('Pilihan bawaan dipulihkan.')};
+
+/* ================= episode ================= */
+const lastEp=()=>S.episodes.reduce((a,b)=>!a||T(b.waktu_mulai)>T(a.waktu_mulai)?b:a,null);
+const lastTap=e=>T(e.terakhir_tap||e.waktu_mulai);
+function cdLeft(){const e=lastEp();if(!e||e.hasil)return 0;return Math.max(0,S.settings.cooldown_menit*60000-(Date.now()-lastTap(e)))}
+function newEp(t0){const now=t0||new Date();return{id:newId(S.episodes),waktu_mulai:isoTz(now),waktu_selesai:'',perilaku_sasaran:behaviors().join('|'),intensitas_awal:'',intensitas_puncak:'',jumlah_tap_masih_kuat:0,konteks:[],kebutuhan:[],lokasi_umum:'',strategi:[],hasil:'',durasi_menit:'',dicatat_terlambat:'tidak',ditutup_terlambat:'tidak',catatan:'',terakhir_tap:isoTz(now),ditanya:false,diingatkan:false}}
+function armNotif(id){if(S.settings.notifikasi!=='ya'||!window.Notification||Notification.permission!=='granted'||!S.settings.pengingat_penutupan_jam)return;setTimeout(()=>{const e=S.episodes.find(x=>x.id===id);if(e&&!e.hasil&&!e.diingatkan){e.diingatkan=true;save();try{new Notification(S.settings.nama_netral,{body:'Ada satu pertanyaan singkat.'})}catch(x){}}},S.settings.pengingat_penutupan_jam*3600000)}
+function tap(){haptic();const now=new Date(),e=lastEp();
+ if(e&&!e.hasil&&cdLeft()>0){const prev={n:e.jumlah_tap_masih_kuat,t:e.terakhir_tap};e.jumlah_tap_masih_kuat=(+e.jumlah_tap_masih_kuat||0)+1;e.terakhir_tap=isoTz(now);save();render();
+  toast('Ditandai: masih kuat',[{t:'Mode Dorongan',f:()=>openMD(e.id)},{t:'Batal',f:()=>{e.jumlah_tap_masih_kuat=prev.n;e.terakhir_tap=prev.t;save();render()}}]);return}
+ if(e&&!e.hasil&&!e.ditanya){openSheet(`<h2>Dorongan sebelumnya</h2><p class="muted">Dorongan pada ${esc(fmtT(e.waktu_mulai))} sudah lewat?</p><div class="chips"><button class="chip" data-a="prevans" data-r="lewat">Lewat</button><button class="chip" data-a="prevans" data-r="berkurang">Berkurang</button><button class="chip" data-a="prevans" data-r="diikuti">Diikuti</button><button class="chip" data-a="prevans" data-r="">Lewati</button></div>`);return}
+ startEp()}
+A.prevans=el=>{const e=lastEp();if(e){e.ditanya=true;if(el.dataset.r)closeEpisode(e.id,el.dataset.r,true);save()}closeSheet(true);startEp()};
+function startEp(){const e=newEp();S.episodes.push(e);save();armNotif(e.id);render();sheetEp(e.id,true);}
+function sheetEp(id,isNew){const e=S.episodes.find(x=>x.id===id);if(!e)return;
+ openSheet(`<div class="sh-h"><h2 style="margin:0">Dorongan tercatat</h2>${isNew?'<button class="ib" id="undob" data-a="undotap" data-id="'+id+'">Batalkan</button>':''}</div>
+ <button class="btn big" data-a="mdfrom" data-id="${id}">Buka Mode Dorongan</button>
+ <p class="muted sm">Semua isian di bawah opsional. Tutup dengan geser atau ketuk di luar.</p>
+ <h3>Seberapa kuat? (level 1–5)</h3>${slider('f_int',e.intensitas_awal!==''?e.intensitas_awal:3,e.intensitas_awal!=='',1,5,1)}
+ <h3>Konteks (maks 5)</h3>${chips('konteks',konteksList(),e.konteks,5,addChipUi)}
+ <h3>Kebutuhan di baliknya</h3>${chips('kebutuhan',OP('kebutuhan'),e.kebutuhan,0,addChipUi)}
+ <h3>Lokasi umum</h3>${chips('lokasi',OP('lokasi'),[e.lokasi_umum],1,addChipUi)}
+ <label>Catatan singkat (maks 140) — jangan tulis detail eksplisit atau identitas orang lain</label><input type="text" id="f_cat" maxlength="140" value="${esc(e.catatan)}">
+ <button class="btn ghost big" data-a="sheetx">Simpan & tutup</button>`,()=>saveEp(id));
+ if(isNew)setTimeout(()=>{const b=$('#undob');if(b)b.remove()},8000)}
+function saveEp(id){const e=S.episodes.find(x=>x.id===id);if(!e)return;const v=sliderVal('f_int');if(v!==null){if(e.intensitas_awal==='')e.intensitas_awal=v;e.intensitas_puncak=Math.max(Number(e.intensitas_puncak)||0,v)}
+ const nk=picked('konteks'),nn=picked('kebutuhan'),nl=one('lokasi');recNew('konteks',nk,e.konteks);recNew('kebutuhan',nn,e.kebutuhan);recNew('lokasi',nl?[nl]:[],[e.lokasi_umum]);
+ e.konteks=nk;e.kebutuhan=nn;e.lokasi_umum=nl;e.catatan=val('f_cat').slice(0,140);save();render()}
+A.undotap=el=>{const id=el.dataset.id;S.episodes=S.episodes.filter(x=>x.id!==id);save();closeSheet(true);render();toast('Dibatalkan')};
+A.mdfrom=el=>{saveEp(el.dataset.id);closeSheet(true);openMD(el.dataset.id)};
+function closeEpisode(id,res,late){const e=S.episodes.find(x=>x.id===id);if(!e)return;const now=new Date();e.hasil=res;late=late||(now-lastTap(e)>3600000);
+ if(late){e.ditutup_terlambat='ya';e.waktu_selesai='';e.durasi_menit=''}else{e.waktu_selesai=isoTz(now);e.durasi_menit=Math.max(0,Math.round((now-T(e.waktu_mulai))/60000))}
+ syncEvent(e);save()}
+function syncEvent(e){const ex=S.events.find(v=>v.episode_id===e.id);
+ if(e.hasil==='diikuti'&&!ex){const c=AC();S.events.push({id:newId(S.events),waktu:e.waktu_mulai,perilaku_sasaran:e.perilaku_sasaran,sesuai_kontrak:c&&c.jenis_tujuan===OBS?'':'tidak',direncanakan_atau_impulsif:'',konteks:[...e.konteks],kebutuhan:[...e.kebutuhan],lokasi_umum:e.lokasi_umum,episode_id:e.id,dicatat_terlambat:e.ditutup_terlambat,jam_kembali_ke_rencana:'',catatan:'',auto:true})}
+ else if(e.hasil!=='diikuti'&&ex&&ex.auto)S.events=S.events.filter(v=>v!==ex)}
+A.close=el=>{const id=el.dataset.id,r=el.dataset.r;closeEpisode(id,r,false);render();if(r==='diikuti'){const v=S.events.find(x=>x.episode_id===id);if(v)openProtocol(v.id)}else toast('Terima kasih. Itu informasi yang berguna.')};
+
+/* ================= Sudah terjadi ================= */
+const winMs=()=>S.settings.jendela_eskalasi_menit*60000;
+const findOpen=t=>S.events.filter(v=>(v.aksi||[]).length&&!v.aksi.includes('orgasme')&&v.dipantau!=='tidak'&&v.terakhir_update&&Math.abs(T(t)-T(v.terakhir_update))<=winMs()).sort((a,b)=>T(b.terakhir_update)-T(a.terakhir_update))[0]||null;
+const openEv=()=>findOpen(Date.now());
+function addHappen(t,aksi,o){const m=findOpen(t);
+ if(m){m.aksi=AKS.filter(a=>m.aksi.includes(a)||aksi.includes(a));if(T(t)>T(m.terakhir_update))m.terakhir_update=isoTz(t);if(T(t)<T(m.waktu))m.waktu=isoTz(t);m.jumlah_pembaruan=(+m.jumlah_pembaruan||1)+1;
+  ['konteks','kebutuhan'].forEach(k=>(o[k]||[]).forEach(x=>{if(!m[k].includes(x))m[k].push(x)}));if(!m.lokasi_umum)m.lokasi_umum=o.lokasi_umum||'';
+  if(o.sesuai_kontrak==='tidak')m.sesuai_kontrak='tidak';else if(!m.sesuai_kontrak)m.sesuai_kontrak=o.sesuai_kontrak||'';if(!m.direncanakan_atau_impulsif)m.direncanakan_atau_impulsif=o.direncanakan_atau_impulsif||'';
+  if(o.catatan)m.catatan=((m.catatan?m.catatan+' / ':'')+o.catatan).slice(0,140);save();return{ev:m,merged:true}}
+ const ev={id:newId(S.events),waktu:isoTz(t),perilaku_sasaran:behaviors().join('|'),sesuai_kontrak:'',direncanakan_atau_impulsif:'',konteks:[],kebutuhan:[],lokasi_umum:'',episode_id:'',dicatat_terlambat:'tidak',jam_kembali_ke_rencana:'',catatan:'',...o,aksi:AKS.filter(a=>aksi.includes(a)),terakhir_update:isoTz(t),jumlah_pembaruan:1};
+ S.events.push(ev);save();return{ev,merged:false}}
+A.happened=()=>{if(openEv()){toast('Terkunci: kejadian tadi masih dipantau. Gunakan “Ada tambahan” bila perlu.');return}openSheet(`<h2>Sudah terjadi</h2><p class="muted">Dicatat sebagai informasi, bukan penilaian.</p>
+ <label>Waktu</label><input type="datetime-local" id="h_t" value="${dtLocal(new Date())}">
+ <h3>Apa yang terjadi? (boleh pilih lebih dari satu)</h3>${chips('h_a',AKS,[],0)}<p class="muted sm">Jika belum sampai orgasme, aplikasi memantau ${S.settings.jendela_eskalasi_menit} menit. Bila kamu menambah pilihan dalam rentang itu (mis. pornografi lalu masturbasi), semuanya dihitung sebagai satu kejadian.</p>
+
+ <h3>Direncanakan atau impulsif?</h3>${chips('h_pl',['direncanakan','impulsif'],[],1)}
+ <h3>Konteks (maks 5)</h3>${chips('h_k',OP('konteks'),[],5,addChipUi)}
+ <h3>Kebutuhan di baliknya</h3>${chips('h_n',OP('kebutuhan'),[],0,addChipUi)}
+ <h3>Lokasi umum</h3>${chips('h_l',OP('lokasi'),[],1,addChipUi)}
+ <label>Catatan singkat (maks 140)</label><input type="text" id="h_c" maxlength="140">
+ <button class="btn big" data-a="hsave">Simpan</button>`)};
+A.hsave=()=>{if(openEv()){closeSheet(true);toast('Terkunci: kejadian tadi masih dipantau.');return}let t=new Date(val('h_t'));if(isNaN(t))t=new Date();if(t>new Date())t=new Date();const aksi=AKS.filter(a=>picked('h_a').includes(a));if(!aksi.length){toast('Pilih minimal satu: pornografi, masturbasi, atau orgasme');return}
+ recUse('konteks',picked('h_k'));recUse('kebutuhan',picked('h_n'));recUse('lokasi',one('h_l')?[one('h_l')]:[]);
+ const r=addHappen(t,aksi,{sesuai_kontrak:'',direncanakan_atau_impulsif:one('h_pl'),konteks:picked('h_k'),kebutuhan:picked('h_n'),lokasi_umum:one('h_l'),catatan:val('h_c').slice(0,140),dicatat_terlambat:(Date.now()-t)>3600000?'ya':'tidak'});
+ {const le=lastEp();if(le&&!le.hasil&&cdLeft()>0){if(!r.ev.episode_id)r.ev.episode_id=le.id;closeEpisode(le.id,'diikuti',false)}}
+ closeSheet(true);render();if(r.merged)toast('Digabung ke kejadian tadi (dalam '+S.settings.jendela_eskalasi_menit+' menit), dihitung satu kejadian.');else if(r.ev.sesuai_kontrak==='ya')toast('Tercatat.');else openProtocol(r.ev.id)};
+A.escadd=el=>{const v=S.events.find(x=>x.id===el.dataset.id);openSheet(`<h2>Ada tambahan?</h2><p class="muted">Pilih semua yang sudah terjadi sejauh ini. Tetap dihitung satu kejadian.</p>${chips('h_a',AKS,v.aksi,0)}<button class="btn big" data-a="escsave" data-id="${v.id}">Simpan</button>`)};
+A.escsave=el=>{const a=AKS.filter(x=>picked('h_a').includes(x));if(!a.length){toast('Pilih minimal satu');return}const v=S.events.find(x=>x.id===el.dataset.id),b=v.aksi.join();addHappen(new Date(),a,{});closeSheet(true);render();toast(v.aksi.join()===b?'Tidak ada perubahan.':'Digabung ke kejadian yang sama.')};
+
+/* ================= Mode Dorongan ================= */
+let MD=null;
+function mdSteps(ep){const k=ep?ep.konteks:[];let s=['jeda','nama','ling','rencana','alt','kontak','tutup'];
+ if(k.some(x=>/tidur|kamar|gelap|bangun|malam/.test(x)))s=['jeda','ling','nama','rencana','alt','kontak','tutup'];
+ else if(k.some(x=>/stres|kesepian|cemas|sedih|capek|marah|tekanan|gagal|ditolak|kecewa|iri|rindu|bertengkar|berharga/.test(x)))s=['jeda','nama','kontak','alt','ling','rencana','tutup'];
+ else if(k.includes('bosan'))s=['jeda','alt','nama','ling','rencana','kontak','tutup'];
+ if(!S.settings.kontak_tepercaya)s=s.filter(x=>x!=='kontak');return s}
+function openMD(epId){const ep=epId?S.episodes.find(e=>e.id===epId):null;MD={ep:ep?ep.id:null,i:0,t0:Date.now(),started:new Date(),steps:mdSteps(ep),used:[],ling:[],done:false};if(MD.iv)clearInterval(MD.iv);MD.iv=setInterval(mdTick,1000);renderMD()}
+function mdTick(){if(!MD)return;const el=$('#mdt');if(!el)return;const left=Math.max(0,S.settings.jeda_menit*60000-(Date.now()-MD.t0));el.textContent=fmtMs(left);if(left===0){el.parentElement.classList.add('done');const m=$('#mdmsg');if(m)m.textContent='Jeda selesai. Kamu boleh lanjut atau tetap di sini.'}}
+function addStrat(s){if(!MD.used.includes(s))MD.used.push(s);if(MD.ep){const e=S.episodes.find(x=>x.id===MD.ep);if(e&&!e.strategi.includes(s)){e.strategi.push(s);save()}}}
+/* UCB berbobot konteks: rata-rata keberhasilan (smoothing Beta) + bonus eksplorasi untuk strategi yang jarang dicoba */
+function rankedAlts(){const ep=MD&&MD.ep?S.episodes.find(e=>e.id===MD.ep):null,ks=ep?ep.konteks:[],N=S.episodes.filter(e=>e.hasil).length+1;const acts=S.activities.filter(a=>a.jenis==='alternatif'&&a.aktif!=='tidak');return acts.map((a,i)=>{const s='aktivitas: '+a.nama,cl=S.episodes.filter(e=>e.hasil&&e.strategi.includes(s));let w=0,k=0;cl.forEach(e=>{const m=1+2*(e.konteks||[]).filter(x=>ks.includes(x)).length;w+=m;if(e.hasil!=='diikuti')k+=m});const n=cl.length,mean=(k+1)/(w+2);return{a,i,n,ok:cl.filter(e=>e.hasil!=='diikuti').length,rate:n>=3?mean:-1,u:mean+.5*Math.sqrt(1.2*Math.log(N+1)/(n+1))}}).sort((x,y)=>y.u-x.u||x.i-y.i)}
+function altSug(skip){const own=S.activities.filter(a=>a.aktif!=='tidak').map(a=>a.nama);const pool=[...(S.custom.alt||[]),...SARAN].filter((x,i,a)=>a.indexOf(x)===i&&!own.includes(x)&&!skip.includes(x));const r=rankList(pool,'alt').slice(0,6);if(!r.length)return'';
+ return`<h3>Saran lain yang bisa dicoba sekarang</h3><p class="muted sm">Ketuk yang kamu lakukan. Yang sering kamu pilih akan naik ke depan.</p><div class="chips">${r.map(x=>`<button type="button" class="chip" data-a="altsug" data-n="${esc(x)}">${esc(x)}</button>`).join('')}</div>`}
+A.altsug=el=>{const n=el.dataset.n;if(el.classList.contains('on'))return;el.classList.add('on');addStrat('aktivitas: '+n);recUse('alt',[n]);save();toast('Bagus, dicatat.')};
+function renderMD(){const st=MD.steps[MD.i],c=AC(),n=MD.steps.length;let b='';
+ if(st==='jeda')b=`<h2>Jeda sebentar</h2><p class="muted">Dorongan sering naik lalu mereda. Selama jeda kamu tidak perlu melakukan apa-apa.</p><div class="timer"><span id="mdt">${fmtMs(Math.max(0,S.settings.jeda_menit*60000-(Date.now()-MD.t0)))}</span></div><p id="mdmsg" class="muted c"></p>${c&&c.alasan?`<div class="card hl"><p class="muted sm">Alasanku</p><p style="font-size:1.1rem">${esc(c.alasan)}</p></div>`:''}`;
+ else if(st==='nama')b=`<h2>Beri nama dorongannya</h2><p class="muted">Amati saja, tanpa perintah "tahan" atau "turuti". Pilihan bagian tubuh tidak masuk riwayat maupun ekspor; hanya dipakai di perangkat ini untuk mengurutkan daftar.</p><h3>Seberapa kuat sekarang? (level 1–5)</h3>${slider('md_int',3,false,1,5,1)}<h3>Di mana terasa?</h3>${chips('md_body',OP('tubuh'),[],0,addChipUi)}`;
+ else if(st==='ling')b=`<h2>Ubah lingkungan</h2><p class="muted">Pilih yang kamu lakukan.</p>${chips('md_ling',OP('ling'),MD.ling,0,addChipUi)}`;
+ else if(st==='rencana'){const pl=S.plans.filter(p=>p.aktif!=='tidak');b=`<h2>Rencana jika-maka</h2>`+(pl.length?pl.map(p=>`<div class="card"><p><b>Jika</b> ${esc(p.jika)}</p><p><b>maka</b> ${esc(p.maka)}</p><div class="row"><button class="btn s" data-a="plando" data-id="${p.id}">Aku menjalankannya</button><button class="btn ghost s" data-a="plantrig" data-id="${p.id}">Pemicu muncul, belum</button></div></div>`).join(''):`<p class="muted">Belum ada rencana. Kamu bisa menyusunnya nanti di tab Rencana.</p>`)}
+ else if(st==='alt'){const r=rankedAlts().slice(0,2);b=`<h2>Aktivitas pengganti</h2>`+(r.length?r.map(x=>`<div class="card"><p><b>${esc(x.a.nama)}</b></p>${x.a.isyarat?`<p class="muted sm">Isyarat: ${esc(x.a.isyarat)}</p>`:''}${x.rate>=0?`<p class="muted sm">Dari datamu: berhasil ${x.ok} dari ${x.n} percobaan (sampel kecil).</p>`:`<p class="muted sm">Baru sedikit dicoba, layak dicoba (eksplorasi).</p>`}<button class="btn s" data-a="altdo" data-id="${x.a.id}">Aku mencobanya</button></div>`).join(''):`<p class="muted">Belum ada aktivitas pilihanmu. Tambahkan di tab Rencana.</p>`)+altSug(r.map(x=>x.a.nama))}
+ else if(st==='kontak')b=`<h2>Orang atau hal yang bisa kuhubungi</h2><div class="card"><p>${esc(S.settings.kontak_tepercaya)}</p></div><button class="btn s" data-a="contactdo">Aku menghubungi</button>`;
+ else if(st==='tutup'){if(MD.ep)b=`<h2>Apa yang terjadi?</h2><p class="muted">Satu ketukan untuk menutup episode ini.</p><div class="chips"><button class="chip" data-a="mdres" data-r="lewat">Lewat</button><button class="chip" data-a="mdres" data-r="berkurang">Berkurang</button><button class="chip" data-a="mdres" data-r="diikuti">Diikuti</button></div><button class="btn ghost big" data-a="mdx">Nanti saja</button>`;
+  else b=`<h2>Mau dicatat?</h2><p class="muted">Bantuan tadi tidak membuat catatan. Pilih hasilnya bila ingin dicatat.</p><div class="chips"><button class="chip" data-a="mdres" data-r="lewat">Catat: lewat</button><button class="chip" data-a="mdres" data-r="berkurang">Catat: berkurang</button><button class="chip" data-a="mdres" data-r="diikuti">Catat: diikuti</button></div><button class="btn ghost big" data-a="mdx">Tidak dicatat</button>`}
+ const nav=st==='tutup'?'':`<div class="row"><button class="btn ghost" data-a="mdback" ${MD.i?'':'disabled style="opacity:.4"'}>Kembali</button><button class="btn" data-a="mdnext">Lanjut</button></div><button class="btn ghost big" data-a="mdjump">Aku sudah lewat / lanjut ke akhir</button>`;
+ openFull(`<div class="top"><span class="muted">Mode Dorongan · ${MD.i+1}/${n}</span><button class="ib" data-a="mdx">Tutup</button></div>${b}${nav}`)}
+function mdLeave(){const st=MD.steps[MD.i];
+ if(st==='jeda'&&Date.now()-MD.t0>=120000)addStrat('jeda');
+ if(st==='nama'){const v=sliderVal('md_int');if(v!==null&&MD.ep){const e=S.episodes.find(x=>x.id===MD.ep);if(e){if(e.intensitas_awal==='')e.intensitas_awal=v;e.intensitas_puncak=Math.max(Number(e.intensitas_puncak)||0,v);save()}}}
+ if(st==='nama'){const bd=picked('md_body');if(bd.length&&!MD.bodyDone){recUse('tubuh',bd);MD.bodyDone=true;save()}}
+ if(st==='ling'){const nl=picked('md_ling');recNew('ling',nl,MD.ling);MD.ling=nl;MD.ling.forEach(x=>addStrat(x.toLowerCase()));save()}}
+A.mdnext=()=>{mdLeave();if(MD.i<MD.steps.length-1)MD.i++;renderMD()};
+A.mdback=()=>{mdLeave();if(MD.i>0)MD.i--;renderMD()};
+A.mdjump=()=>{mdLeave();MD.i=MD.steps.length-1;renderMD()};
+A.mdx=()=>{mdLeave();if(MD.iv)clearInterval(MD.iv);MD=null;closeFull();render();toast('Bantuan ditutup. Hasil episode bisa ditutup dari beranda.')};
+A.md=el=>openMD(el.dataset.ep||null);
+A.plando=el=>{const p=S.plans.find(x=>x.id===el.dataset.id);p.kali_pemicu_muncul=(+p.kali_pemicu_muncul||0)+1;p.kali_dilaksanakan=(+p.kali_dilaksanakan||0)+1;save();addStrat('rencana jika-maka');toast('Tercatat.')};
+A.plantrig=el=>{const p=S.plans.find(x=>x.id===el.dataset.id);p.kali_pemicu_muncul=(+p.kali_pemicu_muncul||0)+1;save();toast('Tercatat. Rencananya bisa ditinjau nanti.')};
+A.altdo=el=>{const a=S.activities.find(x=>x.id===el.dataset.id);S.activityLog.push({id:newId(S.activityLog),aktivitas_id:a.id,waktu:isoTz(),durasi_menit:'',episode_id:MD.ep||''});addStrat('aktivitas: '+a.nama);save();toast('Bagus, dicatat.')};
+A.contactdo=()=>{addStrat('hubungi seseorang');toast('Dicatat.')};
+A.mdres=el=>{const r=el.dataset.r;let epId=MD.ep,diikutiEv=null;
+ if(!epId){const e=newEp(MD.started);e.strategi=[...MD.used];e.intensitas_awal='';S.episodes.push(e);epId=e.id;closeEpisode(epId,r,false)}else closeEpisode(epId,r,false);
+ diikutiEv=S.events.find(v=>v.episode_id===epId);if(MD.iv)clearInterval(MD.iv);MD=null;closeFull();render();
+ if(r==='diikuti'&&diikutiEv)openProtocol(diikutiEv.id);else{toast('Tercatat. Mau menulis satu hal yang kamu pelajari?',[{t:'Tulis',f:()=>openNote(epId)}])}};
+
+/* ================= protokol pasca-kejadian ================= */
+let PR=null;
+function openProtocol(evId){PR={ev:evId,i:0};renderPR()}
+function renderPR(){const v=S.events.find(x=>x.id===PR.ev);if(!v){closeFull();return}let b='';
+ if(PR.i===0)b=`<h2>Terima kasih sudah mencatat</h2><p style="font-size:1.05rem">Kejadian ini adalah informasi, bukan penghapus progres. Yang penting adalah langkah berikutnya.</p><button class="btn big" data-a="prx">Selesai</button><button class="btn ghost big" data-a="prnext">Refleksi singkat (opsional)</button>`;
+ else if(PR.i===1)b=`<h2>Refleksi singkat</h2><h3>Apa yang terjadi sebelumnya, dan apa yang kurasakan?</h3>${chips('p_k',konteksList(),v.konteks,5,addChipUi)}<h3>Apa yang kubutuhkan?</h3>${chips('p_n',OP('kebutuhan'),v.kebutuhan,0,addChipUi)}<label>Satu perubahan kecil yang akan kucoba (maks 120)</label><input type="text" id="p_ch" maxlength="120" placeholder="mis. ponsel diisi daya di luar kamar"><h3>Kapan aku kembali ke rencana?</h3>${chips('p_t',['sekarang','1 jam lagi','besok pagi'],[],1)}<button class="btn big" data-a="prnext">Lanjut</button>`;
+ else b=`<h2>Satu aksi pemulihan</h2><p class="muted">Mis. minum air, keluar ruangan, atau tidur. Lalu, bila mau, satu baris yang kamu pelajari.</p>${chips('p_j',listFor('njenis'),[],1,addChipUi,'njenis')}<input type="text" id="p_n2" maxlength="140" placeholder="yang kupelajari (opsional)"><button class="btn big" data-a="prfin">Selesai</button>`;
+ openFull(`<div class="top"><span class="muted">Setelah kejadian</span><button class="ib" data-a="prx">Tutup</button></div>${b}`)}
+A.prnext=()=>{const v=S.events.find(x=>x.id===PR.ev);if(PR.i===1&&v){const k=picked('p_k'),n=picked('p_n');recNew('konteks',k,v.konteks);recNew('kebutuhan',n,v.kebutuhan);if(k.length)v.konteks=k;if(n.length)v.kebutuhan=n;const t=one('p_t');if(t==='sekarang')v.jam_kembali_ke_rencana=0;else if(t==='1 jam lagi')v.jam_kembali_ke_rencana=1;else if(t==='besok pagi'){const now=new Date(),x=new Date(now);x.setHours(7,0,0,0);if(x<=now)x.setDate(x.getDate()+1);v.jam_kembali_ke_rencana=Math.round((x-now)/3600000)}
+ const ch=val('p_ch').trim();if(ch)S.notes.push({id:newId(S.notes),waktu:isoTz(),jenis:'hasil protokol',isi:ch,episode_id:v.episode_id||''});save()}
+ PR.i++;renderPR()};
+A.prfin=()=>{const j=one('p_j'),t=val('p_n2').trim();const v=S.events.find(x=>x.id===PR.ev);if(t||j){S.notes.push({id:newId(S.notes),waktu:isoTz(),jenis:j||'pemicu baru',isi:t,episode_id:v?v.episode_id:''});noteJenis(j);recUse('njenis',j?[j]:[]);save()}A.prx()};
+A.prx=()=>{PR=null;closeFull();render();toast('Silakan lanjut. Datanya sudah tersimpan.')};
+function openNote(epId){openSheet(`<h2>Yang kupelajari</h2>${chips('n_j',listFor('njenis'),[],1,addChipUi,'njenis')}<input type="text" id="n_t" maxlength="140" placeholder="satu baris (opsional)"><button class="btn big" data-a="notesave" data-ep="${epId||''}">Simpan</button>`)}
+A.notesave=el=>{const t=val('n_t').trim();if(!t&&!one('n_j')){closeSheet(true);return}S.notes.push({id:newId(S.notes),waktu:isoTz(),jenis:one('n_j')||'pemicu baru',isi:t,episode_id:el.dataset.ep||''});noteJenis(one('n_j'));recUse('njenis',one('n_j')?[one('n_j')]:[]);save();closeSheet(true);render();toast('Tersimpan.')};
+A.addnote=()=>openNote('');
+
+/* ================= check-in ================= */
+function openCheckin(d){const c=S.checkins.find(x=>x.tanggal===d)||{};
+ openSheet(`<h2>Check-in ${esc(dayLabel(d))}</h2><p class="muted">10 pertanyaan singkat, sekitar 1 menit. Semua opsional.</p>`+CKQ.map((q,i)=>`<h3>${i+1}. ${q[1]}</h3>${q[2]?`<p class="muted sm" style="margin:0">${q[2]}</p>`:''}${chips('ck_'+q[0],q[3],[String(c[q[0]]==null?'':c[q[0]])],1)}`).join('')+`<button class="btn big" data-a="cksave" data-d="${d}">Simpan</button>`)}
+A.ck=el=>openCheckin(el.dataset.d||today());
+A.cksave=el=>{const d=el.dataset.d,row={tanggal:d};CKQ.forEach(q=>{const v=one('ck_'+q[0]);row[q[0]]=q[4]?(v?Number(v):''):(v==='lewati'?'':v)});row.dicatat_terlambat=d<today()?'ya':'tidak';
+ const i=S.checkins.findIndex(x=>x.tanggal===d);if(i>=0)S.checkins[i]=row;else S.checkins.push(row);save();closeSheet(true);render();toast('Check-in tersimpan.')}
+
+/* ================= statistik ================= */
+function wk(w){const ps=pausedSet(),ck=new Set(S.checkins.map(c=>c.tanggal)),td=today();const days=[0,1,2,3,4,5,6].map(i=>addDays(w,i)).filter(d=>d<=td);const e7=addDays(w,6);
+ const ep=S.episodes.filter(e=>{const d=dayOf(e.waktu_mulai);return d>=w&&d<=e7}),ev=S.events.filter(e=>{const d=dayOf(e.waktu);return d>=w&&d<=e7});
+ const jeda=days.filter(d=>ps.has(d)).length,rec=days.filter(d=>ck.has(d)).length,den=days.length-jeda;
+ const cnt=r=>ep.filter(e=>e.hasil===r).length;
+ return{w,ep:ep.length,ev:ev.length,lewat:cnt('lewat'),berkurang:cnt('berkurang'),diikuti:cnt('diikuti'),unk:ep.filter(e=>!e.hasil).length,med:med(ep.map(e=>e.durasi_menit)),rec,jeda,den,kel:den>0?Math.round(rec/den*100)/100:''}}
+function allWeeks(){const ds=[...S.episodes.map(e=>dayOf(e.waktu_mulai)),...S.events.map(e=>dayOf(e.waktu)),...S.checkins.map(c=>c.tanggal)].sort();if(!ds.length)return[];let w=weekStart(ds[0]);const end=weekStart(today()),o=[];while(w<=end){o.push(w);w=addDays(w,7)}return o}
+function baseline(){const c=AC();if(!c)return null;const s=c.mulai,e=addDays(s,13);if(today()<e)return null;const n=S.events.filter(v=>{const d=dayOf(v.waktu);return d>=s&&d<=e}).length;return n/2}
+function bars(vals,labels,base,low){const W=320,H=110,mx=Math.max(1,...vals,base||0),bw=W/vals.length;let s=`<svg viewBox="0 0 ${W} ${H+16}" class="chart" role="img">`;
+ vals.forEach((v,i)=>{const bh=(v/mx)*(H-16);s+=`<rect x="${i*bw+5}" y="${H-bh}" width="${bw-10}" height="${bh}" rx="3" class="${low[i]?'barlow':'bar'}"/><text x="${i*bw+bw/2}" y="${H-bh-3}" text-anchor="middle" class="bt">${v}</text><text x="${i*bw+bw/2}" y="${H+12}" text-anchor="middle" class="bl">${labels[i]}</text>`});
+ if(base!=null){const y=H-(base/mx)*(H-16);s+=`<line x1="0" x2="${W}" y1="${y}" y2="${y}" class="bline"/>`}return s+'</svg>'}
+function vPolaDasar(){const eps=S.episodes,n=eps.length;const ws=allWeeks().slice(-8);
+ let h=`<h1>Pola</h1><p class="muted">Dari datamu sejauh ini. Ini informasi tentang pola kamu, bukan bukti bahwa sesuatu bekerja.</p>`;
+ if(!n&&!S.events.length&&!S.checkins.length)return h+`<div class="card"><p>Belum ada data. Pola muncul setelah beberapa hari mencatat.</p></div>`;
+ const W=ws.map(wk),td=today();const ps=pausedSet();
+ const first=[...eps.map(e=>dayOf(e.waktu_mulai)),...S.checkins.map(c=>c.tanggal)].sort()[0]||td;let tot=0,ckd=0;const ck=new Set(S.checkins.map(c=>c.tanggal));for(let d=first;d<=td;d=addDays(d,1)){if(ps.has(d))continue;tot++;if(ck.has(d))ckd++}
+ const closed=eps.filter(e=>e.hasil);
+ h+=`<div class="card"><h3>Kelengkapan data</h3><p>Check-in: <b>${ckd}</b> dari <b>${tot}</b> hari${[...ps].length?' (hari jeda dikeluarkan)':''}.</p><p>Episode dorongan yang sudah ditutup: <b>${closed.length}</b> dari <b>${n}</b>.</p><p class="muted sm">Hari tanpa catatan bukan nol. Angka lain lebih bisa dipercaya bila kelengkapan tinggi.</p></div>`;
+ const lbl=W.map(x=>x.w.slice(5)),low=W.map(x=>x.kel!==''&&x.kel<.5);
+ const m4=a=>med(a.slice(-4));
+ h+=`<div class="card"><h3>Dorongan per minggu</h3>${bars(W.map(x=>x.ep),lbl,null,low)}<p class="muted sm">Median 4 minggu terakhir: ${m4(W.map(x=>x.ep))??'–'}. Batang pudar = kelengkapan data di bawah 50%. Cooldown memengaruhi hitungan; dorongan yang tidak dicatat tidak terhitung (angka ini batas bawah).</p></div>`;
+ const bs=baseline();
+ h+=`<div class="card"><h3>Kejadian per minggu</h3>${bars(W.map(x=>x.ev),lbl,bs,low)}<p class="muted sm">Median 4 minggu terakhir: ${m4(W.map(x=>x.ev))??'–'}. ${bs!=null?'Garis putus-putus = baseline dua minggu pertama ('+r1(bs)+' per minggu). ':'Baseline tersedia setelah 2 minggu pertama. '}Sebagian penurunan bisa terjadi sendiri (regresi ke rata-rata), jadi jangan langsung dianggap hasil strategi.</p></div>`;
+ // klasifikasi
+ const d7=addDays(td,-6),ev7=S.events.filter(v=>dayOf(v.waktu)>=d7&&v.sesuai_kontrak!=='ya').length;
+ if(ev7>0){let t;if(ev7===1&&(bs==null||ev7<=bs))t='Satu kejadian di luar rencana dalam 7 hari terakhir. Cukup protokol ringan: apa satu perubahan kecil berikutnya?';else if(ev7>=2&&(bs==null||ev7>=bs))t='Dua atau lebih kejadian dalam 7 hari terakhir. Mungkin saat yang baik untuk meninjau strategi, atau meninjau tujuan.';else t='Kejadian dalam 7 hari terakhir masih di bawah baseline.';h+=`<div class="card hl"><h3>Seminggu terakhir</h3><p>${t}</p><p class="muted sm">Definisi operasional aplikasi <span class="tag">hipotesis</span>, bukan definisi klinis.</p></div>`}
+ // hasil
+ const ea=S.events.filter(v=>(v.aksi||[]).length);if(ea.length>=3){const og=ea.filter(v=>v.aksi.includes('orgasme')).length,ms=ea.filter(v=>!v.aksi.includes('orgasme')&&v.aksi.includes('masturbasi')).length,po=ea.length-og-ms;h+=`<div class="card"><h3>Tahap kejadian</h3><p class="sm">Dari ${ea.length} kejadian: berhenti di pornografi ${po}, sampai masturbasi tanpa orgasme ${ms}, sampai orgasme ${og}.</p><p class="muted sm">Beberapa tahap dalam satu rentang ${S.settings.jendela_eskalasi_menit} menit dihitung satu kejadian.</p></div>`}
+ const cnt=r=>eps.filter(e=>e.hasil===r).length,unk=eps.filter(e=>!e.hasil).length;
+ if(n){const row=(l,v)=>`<div class="sm">${l}: ${v}</div><div class="hb"><div style="width:${n?v/n*100:0}%"></div></div>`;
+  const ok=cnt('lewat')+cnt('berkurang');
+  h+=`<div class="card"><h3>Hasil dorongan</h3>${row('Lewat',cnt('lewat'))}${row('Berkurang',cnt('berkurang'))}${row('Diikuti',cnt('diikuti'))}${row('Belum diketahui',unk)}<p class="muted sm">${closed.length>=5?`Dorongan yang berakhir tanpa perilaku sasaran: ${ok} dari ${closed.length} episode yang ditutup (${Math.round(ok/closed.length*100)}%). Penyebutnya hanya episode yang kamu tutup, jadi bisa condong ke yang diingat.`:'Butuh sekitar 5 episode yang ditutup sebelum persentase ditampilkan.'}</p>${closed.length?`<p class="muted sm">Durasi tengah episode: ${med(closed.map(e=>e.durasi_menit))??'–'} menit (hanya yang ditutup tepat waktu).</p>`:''}</div>`}
+ // heatmap
+ const hp=eps.filter(e=>e.dicatat_terlambat!=='ya');
+ if(hp.length>=10){const g=Array.from({length:7},()=>Array(24).fill(0));hp.forEach(e=>{g[dow(dayOf(e.waktu_mulai))][new Date(e.waktu_mulai).getHours()]++});const mx=Math.max(...g.flat());const dn=['Sen','Sel','Rab','Kam','Jum','Sab','Min'];
+  let hm='<div class="hm"><span></span>'+Array.from({length:24},(_,i)=>`<span>${i%6===0?i:''}</span>`).join('');g.forEach((r,i)=>{hm+=`<span>${dn[i]}</span>`+r.map((c,j)=>`<i title="${dn[i]} ${j}:00 — ${c}" style="background:rgba(108,197,184,${c?(.18+.8*c/mx):.06})"></i>`).join('')});
+  h+=`<div class="card"><h3>Kapan paling rawan</h3>${hm}</div><p class="muted sm">Jam asli, baris menurut hari kustom. Jangan dibaca sebagai sebab-akibat. Entri yang dicatat terlambat dikecualikan.</p>`}
+ else h+=`<div class="card"><h3>Kapan paling rawan</h3><p class="muted">Peta panas muncul setelah sekitar 10 dorongan tercatat (baru ${hp.length}).</p></div>`;
+ // konteks
+ if(n>=10){const c={};eps.forEach(e=>e.konteks.forEach(k=>c[k]=(c[k]||0)+1));const top=Object.entries(c).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  h+=`<div class="card"><h3>Konteks yang sering muncul bersama dorongan <span class="tag">pola awal</span></h3>${top.length?top.map(([k,v])=>`<div class="sm">${esc(k)}: ${v} dari ${n} episode (${Math.round(v/n*100)}%)</div><div class="hb"><div style="width:${v/n*100}%"></div></div>`).join(''):'<p class="muted">Belum ada konteks yang ditandai.</p>'}<p class="muted sm">Dari datamu sejauh ini, hal-hal ini tampaknya sering muncul bersama dorongan. Ini hubungan, bukan sebab.</p></div>`}
+ // strategi
+ const st={};eps.filter(e=>e.hasil).forEach(e=>e.strategi.forEach(s=>{st[s]=st[s]||{n:0,ok:0};st[s].n++;if(e.hasil!=='diikuti')st[s].ok++}));const sr=Object.entries(st).filter(([k,v])=>v.n>=3);
+ h+=`<div class="card"><h3>Hasil per strategi</h3>${sr.length?sr.map(([k,v])=>`<p>${esc(k)}: <b>${v.ok}</b> dari ${v.n} berakhir tanpa perilaku sasaran</p>`).join('')+'<p class="muted sm">Sampel kecil; jangan menyimpulkan satu strategi lebih unggul secara umum.</p>':'<p class="muted">Butuh minimal 3 percobaan per strategi.</p>'}</div>`;
+ // rencana
+ const pm=S.plans.reduce((a,p)=>a+(+p.kali_pemicu_muncul||0),0),pd=S.plans.reduce((a,p)=>a+(+p.kali_dilaksanakan||0),0);
+ if(S.plans.length)h+=`<div class="card"><h3>Rencana jika-maka</h3><p>${pm?`Dilaksanakan ${pd} dari ${pm} kali pemicu muncul.`:'Belum ada pemicu yang kamu laporkan.'}</p></div>`;
+ const evr=S.events.map(v=>v.jam_kembali_ke_rencana).filter(x=>x!=='');if(evr.length>=3)h+=`<div class="card"><h3>Waktu kembali ke rencana</h3><p>Tengah: ${med(evr)} jam (dari ${evr.length} kejadian).</p></div>`;
+ if(S.settings.tampilkan_hari_sesuai==='ya'){let c=0;for(let i=0;i<90;i++){const d=addDays(td,-i);if(ps.has(d))continue;if(S.checkins.some(x=>x.tanggal===d&&x.ada_kejadian==='tidak')&&!S.events.some(v=>dayOf(v.waktu)===d))c++}h+=`<div class="card"><h3>Hari sesuai tujuan (90 hari)</h3><p>${c} hari <span class="muted sm">(dari hari yang kamu check-in)</span></p></div>`}
+ return h}
+
+
+/* ================= Pola: insight & algoritma ================= */
+const BK=['Dini hari','Pagi','Siang–sore','Malam'],HN=['Sen','Sel','Rab','Kam','Jum','Sab','Min'];
+const wil=(k,n)=>{if(!n)return 0;const z=1.96,p=k/n,d=1+z*z/n;return(p+z*z/(2*n)-z*Math.sqrt((p*(1-p)+z*z/(4*n))/n))/d};
+const mean=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:null;
+function pear(x,y){const n=x.length;if(n<8)return null;const mx=mean(x),my=mean(y);let a=0,b=0,c=0;for(let i=0;i<n;i++){a+=(x[i]-mx)*(y[i]-my);b+=(x[i]-mx)**2;c+=(y[i]-my)**2}return b&&c?a/Math.sqrt(b*c):null}
+const allTimes=()=>[...S.episodes.map(e=>T(e.waktu_mulai)),...S.events.filter(v=>!v.episode_id).map(v=>T(v.waktu))];
+/* kernel density melingkar (lebar 1,5 jam), bobot peluruhan 30 hari */
+function hourCurve(){const now=Date.now(),w=Array(24).fill(0);allTimes().forEach(t=>{const a=Math.pow(.5,(now-t)/(30*864e5)),d0=new Date(t),hh=d0.getHours()+d0.getMinutes()/60;for(let x=0;x<24;x++){let d=Math.abs(x+.5-hh);d=Math.min(d,24-d);w[x]+=a*Math.exp(-d*d/4.5)}});const m=Math.max(...w,1e-9);return w.map(v=>v/m)}
+function curveSvg(c,hr,H){H=H||56;const W=288,p=c.map((v,i)=>[(i+.5)/24*W,H-4-v*(H-12)]);let d='M0,'+(H-4);p.forEach(q=>d+=' L'+q[0].toFixed(1)+','+q[1].toFixed(1));d+=` L${W},${H-4} Z`;const x=(hr+.5)/24*W;return`<svg viewBox="0 0 ${W} ${H+14}" class="chart"><path d="${d}" fill="rgba(var(--acrgb),.28)" stroke="var(--ac)" stroke-width="1.5"/><line x1="${x}" x2="${x}" y1="0" y2="${H-4}" stroke="var(--wa)" stroke-dasharray="3 3"/>${[0,6,12,18].map(h=>`<text x="${(h+.5)/24*W}" y="${H+10}" class="bl" text-anchor="middle">${pad(h)}</text>`).join('')}</svg>`}
+function riskCard(){const ts=allTimes();if(ts.length<8)return'';const c=hourCurve(),hr=new Date().getHours();let nx=-1;for(let i=1;i<=6;i++)if(c[(hr+i)%24]>=.7){nx=(hr+i)%24;break}
+ const m=c[hr]>=.7?'Sekarang termasuk jam yang sering rawan menurut polamu. Siapkan satu langkah kecil.':nx>=0?`Sekitar pukul ${pad(nx)}:00 biasanya mulai rawan. Mau pindah ruangan atau siapkan ritual lebih dulu?`:'Beberapa jam ke depan relatif tenang menurut polamu.';
+ return`<div class="card hl"><h3>Prakiraan jam rawan</h3>${curveSvg(c,hr,40)}<p class="sm">${m}</p><p class="muted sm">Dari ${ts.length} catatan (yang terbaru berbobot lebih). Hipotesis, bukan ramalan.</p></div>`}
+function obs(){return S.episodes.map(e=>{const t=T(e.waktu_mulai),d=new Date(t);return{e,t,h:d.getHours(),b:Math.floor(d.getHours()/6),wd:dow(dayOf(e.waktu_mulai)),k:e.konteks||[],n:e.kebutuhan||[],l:e.lokasi_umum,i:Number(e.intensitas_puncak||e.intensitas_awal)||0,hit:e.hasil?(e.hasil==='diikuti'?1:0):null,s:e.strategi||[]}})}
+/* penambangan aturan asosiasi (Apriori ringan): dukungan, keyakinan terkoreksi, lift terhadap laju dasar */
+function rules(O){const cl=O.filter(o=>o.hit!==null),base=cl.length?cl.reduce((a,o)=>a+o.hit,0)/cl.length:0,c={};
+ cl.forEach(o=>{const f=[...new Set([...o.k.map(x=>'konteks: '+x),...o.n.map(x=>'butuh: '+x),...(o.l?['lokasi: '+o.l]:[]),'waktu: '+BK[o.b].toLowerCase(),o.wd>=5?'waktu: akhir pekan':'waktu: hari kerja'])];
+  for(let i=0;i<f.length;i++){(c[f[i]]=c[f[i]]||{n:0,h:0}).n++;c[f[i]].h+=o.hit;for(let j=i+1;j<f.length;j++){const k=[f[i],f[j]].sort().join('  +  ');(c[k]=c[k]||{n:0,h:0}).n++;c[k].h+=o.hit}}});
+ return{base,n:cl.length,r:Object.entries(c).filter(([k,v])=>v.n>=3).map(([k,v])=>{const conf=(v.h+base*2)/(v.n+2);return{k,n:v.n,conf,lift:base?conf/base:1}})}}
+function corr(){const days={};S.episodes.forEach(e=>{const d=dayOf(e.waktu_mulai);days[d]=(days[d]||0)+1});const V=[['kualitas_tidur','Kualitas tidur'],['suasana_hati','Suasana hati'],['stres','Stres'],['kecemasan','Kecemasan'],['energi','Energi'],['kesepian','Kesepian']],out=[];
+ V.forEach(([k,l])=>[0,1].forEach(lag=>{const x=[],y=[];S.checkins.forEach(c=>{if(c[k]===''||c[k]==null||addDays(c.tanggal,lag)>=today())return;x.push(Number(c[k]));y.push(days[addDays(c.tanggal,lag)]||0)});const r=pear(x,y);if(r!==null)out.push({k:l,lag,r,n:x.length})}));return out.sort((a,b)=>Math.abs(b.r)-Math.abs(a.r))}
+function slope(y){const n=y.length;if(n<4)return null;const mx=(n-1)/2,my=mean(y);let a=0,b=0;y.forEach((v,i)=>{a+=(i-mx)*(v-my);b+=(i-mx)**2});return a/b}
+const pc=x=>Math.round(x*100)+'%';
+const hb2=(l,v,tot,ex)=>`<div class="sm" style="display:flex;justify-content:space-between;gap:8px"><span>${esc(l)}</span><span class="muted">${ex||''}</span></div><div class="hb"><div style="width:${tot?Math.min(100,v/tot*100):0}%"></div></div>`;
+const tile=(n,l)=>`<div class="tile"><b>${n}</b><span>${l}</span></div>`;
+const conf=n=>n<10?'keyakinan rendah':n<25?'keyakinan sedang':'keyakinan cukup';
+function insights(O){const r=[],cl=O.filter(o=>o.hit!==null),ts=allTimes(),R=rules(O),td=today();
+ if(ts.length>=8){const c=hourCurve();let b=0,bi=0;for(let s=0;s<24;s++){const v=c[s]+c[(s+1)%24]+c[(s+2)%24];if(v>b){b=v;bi=s}}r.push({w:3,n:ts.length,h:'Waktu tersering',x:`Dorongan paling sering muncul sekitar pukul ${pad(bi)}:00–${pad((bi+3)%24)}:00. Catatan terbaru dibobot lebih besar.`})}
+ R.r.filter(x=>x.n>=3&&R.base>0).sort((a,b)=>b.lift*Math.log(b.n+1)-a.lift*Math.log(a.n+1)).slice(0,1).filter(x=>x.lift>=1.3).forEach(x=>r.push({w:3.5,n:x.n,h:'Lebih rentan diikuti',x:`Saat “${x.k.replace('  +  ','” bersama “')}”, dorongan diikuti sekitar ${pc(x.conf)} (dasar ${pc(R.base)}), dari ${x.n} episode.`}));
+ R.r.filter(x=>x.n>=3&&R.base>0&&x.lift<=.7).sort((a,b)=>a.lift-b.lift).slice(0,1).forEach(x=>r.push({w:3.2,n:x.n,h:'Lebih sering lewat',x:`Saat “${x.k.replace('  +  ','” bersama “')}”, dorongan lebih jarang diikuti (${pc(x.conf)} vs dasar ${pc(R.base)}). Ada yang berjalan baik di sini.`}));
+ {const hi=cl.filter(o=>o.i>=4),lo=cl.filter(o=>o.i>0&&o.i<=2);if(hi.length>=3&&lo.length>=3){const a=hi.reduce((s,o)=>s+o.hit,0)/hi.length,b=lo.reduce((s,o)=>s+o.hit,0)/lo.length;if(Math.abs(a-b)>=.15)r.push({w:2.8,n:hi.length+lo.length,h:'Intensitas',x:`Dorongan level 4–5 diikuti ${pc(a)}, sedangkan level 1–2 ${pc(b)}. ${a>b?'Bantuan paling berguna saat dorongan masih rendah, jangan menunggu sampai kuat.':'Menariknya, dorongan kuat tidak otomatis lebih sering diikuti.'}`})}}
+ {const wk=O.filter(o=>o.wd>=5).length/2,wd=O.filter(o=>o.wd<5).length/5;if(O.length>=8&&Math.max(wk,wd)>0&&Math.abs(wk-wd)/Math.max(wk,wd)>=.35)r.push({w:2.2,n:O.length,h:'Pekan vs hari kerja',x:wk>wd?`Per hari, dorongan di akhir pekan sekitar ${r1(wk/(wd||.5))}× hari kerja. Akhir pekan yang tanpa struktur mungkin perlu rencana.`:`Per hari, dorongan di hari kerja lebih banyak daripada akhir pekan (${r1(wd/(wk||.5))}×).`})}
+ {const W=allWeeks().slice(-6).map(w=>wk2(w));const sl=slope(W);if(sl!==null&&W.reduce((a,b)=>a+b,0)>=6&&Math.abs(sl)>=.4)r.push({w:2.6,n:W.reduce((a,b)=>a+b,0),h:'Tren mingguan',x:`Garis tren 6 minggu terakhir ${sl<0?'menurun':'naik'} sekitar ${r1(Math.abs(sl))} dorongan per minggu. Sebagian bisa regresi ke rata-rata, bukan bukti strategi.`})}
+ {const a=O.filter(o=>dayOf(o.e.waktu_mulai)>addDays(td,-14)).length,b=O.filter(o=>{const d=dayOf(o.e.waktu_mulai);return d<=addDays(td,-14)&&d>addDays(td,-28)}).length;if(a+b>=6&&Math.abs(a-b)/Math.sqrt(a+b)>=1.5)r.push({w:3,n:a+b,h:'Perubahan terdeteksi',x:`14 hari terakhir: ${a} dorongan, 14 hari sebelumnya: ${b}. Selisihnya cukup besar untuk diperhatikan (uji Poisson sederhana).`})}
+ {const st=strat(O);if(st.length)r.push({w:2.9,n:st[0].n,h:'Strategi andalan',x:`“${st[0].k}” berakhir tanpa perilaku sasaran ${st[0].ok} dari ${st[0].n} kali (batas bawah Wilson ${pc(st[0].lb)}).`})}
+ {const c=corr()[0];if(c&&Math.abs(c.r)>=.3)r.push({w:2.7,n:c.n,h:'Hubungan check-in',x:`${c.k}${c.lag?' kemarin':' hari ini'} berkaitan dengan jumlah dorongan ${c.lag?'hari berikutnya':'di hari yang sama'}: ${c.r>0?'makin tinggi, dorongan cenderung lebih banyak':'makin tinggi, dorongan cenderung lebih sedikit'} (r=${r1(c.r*100)/100}).`})}
+ return r.sort((a,b)=>b.w-a.w).slice(0,7)}
+function wk2(w){const e=addDays(w,6);return S.episodes.filter(x=>{const d=dayOf(x.waktu_mulai);return d>=w&&d<=e}).length}
+function strat(O){const m={};O.filter(o=>o.hit!==null).forEach(o=>o.s.forEach(s=>{const x=m[s]=m[s]||{k:s,n:0,ok:0};x.n++;if(!o.hit)x.ok++}));return Object.values(m).filter(x=>x.n>=3).map(x=>({...x,lb:wil(x.ok,x.n)})).sort((a,b)=>b.lb-a.lb||b.n-a.n)}
+function freq(O,g){const m={};O.forEach(o=>g(o).forEach(v=>{const x=m[v]=m[v]||{n:0,c:0,h:0};x.n++;if(o.hit!==null){x.c++;x.h+=o.hit}}));return Object.entries(m).sort((a,b)=>b[1].n-a[1].n)}
+function pSorot(O){const cl=O.filter(o=>o.hit!==null),ok=cl.filter(o=>!o.hit).length,ints=O.map(o=>o.i).filter(Boolean),ts=allTimes().sort((a,b)=>a-b),gaps=ts.slice(1).map((t,i)=>(t-ts[i])/36e5);
+ let h=`<div class="tiles">${tile(O.length,'dorongan tercatat')}${tile(cl.length>=5?pc(ok/cl.length):'–','berakhir tanpa perilaku sasaran')}${tile(ints.length?r1(mean(ints)):'–','rata-rata intensitas (1–5)')}${tile(gaps.length>=3?r1(med(gaps))+' jam':'–','jarak tengah antar dorongan')}</div>`;
+ const I=insights(O);h+=I.length?`<h2>Sorotan untukmu</h2>`+I.map(i=>`<div class="ins"><small>${i.h} · ${conf(i.n)}</small><p>${i.x}</p></div>`).join('')+`<p class="muted sm">Semua ini hubungan dalam datamu, bukan sebab-akibat. Makin banyak catatan, makin bisa dipercaya.</p>`:`<div class="card"><p>Sorotan muncul setelah sekitar 8 dorongan tercatat (baru ${O.length}). Isian opsional seperti konteks dan intensitas membuatnya lebih tajam.</p></div>`;return h}
+function pWaktu(O){let h='';const ts=allTimes();
+ if(ts.length>=8)h+=`<div class="card"><h3>Kurva jam rawan <span class="tag">KDE melingkar</span></h3>${curveSvg(hourCurve(),new Date().getHours())}<p class="muted sm">Garis putus-putus = sekarang. Kurva dihaluskan dan catatan terbaru berbobot lebih (paruh 30 hari).</p></div>`;else h+=`<div class="card"><p class="muted">Kurva jam rawan muncul setelah 8 catatan (baru ${ts.length}).</p></div>`;
+ const b=[0,1,2,3].map(i=>{const x=O.filter(o=>o.b===i),c=x.filter(o=>o.hit!==null);return{n:x.length,c:c.length,h:c.reduce((a,o)=>a+o.hit,0)}});
+ h+=`<div class="card"><h3>Bagian hari</h3>${b.map((x,i)=>hb2(BK[i],x.n,O.length,`${x.n}×${x.c>=3?' · diikuti '+pc(x.h/x.c):''}`)).join('')}</div>`;
+ const d=[0,1,2,3,4,5,6].map(i=>O.filter(o=>o.wd===i).length);h+=`<div class="card"><h3>Hari dalam pekan</h3>${bars(d,HN,null,d.map(()=>false))}</div>`;
+ const ig=[1,2,3,4,5].map(l=>{const x=O.filter(o=>o.i===l),c=x.filter(o=>o.hit!==null);return{l,n:x.length,c:c.length,h:c.reduce((a,o)=>a+o.hit,0)}});
+ if(ig.some(x=>x.n))h+=`<div class="card"><h3>Intensitas dan hasil</h3>${ig.map(x=>hb2(`Level ${x.l} · ${LV[x.l-1][0]}`,x.n,Math.max(...ig.map(y=>y.n)),`${x.n}×${x.c>=3?' · diikuti '+pc(x.h/x.c):''}`)).join('')}<p class="muted sm">Intensitas memakai nilai puncak bila ada.</p></div>`;
+ const ep=O.filter(o=>o.e.intensitas_awal!==''&&o.e.intensitas_puncak!=='');if(ep.length>=5){const up=ep.filter(o=>o.e.intensitas_puncak>o.e.intensitas_awal).length;h+=`<div class="card"><h3>Naik atau tidak</h3><p class="sm">Dorongan naik melewati level awal pada ${pc(up/ep.length)} episode (${up} dari ${ep.length}). Sisanya tetap atau turun.</p></div>`}
+ return h}
+function pPemicu(O){const R=rules(O),ev=S.events.filter(v=>!v.episode_id).map(v=>({k:v.konteks||[],n:v.kebutuhan||[],l:v.lokasi_umum,hit:null}));const all=[...O,...ev];let h='';
+ const sec=(t,g)=>{const f=freq(all,g).slice(0,6);return`<div class="card"><h3>${t}</h3>${f.length?f.map(([k,v])=>hb2(k,v.n,all.length,`${v.n}×${v.c>=3?' · diikuti '+pc(v.h/v.c):''}`)).join(''):'<p class="muted">Belum ada yang ditandai.</p>'}</div>`};
+ h+=sec('Konteks teratas',o=>o.k)+sec('Kebutuhan di baliknya',o=>o.n)+sec('Lokasi',o=>o.l?[o.l]:[]);
+ const co=R.r.filter(x=>x.k.includes('  +  ')&&x.n>=3).sort((a,b)=>b.n-a.n).slice(0,5);
+ h+=`<div class="card"><h3>Sering muncul bersamaan <span class="tag">asosiasi</span></h3>${co.length?co.map(x=>hb2(x.k.replace('  +  ',' + '),x.n,Math.max(1,R.n),`${x.n}× · ${x.lift>=1.3?'cenderung diikuti':x.lift<=.7?'cenderung lewat':'netral'}`)).join(''):'<p class="muted">Butuh lebih banyak episode yang ditutup (min. 3 kali kombinasi sama).</p>'}<p class="muted sm">Keyakinan dikoreksi ke laju dasar (${pc(R.base)}) agar sampel kecil tidak melebih-lebihkan.</p></div>`;return h}
+function pStrat(O){const st=strat(O);let h=`<div class="card"><h3>Peringkat strategi <span class="tag">Wilson</span></h3>${st.length?st.map(x=>hb2(x.k,x.lb,1,`${x.ok}/${x.n} · batas bawah ${pc(x.lb)}`)).join('')+'<p class="muted sm">Diurutkan memakai batas bawah interval Wilson 95%, jadi strategi yang baru dicoba sedikit kali tidak langsung unggul.</p>':'<p class="muted">Butuh minimal 3 percobaan per strategi.</p>'}</div>`;
+ const top=freq(O,o=>o.k).slice(0,3).map(x=>x[0]),rows=top.map(k=>{const m={};O.filter(o=>o.hit!==null&&o.k.includes(k)).forEach(o=>o.s.forEach(s=>{const x=m[s]=m[s]||{n:0,ok:0};x.n++;if(!o.hit)x.ok++}));const b=Object.entries(m).filter(([s,v])=>v.n>=2).sort((a,b)=>(b[1].ok+1)/(b[1].n+2)-(a[1].ok+1)/(a[1].n+2))[0];return b?`<p class="sm">Saat <b>${esc(k)}</b>: “${esc(b[0])}” (${b[1].ok} dari ${b[1].n})</p>`:''}).join('');
+ h+=`<div class="card"><h3>Paling cocok per konteks</h3>${rows||'<p class="muted">Muncul setelah beberapa strategi dicoba berulang di konteks yang sama.</p>'}<p class="muted sm">Mode Dorongan memakai logika serupa (UCB berbobot konteks) untuk menyarankan aktivitas, sambil sesekali mengajakmu mencoba yang belum teruji.</p></div>`;
+ const d7=addDays(today(),-6),lg=S.activities.map(a=>({a,c:S.activityLog.filter(l=>l.aktivitas_id===a.id&&dayOf(l.waktu)>=d7).length})).filter(x=>x.c).sort((a,b)=>b.c-a.c).slice(0,5);if(lg.length)h+=`<div class="card"><h3>Aktivitas 7 hari terakhir</h3>${lg.map(x=>hb2(x.a.nama,x.c,lg[0].c,x.c+'×')).join('')}</div>`;return h}
+function pHari(O){const cr=corr().slice(0,6);let h=`<div class="card"><h3>Check-in dan dorongan</h3>${cr.length?cr.map(x=>`<div class="sm" style="display:flex;justify-content:space-between"><span>${x.k} ${x.lag?'(kemarin → hari ini)':'(hari yang sama)'}</span><span class="muted">r=${r1(x.r*100)/100} · ${x.n} hari</span></div><div class="dv"><i style="${x.r>=0?'left:50%':'right:50%'};width:${Math.abs(x.r)*50}%;background:${x.r>=0?'var(--wa)':'var(--ac)'}"></i></div>`).join('')+'<p class="muted sm">Kanan (kuning) = makin tinggi, dorongan makin banyak. Kiri (hijau) = sebaliknya. Korelasi Pearson; butuh ≥8 hari check-in.</p>':'<p class="muted">Butuh sekitar 8 hari check-in yang terisi.</p>'}</div>`;
+ const days={};O.forEach(o=>{const d=dayOf(o.e.waktu_mulai);days[d]=1});const A1=S.checkins.filter(c=>days[c.tanggal]&&c.tanggal<today()),B1=S.checkins.filter(c=>!days[c.tanggal]&&c.tanggal<today());
+ if(A1.length>=4&&B1.length>=4){const V=[['kualitas_tidur','Tidur'],['suasana_hati','Hati'],['stres','Stres'],['kecemasan','Cemas'],['energi','Energi'],['kesepian','Sepi']];const av=(L,k)=>{const a=L.map(c=>c[k]).filter(x=>x!==''&&x!=null).map(Number);return a.length?r1(mean(a)):'–'};
+  h+=`<div class="card"><h3>Profil hari dengan dorongan</h3><table><tr><th></th><th>Ada dorongan (${A1.length})</th><th>Tanpa (${B1.length})</th></tr>${V.map(([k,l])=>`<tr><td>${l}</td><td>${av(A1,k)}</td><td>${av(B1,k)}</td></tr>`).join('')}</table><p class="muted sm">Rata-rata skor 1–5. Perbedaan kecil jangan terlalu dibaca.</p></div>`}
+ return h}
+const pData=O=>vPolaDasar().replace(/^<h1>.*?<\/p>/,'');
+A.pt=el=>{UI.pt=el.dataset.v;render();window.scrollTo(0,0)};
+function vPola(){const P=UI.pt||'sorotan',O=obs(),T2=[['sorotan','Sorotan'],['waktu','Waktu'],['pemicu','Pemicu'],['strategi','Strategi'],['hari','Hari & tubuh'],['data','Tren & data']];
+ const h=`<h1>Pola</h1><p class="muted">Dari datamu sendiri. Ini informasi tentang pola, bukan bukti bahwa sesuatu bekerja.</p><div class="seg">${T2.map(([k,l])=>`<button class="${P===k?'on':''}" data-a="pt" data-v="${k}">${l}</button>`).join('')}</div>`;
+ if(!O.length&&!S.events.length&&!S.checkins.length)return h+`<div class="card"><p>Belum ada data. Pola muncul setelah beberapa hari mencatat.</p></div>`;
+ return h+({sorotan:pSorot,waktu:pWaktu,pemicu:pPemicu,strategi:pStrat,hari:pHari,data:pData}[P]||pSorot)(O)}
+
+/* ================= home ================= */
+function vHome(){const e=lastEp(),cd=cdLeft(),inCd=cd>0,td=today(),c=AC(),now=Date.now();
+ let h=`<section><button class="tap ${inCd?'cd':''}" data-a="tap" aria-label="Ada dorongan"><span class="t1">${inCd?'Masih kuat':'Ada dorongan'}</span><span class="t2" id="cdtxt">${inCd?fmtMs(cd):'ketuk sekali'}</span></button>
+ <p class="muted c">${inCd?'Ketukan sekarang digabung ke episode yang sama. Bantuan tetap terbuka.':'Satu ketukan saja. Isian setelahnya opsional.'}</p>
+ <div class="row"><button class="btn" data-a="md" data-ep="${inCd?e.id:''}">Bantu aku sekarang</button><button class="btn ghost${openEv()?' lock':''}" data-a="happened" ${openEv()?'aria-disabled="true"':''}>${openEv()?'Sudah terjadi · terkunci':'Sudah terjadi'}</button></div></section>`;
+ if(inCd&&e)h+=`<div class="card hl"><h3>Waktu sedang berjalan</h3><p class="muted">Pilih keadaan sekarang untuk menghentikan waktu dan menutup episode ini.</p><div class="chips"><button class="chip" data-a="close" data-id="${e.id}" data-r="lewat">Lewat</button><button class="chip" data-a="close" data-id="${e.id}" data-r="berkurang">Berkurang</button><button class="chip" data-a="close" data-id="${e.id}" data-r="diikuti">Sudah terjadi</button></div></div>`;
+ const ps=pausedSet();if(ps.has(td))h+=`<div class="card"><p>Hari ini ditandai jeda. Kamu tetap boleh mengetuk tombol.</p></div>`;
+ const hrs=S.settings.pengingat_penutupan_jam;
+ const open=S.episodes.filter(x=>!x.hasil&&now-lastTap(x)>Math.max(1,hrs)*3600000&&now-lastTap(x)<14*86400000&&!x.skip).sort((a,b)=>lastTap(b)-lastTap(a));
+ if(open.length&&hrs>0&&!inCd){const x=open[0];h+=`<div class="card hl"><h3>Tadi gimana?</h3><p class="muted">Dorongan pada ${esc(fmtT(x.waktu_mulai))}.</p><div class="chips"><button class="chip" data-a="close" data-id="${x.id}" data-r="lewat">Lewat</button><button class="chip" data-a="close" data-id="${x.id}" data-r="berkurang">Berkurang</button><button class="chip" data-a="close" data-id="${x.id}" data-r="diikuti">Diikuti</button></div></div>`}
+ const unk=S.episodes.filter(x=>!x.hasil&&!x.skip&&now-lastTap(x)>12*3600000&&now-lastTap(x)<14*86400000);
+ if(unk.length>=2)h+=`<div class="card"><p>${unk.length} episode belum punya hasil. Mau menutupnya sekaligus, tenang saja?</p><button class="btn ghost s" data-a="go" data-v="tutupsemua">Buka daftar</button></div>`;
+ const ov=openEv();if(ov)h+=`<div class="card hl"><h3>Kejadian sedang dipantau</h3><p class="muted">Tercatat: ${esc(ov.aksi.join(' + '))}. Selama <b id="esctxt">${fmtMs(winMs()-(Date.now()-T(ov.terakhir_update)))}</b> lagi, tambahan akan digabung ke kejadian yang sama (bukan kejadian baru). Tombol “Sudah terjadi” terkunci sampai waktu ini habis.</p><div class="row"><button class="btn s" data-a="escadd" data-id="${ov.id}">Ada tambahan</button></div></div>`;
+ if(!S.checkins.some(x=>x.tanggal===td))h+=`<div class="card"><h3>Check-in hari ini</h3><p class="muted">10 pertanyaan singkat. Sekitar 1 menit.</p><button class="btn s" data-a="ck" data-d="${td}">Isi check-in</button></div>`;
+ h+=riskCard();h+=noteForm(true);
+ const hr=new Date().getHours(),rit=S.activities.filter(a=>a.jenis==='ritual'&&a.aktif!=='tidak');
+ if(rit.length&&(hr>=S.settings.jam_ritual||hr<S.settings.jam_mulai_hari)){const done=a=>S.activityLog.some(l=>l.aktivitas_id===a.id&&dayOf(l.waktu)===td);h+=`<div class="card"><h3>Ritual malam</h3>${rit.map(a=>`<p><label style="display:flex;gap:8px;align-items:center;color:var(--tx);margin:0"><input type="checkbox" data-a="ritlog" data-id="${a.id}" ${done(a)?'checked disabled':''}> ${esc(a.nama)}</label></p>`).join('')}</div>`}
+ // kartu hari rawan
+ const tc=S.checkins.find(x=>x.tanggal===td);
+ if(tc&&tc.kualitas_tidur!==''&&tc.kualitas_tidur<=2&&tc.stres!==''&&tc.stres>=4){const hv=S.checkins.filter(x=>x.kualitas_tidur!==''&&x.kualitas_tidur<=2&&x.stres!==''&&x.stres>=4&&x.tanggal!==td);const hit=hv.filter(x=>S.episodes.some(e=>dayOf(e.waktu_mulai)===x.tanggal)).length;
+  if(S.checkins.length>=10&&hv.length>=3&&hit/hv.length>=.5)h+=`<div class="card hl"><h3>Hari yang mungkin berat</h3><p>Dari datamu sejauh ini, kombinasi tidur kurang dan stres tinggi sering muncul bersama dorongan (${hit} dari ${hv.length} hari serupa). Mau lihat rencanamu?</p><button class="btn ghost s" data-a="tab" data-v="rencana">Buka rencana</button></div>`}
+ const ex=S.experiments.find(x=>!x.selesai);if(ex&&today()>=addDays(ex.mulai,ex.durasi||14))h+=`<div class="card hl"><h3>Eksperimen selesai</h3><p class="muted">${esc(ex.hipotesis||ex.perubahan)}</p><button class="btn s" data-a="tab" data-v="tinjau">Lihat hasil</button></div>`;
+ if(S.settings.pengingat_ekspor_minggu>0){const since=S.lastExport?T(S.lastExport):(c?T(c.mulai+'T00:00:00'):now);if(now-since>S.settings.pengingat_ekspor_minggu*7*86400000&&(S.episodes.length||S.checkins.length))h+=`<div class="card"><p>Simpan cadangan data?</p><button class="btn ghost s" data-a="go" data-v="ekspor">Ekspor</button></div>`}
+ if(c&&c.jenis_tujuan===OBS){const d=Math.max(1,Math.min(14,Math.round((T(td)-T(c.mulai))/86400000)+1));h+=`<p class="muted c">Masa pengamatan: hari ${d} dari 14 · belum ada target.</p>`}
+ h+=pwaHome();
+ if(saveFail)h+=`<div class="card"><p>Penyimpanan di browser ini tidak tersedia. Ekspor datamu secara berkala.</p></div>`;
+ return h}
+A.ritlog=el=>{const a=S.activities.find(x=>x.id===el.dataset.id);S.activityLog.push({id:newId(S.activityLog),aktivitas_id:a.id,waktu:isoTz(),durasi_menit:'',episode_id:''});save();render()};
+A.tap=tap;
+A.go=el=>{UI.view=el.dataset.v;render();window.scrollTo(0,0)};
+A.tab=el=>{closeSheet(true);UI.view=el.dataset.v;render();window.scrollTo(0,0)};
+
+/* ================= riwayat ================= */
+function vRiwayat(){const f=UI.rf;let it=[];
+ if(f==='semua'||f==='dorongan')S.episodes.forEach(o=>it.push({t:T(o.waktu_mulai),k:'e',o}));
+ if(f==='semua'||f==='kejadian')S.events.forEach(o=>it.push({t:T(o.waktu),k:'v',o}));
+ if(f==='semua'||f==='checkin')S.checkins.forEach(o=>it.push({t:T(o.tanggal+'T12:00:00'),k:'c',o}));
+ it.sort((a,b)=>b.t-a.t);const sl=it.slice(0,UI.rl);let h=`<h1>Riwayat</h1><div class="chips">${['semua','dorongan','kejadian','checkin'].map(x=>`<button class="chip ${f===x?'on':''}" data-a="rf" data-v="${x}">${x}</button>`).join('')}</div>`;
+ if(!it.length)return h+'<p class="muted">Belum ada entri.</p>';let cur='';
+ sl.forEach(x=>{const d=x.k==='c'?x.o.tanggal:dayOf(x.o.waktu_mulai||x.o.waktu);if(d!==cur){cur=d;h+=`<div class="dayh">${esc(dayLabel(d))}</div>`}
+  if(x.k==='e'){const o=x.o;h+=`<div class="item" data-a="edit" data-k="e" data-id="${o.id}"><div class="l1"><span>${fmtHM(o.waktu_mulai)} · dorongan${o.intensitas_awal!==''?' · '+o.intensitas_awal+'/5':''}</span><span class="badge">${o.hasil||'belum diketahui'}</span></div><div class="muted sm">${esc(o.konteks.join(', '))}${o.dicatat_terlambat==='ya'?' · dicatat terlambat':''}</div></div>`}
+  else if(x.k==='v'){const o=x.o;h+=`<div class="item" data-a="edit" data-k="v" data-id="${o.id}"><div class="l1"><span>${fmtHM(o.waktu)} · kejadian${(o.aksi||[]).length?' · '+o.aksi.join(' + '):''}</span>${o.sesuai_kontrak==='ya'?'<span class="badge">sesuai kontrak</span>':o.sesuai_kontrak==='tidak'?'<span class="badge">di luar rencana</span>':''}</div><div class="muted sm">${esc(o.konteks.join(', '))}</div></div>`}
+  else{const o=x.o;h+=`<div class="item" data-a="edit" data-k="c" data-id="${o.tanggal}"><div class="l1"><span>check-in</span><span class="badge">tidur ${o.kualitas_tidur||'–'} · hati ${o.suasana_hati||'–'} · stres ${o.stres||'–'}</span></div></div>`}});
+ if(it.length>UI.rl)h+=`<button class="btn ghost big" data-a="more">Muat lebih banyak</button>`;return h}
+A.rf=el=>{UI.rf=el.dataset.v;UI.rl=60;render()};A.more=()=>{UI.rl+=60;render()};
+A.edit=el=>{const k=el.dataset.k,id=el.dataset.id;
+ if(k==='c'){openCheckin(id);return}
+ if(k==='e'){const e=S.episodes.find(x=>x.id===id);openSheet(`<h2>Ubah dorongan</h2><p class="muted">${esc(fmtT(e.waktu_mulai))}</p><h3>Intensitas awal</h3>${slider('e_a',e.intensitas_awal!==''?e.intensitas_awal:3,e.intensitas_awal!=='',1,5,1)}<h3>Intensitas puncak</h3>${slider('e_p',e.intensitas_puncak!==''?e.intensitas_puncak:3,e.intensitas_puncak!=='',1,5,1)}<h3>Konteks</h3>${chips('konteks',konteksList(),e.konteks,5,addChipUi)}<h3>Kebutuhan</h3>${chips('kebutuhan',OP('kebutuhan'),e.kebutuhan,0,addChipUi)}<h3>Lokasi</h3>${chips('lokasi',OP('lokasi'),[e.lokasi_umum],1,addChipUi)}<h3>Hasil</h3>${chips('hasil',['belum diketahui','lewat','berkurang','diikuti'],[e.hasil||'belum diketahui'],1)}<label>Catatan</label><input type="text" id="f_cat" maxlength="140" value="${esc(e.catatan)}"><div class="row"><button class="btn" data-a="eesave" data-id="${id}">Simpan</button><button class="btn warn" data-a="eedel" data-k="e" data-id="${id}">Hapus</button></div>`)}
+ else{const v=S.events.find(x=>x.id===id);openSheet(`<h2>Ubah kejadian</h2><label>Waktu</label><input type="datetime-local" id="h_t" value="${dtLocal(v.waktu)}"><h3>Apa yang terjadi?</h3>${chips('h_a',AKS,v.aksi||[],0)}<h3>Direncanakan atau impulsif?</h3>${chips('h_pl',['direncanakan','impulsif'],[v.direncanakan_atau_impulsif],1)}<h3>Konteks</h3>${chips('h_k',konteksList(),v.konteks,5,addChipUi)}<h3>Kebutuhan</h3>${chips('h_n',OP('kebutuhan'),v.kebutuhan,0,addChipUi)}<h3>Lokasi</h3>${chips('h_l',OP('lokasi'),[v.lokasi_umum],1,addChipUi)}<label>Jam sampai kembali ke rencana</label><input type="number" id="h_j" min="0" max="999" value="${v.jam_kembali_ke_rencana}"><label>Catatan</label><input type="text" id="h_c" maxlength="140" value="${esc(v.catatan)}"><div class="row"><button class="btn" data-a="evsave" data-id="${id}">Simpan</button><button class="btn warn" data-a="eedel" data-k="v" data-id="${id}">Hapus</button></div>`)}};
+A.eesave=el=>{const e=S.episodes.find(x=>x.id===el.dataset.id);let v=sliderVal('e_a');if(v!==null)e.intensitas_awal=v;v=sliderVal('e_p');if(v!==null)e.intensitas_puncak=v;const nk=picked('konteks'),nn=picked('kebutuhan'),nl=one('lokasi');recNew('konteks',nk,e.konteks);recNew('kebutuhan',nn,e.kebutuhan);recNew('lokasi',nl?[nl]:[],[e.lokasi_umum]);e.konteks=nk;e.kebutuhan=nn;e.lokasi_umum=nl;e.catatan=val('f_cat');const h=one('hasil');const nh=h==='belum diketahui'?'':h;if(nh!==e.hasil){e.hasil=nh;if(nh&&!e.waktu_selesai)e.ditutup_terlambat='ya';syncEvent(e)}save();closeSheet(true);render()};
+A.evsave=el=>{const v=S.events.find(x=>x.id===el.dataset.id);let t=new Date(val('h_t'));if(!isNaN(t))v.waktu=isoTz(t);v.aksi=AKS.filter(a=>picked('h_a').includes(a));if(v.aksi.length&&!v.terakhir_update)v.terakhir_update=v.waktu;v.direncanakan_atau_impulsif=one('h_pl');{const nk=picked('h_k'),nn=picked('h_n'),nl=one('h_l');recNew('konteks',nk,v.konteks);recNew('kebutuhan',nn,v.kebutuhan);recNew('lokasi',nl?[nl]:[],[v.lokasi_umum]);v.konteks=nk;v.kebutuhan=nn;v.lokasi_umum=nl}const j=val('h_j');v.jam_kembali_ke_rencana=j===''?'':Math.max(0,Number(j));v.catatan=val('h_c');v.auto=false;save();closeSheet(true);render()};
+A.eedel=el=>{if(!confirm('Hapus entri ini? Ini juga menghapusnya dari statistik.'))return;if(el.dataset.k==='e'){S.events=S.events.filter(v=>!(v.episode_id===el.dataset.id&&v.auto));S.episodes=S.episodes.filter(x=>x.id!==el.dataset.id)}else S.events=S.events.filter(x=>x.id!==el.dataset.id);save();closeSheet(true);render()};
+
+/* ================= rencana ================= */
+function vRencana(){const act=S.plans.filter(p=>p.aktif!=='tidak');let h=`<h1>Rencana</h1><p class="muted">Rencana jika-maka menghubungkan situasi pemicu dengan respons yang sudah kamu putuskan sebelumnya. Maksimal 3 aktif.</p>`;
+ const n=S.episodes.length;if(n>=5){const c={};S.episodes.forEach(e=>e.konteks.forEach(k=>c[k]=(c[k]||0)+1));const t=Object.entries(c).sort((a,b)=>b[1]-a[1])[0];if(t&&act.length<3)h+=`<div class="card hl"><p>Konteks yang paling sering kamu tandai: <b>${esc(t[0])}</b> (${t[1]} dari ${n} episode). Mau membuat rencana untuk ini?</p><button class="btn s" data-a="planadd" data-j="${esc('aku sedang '+t[0])}">Buat rencana</button><p class="muted sm">Mengapa disarankan: dari datamu sendiri. Ini hipotesis, bukan kepastian.</p></div>`}
+ h+=act.length?act.map(p=>`<div class="card"><p><b>Jika</b> ${esc(p.jika)}</p><p><b>maka</b> ${esc(p.maka)}</p><p class="muted sm">Pemicu muncul ${p.kali_pemicu_muncul||0}× · dijalankan ${p.kali_dilaksanakan||0}×${p.terakhir_ditinjau?' · ditinjau '+esc(p.terakhir_ditinjau):''}</p><div class="row"><button class="btn ghost s" data-a="planrev" data-id="${p.id}">Tandai ditinjau</button><button class="btn ghost s" data-a="planoff" data-id="${p.id}">Nonaktifkan</button><button class="btn ghost s" data-a="plandel" data-id="${p.id}">Hapus</button></div></div>`).join(''):'<div class="card"><p class="muted">Belum ada rencana aktif.</p></div>';
+ if(act.length<3)h+=`<button class="btn big" data-a="planadd">Tambah rencana</button>`;
+ const off=S.plans.filter(p=>p.aktif==='tidak');if(off.length)h+=`<h3>Nonaktif</h3>`+off.map(p=>`<div class="item"><div class="l1"><span>Jika ${esc(p.jika)}</span><button class="ib" data-a="planon" data-id="${p.id}">Aktifkan</button></div></div>`).join('');
+ h+=`<h2>Aktivitas pengganti & ritual malam</h2><p class="muted">Aktivitas pilihanmu sendiri; aplikasi tidak menganggap satu lebih unggul. Ritual: 2–4 langkah singkat untuk jam rawan, tanpa penghitung hari.</p>`;
+ h+=S.activities.length?S.activities.map(a=>{const d7=addDays(today(),-6),c=S.activityLog.filter(l=>l.aktivitas_id===a.id&&dayOf(l.waktu)>=d7).length;return`<div class="card"><p><b>${esc(a.nama)}</b> <span class="badge">${a.jenis}</span>${a.aktif==='tidak'?' <span class="badge">nonaktif</span>':''}</p>${a.isyarat?`<p class="muted sm">Isyarat: ${esc(a.isyarat)}</p>`:''}${a.kebutuhan_dipenuhi?`<p class="muted sm">Memenuhi: ${esc(a.kebutuhan_dipenuhi)}</p>`:''}<p class="muted sm">7 hari terakhir: ${c}×</p><div class="row"><button class="btn s" data-a="actlog" data-id="${a.id}">Sudah kulakukan</button><button class="btn ghost s" data-a="acttog" data-id="${a.id}">${a.aktif==='tidak'?'Aktifkan':'Nonaktifkan'}</button><button class="btn ghost s" data-a="actdel" data-id="${a.id}">Hapus</button></div></div>`}).join(''):'<div class="card"><p class="muted">Belum ada aktivitas.</p></div>';
+ return h+`<button class="btn ghost big" data-a="actadd">Tambah aktivitas atau langkah ritual</button>`}
+A.planadd=el=>{if(S.plans.filter(p=>p.aktif!=='tidak').length>=3){toast('Maksimal 3 rencana aktif');return}openSheet(`<h2>Rencana jika-maka</h2><label>Jika… (situasi pemicu)</label><input type="text" id="pl_j" maxlength="140" value="${esc(el&&el.dataset&&el.dataset.j||'')}" placeholder="aku sudah di kasur dan ingin membuka ponsel"><details><summary class="muted sm">Pilih dari ${listFor('jika').length} saran</summary>${sug('jika','pl_j')}</details><label>maka… (respons konkret yang kecil)</label><input type="text" id="pl_m" maxlength="140" placeholder="aku taruh ponsel di meja dan baca 10 halaman"><details><summary class="muted sm">Pilih dari ${listFor('maka').length} saran</summary>${sug('maka','pl_m')}</details><button class="btn big" data-a="plansave">Simpan</button>`)};
+A.plansave=()=>{const j=val('pl_j').trim(),m=val('pl_m').trim();if(!j||!m){toast('Isi keduanya');return}
+ if(!BASE.jika.includes(j)&&!S.custom.jika.includes(j))S.custom.jika.push(j);if(!BASE.maka.includes(m)&&!S.custom.maka.includes(m))S.custom.maka.push(m);recUse('jika',[j]);recUse('maka',[m]);
+ S.plans.push({id:newId(S.plans),jika:j,maka:m,dibuat:today(),aktif:'ya',terakhir_ditinjau:'',kali_pemicu_muncul:0,kali_dilaksanakan:0});save();closeSheet(true);render()};
+A.planrev=el=>{S.plans.find(p=>p.id===el.dataset.id).terakhir_ditinjau=today();save();render()};
+A.planoff=el=>{S.plans.find(p=>p.id===el.dataset.id).aktif='tidak';save();render()};
+A.planon=el=>{if(S.plans.filter(p=>p.aktif!=='tidak').length>=3){toast('Maksimal 3 rencana aktif');return}S.plans.find(p=>p.id===el.dataset.id).aktif='ya';save();render()};
+A.plandel=el=>{if(confirm('Hapus rencana ini?')){S.plans=S.plans.filter(p=>p.id!==el.dataset.id);save();render()}};
+A.actadd=()=>openSheet(`<h2>Aktivitas atau langkah ritual</h2><label>Nama</label><input type="text" id="ac_n" maxlength="60"><details><summary class="muted sm">Pilih aktivitas pengganti (${listFor('alt').length} saran)</summary>${sug('alt','ac_n')}</details><details><summary class="muted sm">Pilih langkah ritual malam (${listFor('rit').length} saran)</summary>${sug('rit','ac_n')}</details><h3>Jenis</h3>${chips('ac_j',['alternatif','ritual'],['alternatif'],1)}<label>Isyarat konkret (opsional)</label><input type="text" id="ac_i" maxlength="80" placeholder="setelah menyikat gigi malam"><details><summary class="muted sm">Contoh isyarat</summary>${sug('isy','ac_i')}</details><h3>Kebutuhan yang dipenuhi</h3>${chips('ac_k',[...KBD,...S.custom.kbd.filter(x=>!KBD.includes(x))],[],1,addChipUi,'kbd')}<button class="btn big" data-a="actsave">Simpan</button>`);
+A.actsave=()=>{const n=val('ac_n').trim();if(!n){toast('Beri nama');return}const jn=one('ac_j')||'alternatif',kk=jn==='ritual'?'rit':'alt',isy=val('ac_i').trim(),kb=one('ac_k');
+ if(!BASE[kk].includes(n)&&!S.custom[kk].includes(n))S.custom[kk].push(n);recUse(kk,[n]);
+ if(isy){if(!ISY.includes(isy)&&!S.custom.isy.includes(isy))S.custom.isy.push(isy);recUse('isy',[isy])}
+ if(kb&&!KBD.includes(kb)&&!S.custom.kbd.includes(kb))S.custom.kbd.push(kb);recUse('kbd',kb?[kb]:[]);
+ S.activities.push({id:newId(S.activities),nama:n,jenis:jn,isyarat:isy,kebutuhan_dipenuhi:kb,aktif:'ya'});save();closeSheet(true);render()};
+A.actlog=el=>{S.activityLog.push({id:newId(S.activityLog),aktivitas_id:el.dataset.id,waktu:isoTz(),durasi_menit:'',episode_id:''});save();render();toast('Dicatat.')};
+A.acttog=el=>{const a=S.activities.find(x=>x.id===el.dataset.id);a.aktif=a.aktif==='tidak'?'ya':'tidak';save();render()};
+A.actdel=el=>{if(confirm('Hapus aktivitas ini beserta lognya?')){S.activities=S.activities.filter(a=>a.id!==el.dataset.id);S.activityLog=S.activityLog.filter(l=>l.aktivitas_id!==el.dataset.id);save();render()}};
+
+/* ================= tinjau ================= */
+function vTinjau(){const td=today(),w=weekStart(td),cur=wk(w),prevW=addDays(w,-7),prev=wk(prevW),bs=baseline(),rv=S.reviews.find(r=>r.minggu_mulai===w);
+ let h=`<h1>Tinjau</h1><div class="card"><h3>Tinjauan minggu ini <span class="muted sm">(5 menit)</span></h3>
+ <p>1. Kejadian minggu ini: <b>${cur.ev}</b> (minggu lalu ${prev.ev}${bs!=null?`, baseline ${r1(bs)}`:''})</p>
+ <p>2. Rencana yang dijalankan: ${(()=>{const m=S.plans.reduce((a,p)=>a+(+p.kali_pemicu_muncul||0),0),d=S.plans.reduce((a,p)=>a+(+p.kali_dilaksanakan||0),0);return m?d+' dari '+m+' kali pemicu muncul':'belum ada data'})()}</p>
+ <p>3. Rating kontrol / dampak: ${rv?rv.rating_kontrol+' / '+rv.rating_dampak:'belum diisi'}</p>
+ <p class="muted sm">Berdasarkan ${cur.rec} dari ${Math.max(0,cur.den)} hari ber-check-in minggu ini. Frekuensi saja tidak cukup untuk menyimpulkan apa pun.</p>
+ <button class="btn" data-a="revopen">${rv?'Ubah tinjauan':'Isi tinjauan'}</button></div>`;
+ const nw=S.notes.filter(n=>dayOf(n.waktu)>=w&&n.isi);if(nw.length)h+=`<div class="card"><h3>Yang kupelajari minggu ini</h3>${nw.map(n=>`<p>• ${esc(n.isi)} <span class="badge">${esc(n.jenis)}</span></p>`).join('')}</div>`;
+ const rs=[...S.reviews].sort((a,b)=>b.minggu_mulai.localeCompare(a.minggu_mulai)).slice(0,5);if(rs.length)h+=`<h3>Tinjauan sebelumnya</h3>`+rs.map(r=>`<div class="item"><div class="l1"><span>Minggu ${esc(r.minggu_mulai)}</span><span class="badge">kontrol ${r.rating_kontrol} · dampak ${r.rating_dampak}</span></div><div class="muted sm">${esc(r.satu_perubahan)}</div></div>`).join('');
+ h+=`<h2>Catatan pembelajaran</h2><button class="btn ghost big" data-a="addnote">Tambah catatan</button>`;
+ const ns=[...S.notes].sort((a,b)=>T(b.waktu)-T(a.waktu)).slice(0,5);h+=ns.map(n=>`<div class="item" data-a="notedel" data-id="${n.id}"><div class="l1"><span>${esc(n.isi||'(tanpa teks)')}</span><span class="badge">${esc(n.jenis)}</span></div><div class="muted sm">${esc(fmtT(n.waktu))} · ketuk untuk menghapus</div></div>`).join('');
+ h+=`<h2>Eksperimen pribadi</h2><p class="muted">Ubah satu hal selama beberapa hari, lalu bandingkan dengan periode yang sama panjang sebelumnya. Ini bukan bukti sebab-akibat.</p>`;
+ const ex=S.experiments.find(x=>!x.selesai);
+ if(ex){const end=addDays(ex.mulai,(ex.durasi||14)-1),ready=td>end;h+=`<div class="card hl"><p><b>${esc(ex.perubahan)}</b></p><p class="muted sm">Hipotesis: ${esc(ex.hipotesis)} · metrik: ${esc(ex.metrik)} · ${esc(ex.mulai)} s/d ${esc(end)}</p><button class="btn s" data-a="expfin" data-id="${ex.id}">${ready?'Lihat hasil':'Akhiri sekarang'}</button></div>`}
+ else h+=`<button class="btn big" data-a="expadd">Mulai eksperimen</button>`;
+ S.experiments.filter(x=>x.selesai).slice(-3).reverse().forEach(x=>{h+=`<div class="item"><div class="l1"><span>${esc(x.perubahan)}</span><span class="badge">${esc(x.selesai)}</span></div><div class="muted sm">${esc(x.hasil_ringkas)}</div></div>`});
+ return h}
+A.revopen=()=>{const w=weekStart(today()),r=S.reviews.find(x=>x.minggu_mulai===w)||{};openSheet(`<h2>Tinjauan minggu ini</h2><h3>Seberapa terkendali? (0–10)</h3>${slider('r_k',r.rating_kontrol!==undefined?r.rating_kontrol:5,r.rating_kontrol!==undefined,0,10)}<h3>Seberapa berdampak pada hidup? (0–10)</h3>${slider('r_d',r.rating_dampak!==undefined?r.rating_dampak:5,r.rating_dampak!==undefined,0,10)}<h3>Rencana dilaksanakan?</h3>${chips('r_p',['ya','sebagian','tidak','tidak ada rencana'],[r.rencana_dilaksanakan||''],1)}<label>Apa satu hal yang akan kuubah minggu depan? (maks 120)</label><input type="text" id="r_c" maxlength="120" value="${esc(r.satu_perubahan||'')}"><label>Catatan (opsional)</label><input type="text" id="r_n" maxlength="140" value="${esc(r.catatan||'')}"><button class="btn big" data-a="revsave">Simpan</button>`)};
+A.revsave=()=>{const w=weekStart(today()),k=sliderVal('r_k'),d=sliderVal('r_d');const row={minggu_mulai:w,rating_kontrol:k===null?'':k,rating_dampak:d===null?'':d,rencana_dilaksanakan:one('r_p'),satu_perubahan:val('r_c'),catatan:val('r_n')};const i=S.reviews.findIndex(x=>x.minggu_mulai===w);if(i>=0)S.reviews[i]=row;else S.reviews.push(row);save();closeSheet(true);render();toast('Tinjauan tersimpan.')};
+A.notedel=el=>{if(confirm('Hapus catatan ini?')){S.notes=S.notes.filter(n=>n.id!==el.dataset.id);save();render()}};
+A.expadd=()=>openSheet(`<h2>Eksperimen pribadi</h2><label>Hipotesis (mis. ponsel di luar kamar mengurangi dorongan malam)</label><input type="text" id="x_h" maxlength="140"><label>Satu perubahan</label><input type="text" id="x_p" maxlength="100"><h3>Metrik</h3>${chips('x_m',['dorongan per periode','kejadian per periode','rating kontrol'],['dorongan per periode'],1)}<h3>Durasi</h3>${chips('x_d',['7','14','21'],['14'],1)}<button class="btn big" data-a="expsave">Mulai hari ini</button>`);
+A.expsave=()=>{const p=val('x_p').trim();if(!p){toast('Isi perubahannya');return}S.experiments.push({id:newId(S.experiments),hipotesis:val('x_h'),perubahan:p,mulai:today(),selesai:'',metrik:one('x_m')||'dorongan per periode',durasi:Number(one('x_d'))||14,hasil_ringkas:''});save();closeSheet(true);render()};
+function expCompare(x){const L=x.durasi||14,s1=x.mulai,e1=addDays(s1,L-1),s0=addDays(s1,-L),e0=addDays(s1,-1);const inr=(d,a,b)=>d>=a&&d<=b;
+ const ps=pausedSet(),ck=new Set(S.checkins.map(c=>c.tanggal));const comp=(a,b)=>{let t=0,c=0;for(let d=a;d<=b;d=addDays(d,1)){if(ps.has(d))continue;t++;if(ck.has(d))c++}return t?Math.round(c/t*100):0};
+ let a,b;if(x.metrik.startsWith('dorongan')){a=S.episodes.filter(e=>inr(dayOf(e.waktu_mulai),s0,e0)).length;b=S.episodes.filter(e=>inr(dayOf(e.waktu_mulai),s1,e1)).length}
+ else if(x.metrik.startsWith('kejadian')){a=S.events.filter(e=>inr(dayOf(e.waktu),s0,e0)).length;b=S.events.filter(e=>inr(dayOf(e.waktu),s1,e1)).length}
+ else{a=med(S.reviews.filter(r=>inr(r.minggu_mulai,addDays(s0,-6),e0)).map(r=>r.rating_kontrol));b=med(S.reviews.filter(r=>inr(r.minggu_mulai,addDays(s1,-6),e1)).map(r=>r.rating_kontrol))}
+ return{a,b,ka:comp(s0,e0),kb:comp(s1,e1),L}}
+A.expfin=el=>{const x=S.experiments.find(e=>e.id===el.dataset.id),c=expCompare(x);openSheet(`<h2>Hasil eksperimen</h2><p><b>${esc(x.perubahan)}</b></p><p>${esc(x.metrik)}: periode sebelumnya (${c.L} hari) <b>${c.a??'data kurang'}</b>, periode eksperimen <b>${c.b??'data kurang'}</b>.</p><p class="muted sm">Kelengkapan check-in: ${c.ka}% vs ${c.kb}%. Ini pola, bukan bukti sebab-akibat: musim, kerja, efek urutan, dan bias harapan bisa berperan. Kepercayaan: rendah (satu orang, periode pendek).</p><label>Kesimpulanmu (opsional)</label><input type="text" id="x_r" maxlength="140"><button class="btn big" data-a="expclose" data-id="${x.id}">Simpan hasil</button>`)};
+A.expclose=el=>{const x=S.experiments.find(e=>e.id===el.dataset.id),c=expCompare(x);x.selesai=today();x.hasil_ringkas=`sebelum ${c.a??'?'} vs selama ${c.b??'?'} (per ${c.L} hari; bukan bukti sebab-akibat)`+(val('x_r')?'. '+val('x_r'):'');save();closeSheet(true);render()};
+
+/* ================= catatanku ================= */
+function noteForm(link){const n=S.notes.filter(x=>x.isi||x.jenis).length;return`<div class="card"><h3>Catatanku</h3><p class="muted sm">Tulis apa saja yang ingin kamu simpan, kapan pun, tanpa lewat “Ada dorongan” atau “Sudah terjadi”. Jangan tulis detail eksplisit atau identitas orang lain.</p><textarea id="nt_t" maxlength="1000" placeholder="apa yang kurasakan, kupelajari, atau ingin kuingat"></textarea><h3>Jenis (opsional)</h3>${chips('nt_j',listFor('njenis'),[],1,addChipUi,'njenis')}<button class="btn big" data-a="ntsave">Simpan catatan</button>${link&&n?`<button class="btn ghost big" data-a="go" data-v="catatan">Lihat semua catatan (${n})</button>`:''}</div>`}
+function vCatatan(){const all=[...S.notes].filter(n=>n.isi||n.jenis).sort((a,b)=>T(b.waktu)-T(a.waktu)),lim=UI.nl||30;
+ let h=`<div class="top"><button class="ib" data-a="go" data-v="home">← Beranda</button></div><h1>Catatanku</h1>`+noteForm(false);
+ if(!all.length)return h+'<p class="muted">Belum ada catatan.</p>';
+ let cur='';
+ all.slice(0,lim).forEach(n=>{const d=dayOf(n.waktu);if(d!==cur){cur=d;h+=`<div class="dayh">${esc(dayLabel(d))}</div>`}
+  h+=`<div class="item" data-a="ntedit" data-id="${n.id}"><div class="l1"><span>${fmtHM(n.waktu)}</span><span class="badge">${esc(n.jenis||'catatan')}</span></div><div style="white-space:pre-wrap;word-break:break-word;margin-top:4px">${esc((n.isi||'(tanpa teks)').slice(0,300))}${(n.isi||'').length>300?'…':''}</div></div>`});
+ if(all.length>lim)h+=`<button class="btn ghost big" data-a="ntmore">Muat lebih banyak</button>`;
+ return h}
+function noteJenis(j){if(!j)return;if(!BASE.njenis.includes(j)&&!S.custom.njenis.includes(j))S.custom.njenis.push(j)}
+A.ntsave=()=>{const t=val('nt_t').trim(),j=one('nt_j');if(!t){toast('Tulis catatannya dulu');return}
+ S.notes.push({id:newId(S.notes),waktu:isoTz(),jenis:j||'catatan bebas',isi:t.slice(0,1000),episode_id:''});noteJenis(j);recUse('njenis',j?[j]:[]);save();render();toast('Catatan tersimpan.')};
+A.ntmore=()=>{UI.nl=(UI.nl||30)+30;render()};
+A.ntedit=el=>{const n=S.notes.find(x=>x.id===el.dataset.id);if(!n)return;
+ openSheet(`<h2>Ubah catatan</h2><p class="muted sm">${esc(fmtT(n.waktu))}</p><textarea id="ne_t" maxlength="1000">${esc(n.isi)}</textarea><h3>Jenis</h3>${chips('ne_j',listFor('njenis'),[n.jenis],1,addChipUi,'njenis')}<div class="row"><button class="btn" data-a="ntupd" data-id="${n.id}">Simpan</button><button class="btn warn" data-a="ntdel" data-id="${n.id}">Hapus</button></div>`)};
+A.ntupd=el=>{const n=S.notes.find(x=>x.id===el.dataset.id);if(!n)return;const j=one('ne_j');n.isi=val('ne_t').trim().slice(0,1000);if(j&&j!==n.jenis){recUse('njenis',[j]);noteJenis(j);n.jenis=j}save();closeSheet(true);render();toast('Tersimpan.')};
+A.ntdel=el=>{if(!confirm('Hapus catatan ini?'))return;S.notes=S.notes.filter(x=>x.id!==el.dataset.id);save();closeSheet(true);render()};
+
+/* ================= lainnya ================= */
+function back(){return`<button class="ib" data-a="go" data-v="lainnya">← Kembali</button>`}
+function vLainnya(){const m=(v,t,d)=>`<button class="menu" data-a="go" data-v="${v}">${t}<small>${d}</small></button>`;
+ return`<h1>Lainnya</h1>${m('tujuan','Tujuan saya','Kontrak tujuan = kesepakatan dengan dirimu sendiri, alasan, riwayat perubahan')+m('opsi','Sesuaikan pilihan','Tambah atau sembunyikan opsi konteks, kebutuhan, lokasi, ubah lingkungan')}${m('jeda','Mode jeda atau libur','Sakit, perjalanan, ujian: hari dikeluarkan dari kelengkapan data')}${m('ekspor','Ekspor data (CSV / Excel)','Bagikan atau simpan ke ponsel; paket ringkas untuk profesional')}${m('impor','Impor data (Excel/CSV/ZIP)','Pulihkan atau gabungkan cadangan')}${m('pengaturan','Pengaturan','Cooldown, hari kustom, tampilan, kunci PIN')}${m('aplikasi','Aplikasi &amp; pembaruan'+(PWA.update?'<i class="dot"></i>':''),'Cek pembaruan, pasang ke layar utama, versi')}${m('pengetahuan','Pengetahuan singkat','Dorongan, lapse, mengapa tanpa streak')}${m('bantuan','Bantuan profesional','Kapan sebaiknya berbicara dengan profesional')}${m('tentang','Tentang aplikasi','Batasan dan status bukti')}<button class="menu" data-a="hide">Sembunyikan layar sekarang<small>Menutup tampilan dengan satu ketukan</small></button><button class="menu" data-a="wipe" style="border-color:var(--dn)">Hapus semua data<small>Tidak bisa dibatalkan</small></button>`}
+function vTujuan(){const c=AC(),p=S.pending;let h=`<div class="top">${back()}</div><h1>Tujuan saya</h1>${kHint()}`;
+ if(!c)return h+'<p class="muted">Belum ada kontrak.</p>';
+ h+=`<div class="card"><p><b>${esc(c.jenis_tujuan)}</b></p><p class="muted sm">Perilaku sasaran: ${esc(c.perilaku_sasaran.replace(/\|/g,', '))}</p><p class="muted sm">Indikator utama: ${esc(c.indikator_utama)}</p>${c.indikator_pendukung?`<p class="muted sm">Pendukung: ${esc(c.indikator_pendukung)}</p>`:''}<p class="muted sm">Mulai ${esc(c.mulai)}</p>${c.alasan?`<p>Alasanku: “${esc(c.alasan)}”</p>`:''}${c.jalur_nilai?`<p class="muted sm">${esc(c.jalur_nilai)}</p>`:''}</div>`;
+ if(p){const left=Math.max(0,p.applyAt-Date.now());h+=`<div class="card hl"><p>Perubahan tujuan diajukan dan berlaku dalam ${Math.ceil(left/3600000)} jam. Jeda 24 jam ini agar tujuan tidak digeser saat sedang goyah.</p><button class="btn ghost s" data-a="pendcancel">Batalkan perubahan</button></div>`}
+ else h+=`<button class="btn big" data-a="goaledit">Ubah tujuan</button>`;
+ h+=`<p class="muted sm">Tujuan boleh berubah; perubahan tercatat dengan alasan. Tidak ada bahasa “gagal”.</p>`;
+ const gh=[...S.goalHistory].reverse().slice(0,8);if(gh.length)h+=`<h3>Riwayat perubahan</h3>`+gh.map(g=>`<div class="item"><div class="l1"><span>${esc(g.kolom_diubah)}</span><span class="muted sm">${esc(fmtT(g.waktu))}</span></div><div class="muted sm">${esc(g.alasan)}</div></div>`).join('');return h}
+A.goaledit=()=>{const c=AC();openSheet(`<h2>Ubah tujuan</h2><p class="muted sm">Berlaku setelah 24 jam.</p><h3>Perilaku sasaran</h3>${chips('g_b',['pornografi','masturbasi','orgasme'],c.perilaku_sasaran.split('|'),0)}<h3>Jenis tujuan</h3>${chips('g_j',GOALS.map(g=>g.n),[c.jenis_tujuan],1)}<label>Indikator utama</label><input type="text" id="g_i" value="${esc(c.indikator_utama)}"><label>Indikator pendukung</label><input type="text" id="g_p" value="${esc(c.indikator_pendukung)}"><label>Alasan (satu kalimat)</label><input type="text" id="g_a" maxlength="160" value="${esc(c.alasan)}"><h3>Jalur</h3>${chips('g_v',JALUR,[c.jalur_nilai],1)}<label>Mengapa diubah?</label><input type="text" id="g_r" maxlength="140"><button class="btn big" data-a="goalsave">Ajukan perubahan</button>`)};
+A.goalsave=()=>{const c=AC(),b=picked('g_b');if(!b.length){toast('Pilih minimal satu perilaku');return}const ch={perilaku_sasaran:b.join('|'),jenis_tujuan:one('g_j')||c.jenis_tujuan,indikator_utama:val('g_i'),indikator_pendukung:val('g_p'),alasan:val('g_a'),jalur_nilai:one('g_v')};const diff={};for(const k in ch)if(ch[k]!==c[k])diff[k]=ch[k];if(!Object.keys(diff).length){closeSheet(true);toast('Tidak ada perubahan');return}S.pending={kontrak_id:c.id,changes:diff,alasan:val('g_r'),applyAt:Date.now()+86400000};save();closeSheet(true);render()};
+A.pendcancel=()=>{S.pending=null;save();render()};
+function vJeda(){let h=`<div class="top">${back()}</div><h1>Mode jeda atau libur</h1><p class="muted">Hari jeda dikeluarkan dari penyebut kelengkapan data, bukan dihitung nol. Tombol tetap bisa diketuk.</p><button class="btn big" data-a="jedaadd">Tambah rentang jeda</button>`;
+ h+=[...S.pauses].reverse().map(p=>`<div class="item" data-a="jedadel" data-id="${p.id}"><div class="l1"><span>${esc(p.mulai)} → ${esc(p.selesai)}</span><span class="badge">${esc(p.alasan)}</span></div><div class="muted sm">ketuk untuk menghapus</div></div>`).join('');return h}
+A.jedaadd=()=>openSheet(`<h2>Rentang jeda</h2><label>Mulai</label><input type="date" id="j_m" value="${today()}"><label>Selesai</label><input type="date" id="j_s" value="${addDays(today(),3)}"><h3>Alasan</h3>${chips('j_a',['sakit','perjalanan','ujian','lainnya'],['lainnya'],1)}<button class="btn big" data-a="jedasave">Simpan</button>`);
+A.jedasave=()=>{const m=val('j_m'),s=val('j_s');if(!m||!s||s<m){toast('Periksa tanggal');return}S.pauses.push({id:newId(S.pauses),mulai:m,selesai:s,alasan:one('j_a')||'lainnya'});save();closeSheet(true);render()};
+A.jedadel=el=>{if(confirm('Hapus rentang jeda ini?')){S.pauses=S.pauses.filter(p=>p.id!==el.dataset.id);save();render()}};
+function vTutup(){const now=Date.now(),l=S.episodes.filter(x=>!x.hasil&&!x.skip&&now-lastTap(x)>cdMs()&&now-lastTap(x)<14*86400000).sort((a,b)=>lastTap(b)-lastTap(a));
+ let h=`<div class="top">${back()}</div><h1>Tutup episode sekaligus</h1><p class="muted">Ingatan memudar, jadi jawaban di sini ditandai “ditutup terlambat”. Tidak apa-apa membiarkannya tidak diketahui.</p>`;
+ return h+(l.length?l.map(x=>`<div class="card"><p>${esc(fmtT(x.waktu_mulai))} ${x.intensitas_awal!==''?'· '+x.intensitas_awal+'/5':''}</p><div class="chips"><button class="chip" data-a="bulk" data-id="${x.id}" data-r="lewat">Lewat</button><button class="chip" data-a="bulk" data-id="${x.id}" data-r="berkurang">Berkurang</button><button class="chip" data-a="bulk" data-id="${x.id}" data-r="diikuti">Diikuti</button><button class="chip" data-a="bulk" data-id="${x.id}" data-r="">Tetap tidak diketahui</button></div></div>`).join(''):'<div class="card"><p>Tidak ada episode yang menunggu.</p></div>')}
+const cdMs=()=>S.settings.cooldown_menit*60000;
+A.bulk=el=>{const e=S.episodes.find(x=>x.id===el.dataset.id);if(el.dataset.r)closeEpisode(e.id,el.dataset.r,true);else{e.skip=true;save()}render()};
+const KNOW=[['Apa itu kontrak?','Kontrak di aplikasi ini adalah kesepakatan dengan dirimu sendiri yang kamu tulis di awal: jenis tujuan, perilaku sasaran, indikator keberhasilan, dan alasanmu. Bukan perjanjian dengan siapa pun. “Sesuai kontrak” berarti kejadian tidak melanggar kesepakatan itu. Boleh diubah (berlaku setelah 24 jam) dan perubahannya tercatat.'],['Apa itu dorongan?','Dorongan adalah pengalaman internal yang sering naik lalu mereda, dan boleh hadir tanpa harus diikuti atau dilawan mati-matian. Mengamatinya (di mana terasa, seberapa kuat) membantu memberi jarak.'],['Apa itu lapse?','Lapse adalah satu kejadian di luar rencana. Di aplikasi ini lapse dianggap informasi, bukan penghapus progres. Pikiran “sudah gagal, sekalian saja” justru yang paling berisiko; karena itu tidak ada hitungan yang kembali ke nol.'],['Mengapa tidak ada streak?','Hitungan hari berisiko mengubah satu kejadian menjadi “kehilangan segalanya” dan mendorong orang menyembunyikan kejadian. Yang ditampilkan adalah pola dan kelengkapan data, dengan bahasa yang jujur soal ketidakpastiannya.'],['Nilai pribadi vs sulit mengendalikan','Penderitaan bisa datang dari konflik antara nilai pribadi/agama dan perilaku, dari sulitnya mengendalikan dorongan, atau keduanya. Penanganannya berbeda. Aplikasi tidak menyimpulkan mana yang berlaku padamu.'],['Soal bukti','Bukti terkuat ada pada pemantauan diri dan rencana jika-maka, keduanya dari literatur perilaku umum. Bukti khusus untuk aplikasi seperti ini masih tipis; hampir semua mekanisme di sini adalah hipotesis desain.']];
+function vPengetahuan(){return`<div class="top">${back()}</div><h1>Pengetahuan singkat</h1>`+KNOW.map(k=>`<div class="card"><h3>${k[0]}</h3><p>${k[1]}</p></div>`).join('')}
+function vBantuan(){return`<div class="top">${back()}</div><h1>Bantuan profesional</h1><p>Aplikasi ini bukan alat diagnosis atau terapi. Pertimbangkan berbicara dengan psikolog klinis, psikiater, atau layanan kesehatan jiwa setempat bila:</p><div class="card"><p>• dampaknya berat pada pekerjaan, sekolah, atau hubungan,</p><p>• kamu berkali-kali berusaha berhenti tetapi tidak berhasil,</p><p>• distres besar berlanjut dari waktu ke waktu,</p><p>• ada pikiran menyakiti diri.</p></div><p>Bila ada pikiran menyakiti diri atau kamu merasa tidak aman, segera hubungi layanan darurat setempat atau orang yang kamu percaya.</p><p class="muted sm">Paket ringkas dari menu Ekspor dapat kamu bawa ke profesional bila kamu mau (tanpa catatan teks dan tanpa data mentah).</p>`}
+function vTentang(){return`<div class="top">${back()}</div><h1>Tentang aplikasi</h1><div class="card"><p>Pendamping perubahan kebiasaan: alat bantu di momen dorongan sekaligus alat belajar dari pola diri sendiri. Bukan penghitung hari, bukan terapis.</p><p>Semua data tersimpan di browser perangkat ini. Tidak ada akun, server, atau pelacak. Itu mengurangi risiko dari server, tetapi siapa pun yang memegang perangkat tidak terkunci mungkin dapat melihatnya. Menghapus data situs akan menghapus datamu, jadi ekspor secara berkala.</p><p>Ini informasi tentang pola kamu, bukan bukti bahwa sesuatu bekerja. Mekanisme di sini hipotesis desain.</p></div>`}
+A.hide=()=>{closeSheet(true);const l=$('#lock');l.innerHTML=`<h1>${esc(S.settings.nama_netral)}</h1><p class="muted">Layar disembunyikan. Ketuk dua kali untuk kembali.</p>`;l.classList.add('open');l.ondblclick=()=>{l.ondblclick=null;if(hasPin())showLock();else{l.classList.remove('open');l.innerHTML=''}}};
+A.wipe=()=>{if(prompt('Ketik HAPUS untuk menghapus semua data di perangkat ini.')==='HAPUS'){try{localStorage.removeItem(KEY);localStorage.removeItem(PINKEY)}catch(e){}S=DEF();UI.view='home';location.reload()}};
+
+/* ================= PIN ================= */
+function cyrb53(str,seed){seed=seed||0;let h1=0xdeadbeef^seed,h2=0x41c6ce57^seed;for(let i=0,ch;i<str.length;i++){ch=str.charCodeAt(i);h1=Math.imul(h1^ch,2654435761);h2=Math.imul(h2^ch,1597334677)}h1=Math.imul(h1^(h1>>>16),2246822507)^Math.imul(h2^(h2>>>13),3266489909);h2=Math.imul(h2^(h2>>>16),2246822507)^Math.imul(h1^(h1>>>13),3266489909);return 4294967296*(2097151&h2)+(h1>>>0)}
+const hashPin=(p,s)=>{let x=s+p;for(let i=0;i<500;i++)x=String(cyrb53(x,i));return x};
+function getPin(){try{return JSON.parse(localStorage.getItem(PINKEY))}catch(e){return null}}
+const hasPin=()=>!!getPin();
+function setPin(p){const salt=uid()+uid();try{localStorage.setItem(PINKEY,JSON.stringify({salt,h:hashPin(p,salt)}))}catch(e){}}
+function showLock(){const l=$('#lock');l.innerHTML=`<h1>${esc(S.settings.nama_netral)}</h1><p class="muted">Masukkan PIN</p><input type="password" inputmode="numeric" id="pin_in" maxlength="8" autocomplete="off"><p id="pin_msg" class="muted sm"></p><button class="btn" data-a="unlock" style="margin-top:8px">Buka</button>`;l.classList.add('open');setTimeout(()=>{const i=$('#pin_in');if(i)i.focus()},50)}
+A.unlock=()=>{const p=getPin(),v=$('#pin_in').value;if(p&&hashPin(v,p.salt)===p.h){$('#lock').classList.remove('open');$('#lock').innerHTML='';render()}else{$('#pin_msg').textContent='PIN tidak cocok.';$('#pin_in').value=''}};
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&$('#pin_in'))A.unlock()});
+let hiddenAt=0;document.addEventListener('visibilitychange',()=>{if(document.hidden)hiddenAt=Date.now();else if(hasPin()&&hiddenAt&&Date.now()-hiddenAt>S.settings.kunci_otomatis_menit*60000)showLock()});
+
+/* ================= pengaturan ================= */
+function vPengaturan(){const s=S.settings,n=(id,l,v,lo,hi,hint)=>`<label>${l}</label><input type="number" id="${id}" min="${lo}" max="${hi}" value="${v}">${hint?`<p class="muted sm">${hint}</p>`:''}`;
+ return`<div class="top">${back()}</div><h1>Pengaturan</h1><div class="card">
+ ${n('s_cd','Cooldown tombol (menit)',s.cooldown_menit,1,60,'Mengatur penghitungan saja; Mode Dorongan selalu terbuka. Terlalu pendek membuat satu episode terhitung berkali-kali.')}
+ ${n('s_jd','Lama jeda di Mode Dorongan (menit)',s.jeda_menit,1,60)}
+ ${n('s_pj','Pertanyaan penutupan setelah (jam; 0 = mati)',s.pengingat_penutupan_jam,0,24)}
+ ${n('s_hr','Hari baru mulai pukul',s.jam_mulai_hari,0,12,'Kejadian pukul 01:00 dihitung milik hari sebelumnya bila batas 04:00.')}
+ ${n('s_jr','Ritual malam muncul mulai jam',s.jam_ritual,0,23)}
+ ${n('s_ex','Pengingat ekspor (minggu; 0 = mati)',s.pengingat_ekspor_minggu,0,52)}
+ ${n('s_ka','Kunci otomatis setelah (menit di luar aplikasi)',s.kunci_otomatis_menit,0,60)}
+ ${n('s_jw','Jendela pemantauan eskalasi (menit)',s.jendela_eskalasi_menit,5,240,'Setelah mencatat “sudah terjadi” tanpa orgasme, tambahan dalam rentang ini digabung jadi satu kejadian. Disarankan 45 menit.')}
+ <h3>Tema</h3>${chips('s_tema',['gelap','terang'],[s.tema],1)}
+ <h3>Huruf besar</h3>${chips('s_bes',['ya','tidak'],[s.huruf_besar],1)}
+ <h3>Getar saat mengetuk</h3>${chips('s_hap',['ya','tidak'],[s.haptic],1)}
+ <h3>Tampilkan “hari sesuai tujuan (90 hari)” di Pola</h3>${chips('s_hs',['ya','tidak'],[s.tampilkan_hari_sesuai],1)}
+ <h3>Notifikasi pertanyaan penutupan</h3>${chips('s_nt',['ya','tidak'],[s.notifikasi],1)}<p class="muted sm">Teks netral. Berfungsi hanya selama halaman ini masih terbuka di browser; selain itu pertanyaan muncul di beranda.</p>
+ <label>Nama tampilan netral</label><input type="text" id="s_nm" maxlength="30" value="${esc(s.nama_netral)}">
+ <label>Orang atau hal yang bisa kuhubungi (opsional, tampil di Mode Dorongan)</label><input type="text" id="s_ko" maxlength="80" value="${esc(s.kontak_tepercaya)}">
+ <button class="btn big" data-a="setsave">Simpan pengaturan</button></div>
+ <div class="card"><h3>Kunci PIN</h3><p class="muted sm">PIN hanya menghalangi pengintip kasual, bukan perlindungan kriptografis.</p>${hasPin()?`<button class="btn ghost s" data-a="pinoff">Hapus PIN</button>`:`<input type="password" inputmode="numeric" id="s_pin" maxlength="8" placeholder="4–8 angka"><button class="btn s" data-a="pinon" style="margin-top:8px">Pasang PIN</button>`}</div>`}
+A.setsave=()=>{const s=S.settings,n=(id,d,lo,hi)=>{let v=Number(val(id));if(isNaN(v))v=d;return Math.min(hi,Math.max(lo,Math.round(v)))};
+ s.cooldown_menit=n('s_cd',10,1,60);s.jeda_menit=n('s_jd',10,1,60);s.pengingat_penutupan_jam=n('s_pj',2,0,24);s.jam_mulai_hari=n('s_hr',4,0,12);s.jam_ritual=n('s_jr',21,0,23);s.pengingat_ekspor_minggu=n('s_ex',4,0,52);s.kunci_otomatis_menit=n('s_ka',1,0,60);s.jendela_eskalasi_menit=n('s_jw',45,5,240);
+ s.pemisah_csv=s.pemisah_csv||',';s.tema=one('s_tema')||'gelap';s.huruf_besar=one('s_bes')||'tidak';s.haptic=one('s_hap')||'ya';s.tampilkan_hari_sesuai=one('s_hs')||'tidak';s.notifikasi=one('s_nt')||'tidak';s.nama_netral=val('s_nm').trim()||'Pendamping';s.kontak_tepercaya=val('s_ko').trim();
+ save();applyTheme();if(s.notifikasi==='ya'&&window.Notification&&Notification.permission==='default')try{Notification.requestPermission()}catch(e){}toast('Pengaturan disimpan.');render()};
+A.pinon=()=>{const v=val('s_pin');if(!/^\d{4,8}$/.test(v)){toast('PIN harus 4–8 angka');return}setPin(v);toast('PIN terpasang.');render()};
+A.pinoff=()=>{if(confirm('Hapus PIN?')){try{localStorage.removeItem(PINKEY)}catch(e){}render()}};
+function applyTheme(){const d=document.documentElement;d.dataset.tema=S.settings.tema;d.dataset.besar=S.settings.huruf_besar;document.title=S.settings.nama_netral;const tc=document.querySelector('meta[name=theme-color]');if(tc)tc.content=S.settings.tema==='terang'?'#f4f6f8':'#0f1720'}
+
+/* ================= CSV: skema ================= */
+const C=s=>s.split(',');
+const SCH=[
+{f:'episode_dorongan.csv',k:'episodes',cols:C('id,waktu_mulai,waktu_selesai,perilaku_sasaran,intensitas_awal,intensitas_puncak,jumlah_tap_masih_kuat,konteks,kebutuhan,lokasi_umum,strategi,hasil,durasi_menit,dicatat_terlambat,ditutup_terlambat,catatan'),arr:C('konteks,kebutuhan,strategi'),num:C('intensitas_awal,intensitas_puncak,jumlah_tap_masih_kuat,durasi_menit'),rng:{intensitas_awal:[0,10],intensitas_puncak:[0,10]},text:['catatan'],date:'waktu_mulai',time:C('waktu_mulai,waktu_selesai'),id:'id'},
+{f:'kejadian.csv',k:'events',cols:C('id,waktu,perilaku_sasaran,sesuai_kontrak,direncanakan_atau_impulsif,konteks,kebutuhan,lokasi_umum,episode_id,dicatat_terlambat,jam_kembali_ke_rencana,catatan,aksi,terakhir_update,jumlah_pembaruan'),arr:C('konteks,kebutuhan,aksi'),num:C('jam_kembali_ke_rencana,jumlah_pembaruan'),text:['catatan'],date:'waktu',time:C('waktu,terakhir_update'),id:'id',rel:{episode_id:'episodes'}},
+{f:'checkin_harian.csv',k:'checkins',cols:C('tanggal,kualitas_tidur,lama_tidur,suasana_hati,stres,kecemasan,energi,kesepian,interaksi_sosial,aktivitas_fisik,ada_kejadian,dicatat_terlambat'),num:C('kualitas_tidur,suasana_hati,stres,kecemasan,energi,kesepian'),rng:{kualitas_tidur:[1,5],suasana_hati:[1,5],stres:[1,5],kecemasan:[1,5],energi:[1,5],kesepian:[1,5]},date:'tanggal',id:'tanggal',dateOnly:['tanggal']},
+{f:'jeda_pelacakan.csv',k:'pauses',cols:C('id,mulai,selesai,alasan'),date:'mulai',id:'id',dateOnly:C('mulai,selesai')},
+{f:'kontrak_tujuan.csv',k:'contracts',cols:C('id,mulai,selesai,perilaku_sasaran,jenis_tujuan,indikator_utama,indikator_pendukung,alasan,jalur_nilai,status'),text:['alasan'],id:'id'},
+{f:'riwayat_tujuan.csv',k:'goalHistory',cols:C('id,waktu,kontrak_id,kolom_diubah,nilai_lama,nilai_baru,alasan'),text:['alasan'],date:'waktu',time:['waktu'],id:'id',hook:(o)=>{if(o.kolom_diubah==='alasan'){o.nilai_lama='';o.nilai_baru=''}}},
+{f:'rencana_jika_maka.csv',k:'plans',cols:C('id,jika,maka,dibuat,aktif,terakhir_ditinjau,kali_pemicu_muncul,kali_dilaksanakan'),num:C('kali_pemicu_muncul,kali_dilaksanakan'),text:['jika','maka'],id:'id'},
+{f:'aktivitas_alternatif.csv',k:'activities',cols:C('id,nama,jenis,isyarat,kebutuhan_dipenuhi,aktif'),id:'id'},
+{f:'aktivitas_log.csv',k:'activityLog',cols:C('id,aktivitas_id,waktu,durasi_menit,episode_id'),num:['durasi_menit'],date:'waktu',time:['waktu'],id:'id'},
+{f:'tinjauan_mingguan.csv',k:'reviews',cols:C('minggu_mulai,rating_kontrol,rating_dampak,rencana_dilaksanakan,satu_perubahan,catatan'),num:C('rating_kontrol,rating_dampak'),rng:{rating_kontrol:[0,10],rating_dampak:[0,10]},text:C('satu_perubahan,catatan'),date:'minggu_mulai',id:'minggu_mulai',dateOnly:['minggu_mulai']},
+{f:'catatan_pembelajaran.csv',k:'notes',cols:C('id,waktu,jenis,isi,episode_id'),text:['isi'],date:'waktu',time:['waktu'],id:'id'},
+{f:'eksperimen_pribadi.csv',k:'experiments',cols:C('id,hipotesis,perubahan,mulai,selesai,metrik,hasil_ringkas'),text:C('hipotesis,perubahan,hasil_ringkas'),date:'mulai',id:'id'},
+{f:'statistik_mingguan.csv',k:'archiveStats',cols:C('minggu_mulai,jumlah_episode,jumlah_kejadian,lewat,berkurang,diikuti,belum_diketahui,median_durasi_menit,hari_tercatat,hari_jeda,kelengkapan_data'),derived:true,date:'minggu_mulai',id:'minggu_mulai'},
+{f:'pengaturan.csv',k:'settings',cols:C('kunci,nilai'),special:'settings',id:'kunci'}];
+const SETKEYS=Object.keys(DS);
+function cell(v,sep){if(v==null)v='';v=String(v);if(/^[=+\-@]/.test(v)&&isNaN(Number(v)))v="'"+v;if(v.includes(sep)||/["\n\r]/.test(v))v='"'+v.replace(/"/g,'""')+'"';return v}
+function toCSV(cols,rows,sep){return[cols.map(c=>cell(c,sep)).join(sep),...rows.map(r=>cols.map(c=>cell(r[c],sep)).join(sep))].join('\r\n')+'\r\n'}
+function exRows(sc,opt){
+ if(sc.special==='settings')return SETKEYS.map(k=>({kunci:k,nilai:opt.noText&&k==='kontak_tepercaya'?'':S.settings[k]}));
+ if(sc.derived)return allWeeks().map(w=>{const x=wk(w);return{minggu_mulai:w,jumlah_episode:x.ep,jumlah_kejadian:x.ev,lewat:x.lewat,berkurang:x.berkurang,diikuti:x.diikuti,belum_diketahui:x.unk,median_durasi_menit:x.med??'',hari_tercatat:x.rec,hari_jeda:x.jeda,kelengkapan_data:x.kel}}).filter(r=>inRange(r[sc.date],opt));
+ return S[sc.k].filter(o=>inRange(o[sc.date],opt)).map(o=>{const r={};sc.cols.forEach(c=>{let v=o[c];if(Array.isArray(v))v=v.join('|');if(v==null)v='';r[c]=v});if(sc.k==='episodes'&&r.hasil==='')r.hasil='belum_diketahui';if(opt.noText){(sc.text||[]).forEach(c=>r[c]='');if(sc.hook)sc.hook(r)}return r})}
+function inRange(d,opt){if(!opt.from||!d)return true;return dayOf(String(d).length>10?d:d+'T12:00:00')>=opt.from}
+function buildExport(sel,opt){const sep=opt.sep||S.settings.pemisah_csv,enc=new TextEncoder(),files=[];const bom=opt.bom?'\ufeff':'';
+ sel.forEach(sc=>{const rows=exRows(sc,opt);files.push({name:sc.f,rows:rows.length,data:enc.encode(bom+toCSV(sc.cols,rows,sep))})});
+ const man=files.map(f=>({nama_file:f.name,jumlah_baris:f.rows,versi_skema:4,diekspor_pada:isoTz(),zona_waktu:tzName()}));
+ if(files.length>1||opt.forceZip)files.push({name:'manifest.csv',rows:man.length,data:enc.encode(bom+toCSV(C('nama_file,jumlah_baris,versi_skema,diekspor_pada,zona_waktu'),man,sep))});return files}
+const CRC=(()=>{const t=[];for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})();
+function crc32(b){let c=-1;for(let i=0;i<b.length;i++)c=CRC[(c^b[i])&255]^(c>>>8);return(c^-1)>>>0}
+function zipBlob(files){const enc=new TextEncoder(),parts=[],cen=[];let off=0;const dt=new Date(),tm=(dt.getHours()<<11)|(dt.getMinutes()<<5)|(dt.getSeconds()>>1),dd=((dt.getFullYear()-1980)<<9)|((dt.getMonth()+1)<<5)|dt.getDate();
+ for(const f of files){const nb=enc.encode(f.name),crc=crc32(f.data),sz=f.data.length;
+  const l=new DataView(new ArrayBuffer(30));l.setUint32(0,0x04034b50,true);l.setUint16(4,20,true);l.setUint16(6,0x0800,true);l.setUint16(8,0,true);l.setUint16(10,tm,true);l.setUint16(12,dd,true);l.setUint32(14,crc,true);l.setUint32(18,sz,true);l.setUint32(22,sz,true);l.setUint16(26,nb.length,true);l.setUint16(28,0,true);
+  parts.push(new Uint8Array(l.buffer),nb,f.data);
+  const c=new DataView(new ArrayBuffer(46));c.setUint32(0,0x02014b50,true);c.setUint16(4,20,true);c.setUint16(6,20,true);c.setUint16(8,0x0800,true);c.setUint16(10,0,true);c.setUint16(12,tm,true);c.setUint16(14,dd,true);c.setUint32(16,crc,true);c.setUint32(20,sz,true);c.setUint32(24,sz,true);c.setUint16(28,nb.length,true);c.setUint32(42,off,true);
+  cen.push(new Uint8Array(c.buffer),nb);off+=30+nb.length+sz}
+ let cs=0;cen.forEach(x=>cs+=x.length);const e=new DataView(new ArrayBuffer(22));e.setUint32(0,0x06054b50,true);e.setUint16(8,files.length,true);e.setUint16(10,files.length,true);e.setUint32(12,cs,true);e.setUint32(16,off,true);
+ return new Blob([...parts,...cen,new Uint8Array(e.buffer)],{type:'application/zip'})}
+async function unzip(buf,all){const dv=new DataView(buf),u8=new Uint8Array(buf);let e=-1;for(let i=buf.byteLength-22;i>=Math.max(0,buf.byteLength-65600);i--){if(dv.getUint32(i,true)===0x06054b50){e=i;break}}if(e<0)throw new Error('ZIP tidak valid');
+ const n=dv.getUint16(e+10,true);let p=dv.getUint32(e+16,true);const out=[],dec=new TextDecoder();
+ for(let i=0;i<n;i++){if(dv.getUint32(p,true)!==0x02014b50)break;const meth=dv.getUint16(p+10,true),cs=dv.getUint32(p+20,true),nl=dv.getUint16(p+28,true),el=dv.getUint16(p+30,true),cl=dv.getUint16(p+32,true),lo=dv.getUint32(p+42,true);const name=dec.decode(u8.subarray(p+46,p+46+nl));p+=46+nl+el+cl;
+  const ds=lo+30+dv.getUint16(lo+26,true)+dv.getUint16(lo+28,true),raw=u8.subarray(ds,ds+cs);let data;
+  if(meth===0)data=raw;else if(meth===8){if(typeof DecompressionStream==='undefined')throw new Error('Browser ini belum bisa membuka ZIP terkompresi; unggah file CSV satu per satu.');data=new Uint8Array(await new Response(new Blob([raw]).stream().pipeThrough(new DecompressionStream('deflate-raw'))).arrayBuffer())}else continue;
+  if((all||/\.csv$/i.test(name))&&!/__MACOSX/.test(name))out.push({name:name.split('/').pop(),text:dec.decode(data)})}return out}
+
+/* ================= Excel (xlsx) ================= */
+const XE=v=>String(v).replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g,'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const colL=i=>{let t='';i++;while(i>0){const m=(i-1)%26;t=String.fromCharCode(65+m)+t;i=Math.floor((i-1)/26)}return t};
+function xlsxBlob(sheets){const enc=new TextEncoder(),H='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n',files=[],NS='http://schemas.openxmlformats.org/',RT=NS+'officeDocument/2006/relationships/',add=(n,x)=>files.push({name:n,data:enc.encode(H+x)});
+ add('[Content_Types].xml','<Types xmlns="'+NS+'package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>'+sheets.map((x,i)=>`<Override PartName="/xl/worksheets/sheet${i+1}.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>`).join('')+'</Types>');
+ add('_rels/.rels','<Relationships xmlns="'+NS+'package/2006/relationships"><Relationship Id="rId1" Type="'+RT+'officeDocument" Target="xl/workbook.xml"/></Relationships>');
+ add('xl/workbook.xml','<workbook xmlns="'+NS+'spreadsheetml/2006/main" xmlns:r="'+RT.slice(0,-1)+'"><sheets>'+sheets.map((x,i)=>`<sheet name="${XE(x.name).slice(0,31)}" sheetId="${i+1}" r:id="rId${i+1}"/>`).join('')+'</sheets></workbook>');
+ add('xl/_rels/workbook.xml.rels','<Relationships xmlns="'+NS+'package/2006/relationships">'+sheets.map((x,i)=>`<Relationship Id="rId${i+1}" Type="${RT}worksheet" Target="worksheets/sheet${i+1}.xml"/>`).join('')+`<Relationship Id="rId${sheets.length+1}" Type="${RT}styles" Target="styles.xml"/></Relationships>`);
+ add('xl/styles.xml','<styleSheet xmlns="'+NS+'spreadsheetml/2006/main"><fonts count="2"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><name val="Calibri"/></font></fonts><fills count="2"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill></fills><borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="2"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1"/></cellXfs></styleSheet>');
+ sheets.forEach((x,i)=>{const c=(v,r,k,st)=>{const ref=colL(k)+r;if(v===''||v==null)return'';if(typeof v==='number'&&isFinite(v))return`<c r="${ref}"><v>${v}</v></c>`;return`<c r="${ref}" t="inlineStr"${st?' s="1"':''}><is><t xml:space="preserve">${XE(v)}</t></is></c>`};
+  let d=`<row r="1">${x.cols.map((v,k)=>c(v,1,k,1)).join('')}</row>`;x.rows.forEach((o,j)=>{d+=`<row r="${j+2}">${x.cols.map((v,k)=>c(o[v],j+2,k)).join('')}</row>`});
+  add(`xl/worksheets/sheet${i+1}.xml`,`<worksheet xmlns="${NS}spreadsheetml/2006/main"><sheetViews><sheetView workbookViewId="0"><pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen"/></sheetView></sheetViews><cols><col min="1" max="${x.cols.length}" width="20" customWidth="1"/></cols><sheetData>${d}</sheetData></worksheet>`)});
+ const b=zipBlob(files);return new Blob([b],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'})}
+async function xlsxToCsv(buf){const fs=await unzip(buf,true),G=n=>(fs.find(x=>x.name===n)||{text:''}).text,P=t=>new DOMParser().parseFromString(t,'application/xml'),tx=e=>[...e.getElementsByTagName('t')].map(x=>x.textContent).join('');
+ const ss=[...P(G('sharedStrings.xml')).getElementsByTagName('si')].map(tx),rels={};[...P(G('workbook.xml.rels')).getElementsByTagName('Relationship')].forEach(r=>rels[r.getAttribute('Id')]=r.getAttribute('Target').split('/').pop());
+ const out=[];[...P(G('workbook.xml')).getElementsByTagName('sheet')].forEach(sh=>{const f=rels[sh.getAttribute('r:id')];if(!f)return;const rows=[];
+  [...P(G(f)).getElementsByTagName('row')].forEach(r=>{const a=[];[...r.getElementsByTagName('c')].forEach(c=>{let ci=0;for(const ch of (c.getAttribute('r')||'A').replace(/\d/g,''))ci=ci*26+ch.charCodeAt(0)-64;const t=c.getAttribute('t'),ve=c.getElementsByTagName('v')[0];a[ci-1]=t==='inlineStr'?tx(c):ve?(t==='s'?(ss[+ve.textContent]||''):ve.textContent):''});rows.push(Array.from(a,v=>v==null?'':v))});
+  out.push({name:sh.getAttribute('name')+'.csv',text:rows.map(r=>r.map(v=>cell(v,',')).join(',')).join('\r\n')})});return out}
+
+/* ================= impor ================= */
+function parseCSV(t){t=t.replace(/^\ufeff/,'');const first=t.split(/\r?\n/)[0]||'';const sep=(first.split(';').length>first.split(',').length)?';':',';const rows=[];let row=[],f='',q=false;
+ for(let i=0;i<t.length;i++){const c=t[i];if(q){if(c==='"'){if(t[i+1]==='"'){f+='"';i++}else q=false}else f+=c}else if(c==='"')q=true;else if(c===sep){row.push(f);f=''}else if(c==='\n'||c==='\r'){if(c==='\r'&&t[i+1]==='\n')i++;row.push(f);f='';rows.push(row);row=[]}else f+=c}
+ if(f!==''||row.length){row.push(f);rows.push(row)}return rows.filter(r=>r.some(x=>x!==''))}
+function ident(h){let best=null,bs=0;SCH.forEach(sc=>{if(!h.includes(sc.id))return;const m=h.filter(x=>sc.cols.includes(x)).length;if(m/h.length>=.6&&m/sc.cols.length>=.45&&m>bs){bs=m;best=sc}});return best}
+function unq(v){return/^'[=+\-@]/.test(v)?v.slice(1):v}
+function conv(sc,rec,idsEp){const o={},bad=[];
+ sc.cols.forEach(c=>{let v=unq((rec[c]==null?'':rec[c]).trim());
+  if(sc.arr&&sc.arr.includes(c))v=v?v.split('|').map(x=>x.trim()).filter(Boolean):[];
+  else if(sc.num&&sc.num.includes(c)){if(v===''){}else{const n=Number(v.replace(',','.'));if(isNaN(n)){bad.push(c+' bukan angka');v=''}else{const r=sc.rng&&sc.rng[c];if(r&&(n<r[0]||n>r[1])){bad.push(c+' di luar rentang');v=''}else v=n}}}
+  else if(sc.time&&sc.time.includes(c)){if(v&&isNaN(T(v))){bad.push(c+' bukan waktu');v=''}}
+  else if(sc.dateOnly&&sc.dateOnly.includes(c)){if(v&&!/^\d{4}-\d{2}-\d{2}$/.test(v)){bad.push(c+' bukan tanggal');v=''}}
+  o[c]=v});
+ if(sc.k==='episodes'){['intensitas_awal','intensitas_puncak'].forEach(c=>{if(o[c]!==''&&(o[c]<1||o[c]>5))o[c]=Math.min(5,Math.max(1,Math.ceil(o[c]/2)))});if(o.hasil==='belum_diketahui')o.hasil='';if(!['','lewat','berkurang','diikuti'].includes(o.hasil)){bad.push('hasil tidak dikenal');o.hasil=''}o.terakhir_tap=o.waktu_mulai;o.ditanya=true;if(!o.waktu_mulai)bad.push('waktu_mulai kosong')}
+ if(sc.k==='events'&&!o.waktu)bad.push('waktu kosong');
+ if(sc.rel)for(const c in sc.rel){if(o[c]&&!idsEp.has(o[c])){bad.push(c+' menunjuk entri yang tidak ada (dikosongkan)');o[c]=''}}
+ const fatal=bad.some(b=>/kosong$/.test(b));return{o,bad,fatal}}
+async function readFiles(fl){const out=[];for(const f of fl){if(f.size>8e6){out.push({name:f.name,err:'Terlalu besar (maks 8 MB)'});continue}
+ if(/\.xlsx$/i.test(f.name)){try{(await xlsxToCsv(await f.arrayBuffer())).forEach(x=>out.push(x))}catch(e){out.push({name:f.name,err:'File Excel tidak bisa dibaca'})}}else if(/\.zip$/i.test(f.name)){try{(await unzip(await f.arrayBuffer())).forEach(x=>out.push(x))}catch(e){out.push({name:f.name,err:e.message})}}else out.push({name:f.name,text:new TextDecoder().decode(await f.arrayBuffer())})}return out}
+function vImpor(){let h=`<div class="top">${back()}</div><h1>Impor data</h1><div class="card"><p class="muted">Pilih file Excel (.xlsx) hasil ekspor, atau file CSV/ZIP lama. Sheet atau file dikenali dari header-nya. Isi file diperlakukan sebagai data, bukan perintah.</p><input type="file" id="imp_f" accept=".xlsx,.csv,.zip,text/csv,application/zip" multiple></div>`;
+ if(UI.undoImport)h+=`<div class="card"><p>Impor terakhir bisa dibatalkan selama aplikasi ini terbuka.</p><button class="btn ghost s" data-a="impundo">Batalkan impor terakhir</button></div>`;
+ if(UI.impPrev){h+=`<h3>Pratinjau</h3>`+UI.impPrev.map(p=>p.err?`<div class="card"><p><b>${esc(p.name)}</b></p><p class="muted">${esc(p.err)}</p></div>`:`<div class="card"><p><b>${esc(p.name)}</b> → ${esc(p.sc.f)}</p><p class="muted sm">${p.rows.length} baris valid · ${p.dup} duplikat (id sudah ada) · ${p.probs.length} bermasalah</p>${p.probs.slice(0,5).map(x=>`<p class="muted sm">• baris ${x.n}: ${esc(x.t)}</p>`).join('')}${p.sc.derived?'<p class="muted sm">Statistik turunan hanya diarsipkan, tidak menimpa angka hitungan ulang.</p>':''}</div>`).join('')+`<h3>Mode</h3>${chips('i_m',['gabung (tambah yang belum ada)','timpa (ganti semua data jenis itu)'],['gabung (tambah yang belum ada)'],1)}<button class="btn big" data-a="impdo">Impor</button>`}
+ return h}
+document.addEventListener('change',async e=>{if(e.target.id==='imp_f'&&e.target.files.length){const files=await readFiles(e.target.files);const prev=[];const idsEp=new Set(S.episodes.map(x=>x.id));
+ files.forEach(f=>{if(f.err){prev.push({name:f.name,err:f.err});return}if(/^manifest\.csv$/i.test(f.name))return;const rows=parseCSV(f.text);if(rows.length<2){prev.push({name:f.name,err:'Kosong atau tanpa data'});return}if(rows.length>50001){prev.push({name:f.name,err:'Terlalu banyak baris (maks 50.000)'});return}
+  const hd=rows[0].map(x=>x.trim().replace(/^'/,'')),sc=ident(hd);if(!sc){prev.push({name:f.name,err:'Header tidak dikenali'});return}
+  if(sc.k==='episodes')rows.slice(1).forEach(r=>{const i=hd.indexOf('id');if(r[i])idsEp.add(r[i].trim())});
+  prev.push({name:f.name,sc,hd,raw:rows.slice(1)})});
+ prev.forEach(p=>{if(p.err)return;p.rows=[];p.probs=[];p.dup=0;const seen=new Set();const existing=sc=>new Set((sc.k==='settings'?[]:S[sc.k]).map(x=>x[sc.id]));const ex=existing(p.sc);
+  p.raw.forEach((r,i)=>{const rec={};p.hd.forEach((c,j)=>rec[c]=r[j]);const{o,bad,fatal}=conv(p.sc,rec,idsEp);const key=o[p.sc.id];if(!key||fatal){p.probs.push({n:i+2,t:!key?'id/kunci kosong':bad.join('; ')});return}if(p.sc.special!=='settings'&&(seen.has(key))){p.dup++;return}seen.add(key);if(ex.has(key))p.dup++;if(bad.length)p.probs.push({n:i+2,t:bad.join('; ')});p.rows.push(o)})});
+ UI.impPrev=prev.filter(p=>p.err||p.rows);UI.impStore=prev;render()}});
+A.impdo=()=>{const over=one('i_m').startsWith('timpa');const list=(UI.impPrev||[]).filter(p=>!p.err&&p.rows.length);if(!list.length){toast('Tidak ada data valid');return}
+ if(over&&!confirm('Timpa akan MENGGANTI semua data jenis yang diimpor. Lanjut?'))return;
+ UI.undoImport=JSON.stringify(S);let added=0;
+ list.forEach(p=>{const sc=p.sc;
+  if(sc.special==='settings'){p.rows.forEach(r=>{if(SETKEYS.includes(r.kunci)){const d=DS[r.kunci];S.settings[r.kunci]=typeof d==='number'?(isNaN(Number(r.nilai))?d:Number(r.nilai)):r.nilai}});return}
+  if(sc.derived){S.archiveStats=over?p.rows:[...S.archiveStats,...p.rows.filter(r=>!S.archiveStats.some(x=>x.minggu_mulai===r.minggu_mulai))];return}
+  if(over)S[sc.k]=p.rows.slice();else{const ex=new Set(S[sc.k].map(x=>x[sc.id]));p.rows.forEach(r=>{if(!ex.has(r[sc.id])){S[sc.k].push(r);ex.add(r[sc.id]);added++}})}});
+ save();UI.impPrev=null;applyTheme();render();toast('Impor selesai ('+added+' baris baru pada mode gabung).')};
+A.impundo=()=>{if(!UI.undoImport)return;S=migrate(JSON.parse(UI.undoImport));UI.undoImport=null;save();applyTheme();render();toast('Impor dibatalkan.')};
+
+/* ================= onboarding ================= */
+let ONB={step:0,beh:[],jenis:'',ind:'',pend:'',alasan:'',jalur:'',nama:'Pendamping',tema:'gelap'};
+function vOnb(){const s=ONB.step;let b='';
+ if(s===0)b=`<h1>Selamat datang</h1><div class="card"><p>Aplikasi ini membantu kamu mengambil keputusan di momen dorongan dan belajar dari pola dirimu sendiri.</p><p>• Ini bukan terapi, bukan alat diagnosis, dan bukan penghitung hari.</p><p>• Data tersimpan di perangkat ini. Tanpa akun dan tanpa server.</p><p>• Tujuanmu boleh berubah kapan saja (dengan jeda 24 jam).</p><p>• Mekanisme di sini sebagian besar hipotesis desain, belum terbukti sebagai produk.</p></div><label style="display:flex;gap:10px;align-items:center;color:var(--tx)"><input type="checkbox" id="o_age"> Saya berusia 18 tahun atau lebih</label><button class="btn big" data-a="onext">Lanjut</button>`;
+ else if(s===1)b=`<h1>Perilaku sasaran</h1><p class="muted">Yang kamu pilih saja yang akan ditanyakan. Orgasme opsional.</p>${chips('o_b',['pornografi','masturbasi','orgasme'],ONB.beh,0)}<button class="btn big" data-a="onext">Lanjut</button>`;
+ else if(s===2)b=`<h1>Jenis tujuan</h1>${kHint()}<p class="muted">Tujuan tidak harus abstinensi. Kamu yang menentukan arti berhasil. Belum yakin? Mulai dengan memahami pola dulu.</p>${chips('o_j',GOALS.map(g=>g.n),ONB.jenis?[ONB.jenis]:[],1)}<button class="btn big" data-a="onext">Lanjut</button>`;
+ else if(s===3)b=`<h1>Indikator dan alasan</h1><label>Indikator keberhasilan utama (satu)</label><input type="text" id="o_i" value="${esc(ONB.ind||(GOALS.find(g=>g.n===ONB.jenis)||{}).i||'')}"><label>Indikator pendukung (opsional)</label><input type="text" id="o_p" value="${esc(ONB.pend)}"><label>Alasanku, satu kalimat milikmu sendiri (tampil di Mode Dorongan)</label><input type="text" id="o_a" maxlength="160" value="${esc(ONB.alasan)}"><h3>Mana yang paling mendekati?</h3>${chips('o_v',JALUR,ONB.jalur?[ONB.jalur]:[],1)}<p class="muted sm">Keduanya dihormati; aplikasi tidak menyimpulkan mana yang berlaku padamu.</p><button class="btn big" data-a="onext">Lanjut</button>`;
+ else if(s===4)b=`<h1>Sesuaikan pilihan</h1><p class="muted">Ini daftar pilihan yang muncul saat mencatat. Ketuk untuk menyembunyikan yang tidak cocok, atau tambahkan milikmu lewat “isi sendiri”. Bisa diubah kapan saja di Lainnya → Sesuaikan pilihan.</p>${optsUI()}<details class="card"><summary>Aktivitas pengganti awal (${ALT.length} contoh, opsional)</summary><p class="muted sm">Ketuk yang mau kamu coba saat dorongan datang.</p>${chips('oo_alt',[...ALT,...S.custom.alt.filter(x=>!ALT.includes(x)),...(ONB.alt||[]).filter(x=>!ALT.includes(x)&&!S.custom.alt.includes(x))],ONB.alt||[],0,addChipUi,'')}</details><button class="btn big" data-a="onext">Lanjut</button>`;
+ else b=`<h1>Privasi dan tampilan</h1><label>Nama tampilan netral (judul tab dan layar kunci)</label><input type="text" id="o_n" maxlength="30" value="${esc(ONB.nama)}"><h3>Tema</h3>${chips('o_t',['gelap','terang'],[ONB.tema],1)}<label>PIN (opsional, 4–8 angka; hanya menghalangi pengintip kasual)</label><input type="password" inputmode="numeric" id="o_pin" maxlength="8"><p class="muted sm">Datamu disimpan di perangkat ini. Itu mengurangi risiko dari server, tetapi siapa pun yang memegang perangkat tidak terkunci mungkin dapat melihatnya. Ekspor Excel secara berkala sebagai cadangan.</p><button class="btn big" data-a="onfin">Mulai</button>`;
+ return`<div id="onb">${s>0?`<div class="top"><button class="ib" data-a="oback">← Kembali</button><span class="muted">${s}/5</span></div>`:''}${b}</div>`}
+A.oback=()=>{ONB.step=Math.max(0,ONB.step-1);render()};
+A.onext=()=>{const s=ONB.step;
+ if(s===0){if(!$('#o_age').checked){toast('Aplikasi ini untuk usia 18+');return}}
+ if(s===1){ONB.beh=picked('o_b');if(!ONB.beh.length){toast('Pilih minimal satu');return}}
+ if(s===2){ONB.jenis=one('o_j');if(!ONB.jenis){toast('Pilih satu jenis tujuan');return}ONB.ind=''}
+ if(s===3){ONB.ind=val('o_i');ONB.pend=val('o_p');ONB.alasan=val('o_a');ONB.jalur=one('o_v')}
+ if(s===4){OPTL.forEach(([k])=>{const v=picked('oo_'+k);if(v.length)S.opts[k]=v});ONB.alt=picked('oo_alt')}
+ ONB.step++;render();window.scrollTo(0,0)};
+A.onfin=()=>{ONB.nama=val('o_n').trim()||'Pendamping';ONB.tema=one('o_t')||'gelap';const pin=val('o_pin');if(pin&&!/^\d{4,8}$/.test(pin)){toast('PIN harus 4–8 angka');return}
+ S.contracts.push({id:newId(S.contracts),mulai:today(),selesai:'',perilaku_sasaran:ONB.beh.join('|'),jenis_tujuan:ONB.jenis,indikator_utama:ONB.ind,indikator_pendukung:ONB.pend,alasan:ONB.alasan,jalur_nilai:ONB.jalur,status:'aktif'});
+ S.settings.nama_netral=ONB.nama;S.settings.tema=ONB.tema;(ONB.alt||[]).forEach(n=>S.activities.push({id:newId(S.activities),nama:n,jenis:'alternatif',isyarat:'',kebutuhan_dipenuhi:'',aktif:'ya'}));S.onboarded=true;save();if(pin)setPin(pin);applyTheme();UI.view='home';render()};
+
+/* ================= PWA: pasang, offline, cek pembaruan ================= */
+const APP_VERSION='1.0.0';
+const RELEASES=[['1.0.0','22 Okt 2026',['Bisa dipasang ke layar utama ponsel dan dibuka lewat alamat web.','Tombol Cek pembaruan + pemberitahuan bila ada versi baru.','Bisa dipakai offline setelah dibuka sekali.','Ekspor CSV diperbaiki untuk ponsel: tombol Bagikan (Files, Drive, Sheets, WhatsApp), pilihan pemisah koma/titik koma, dan BOM untuk Excel.']]];
+const PWAK='pendamping_pwa';
+const PWA={reg:null,inst:null,latest:'',update:false,msg:'',busy:false,checkedAt:0};
+const pwaWeb=()=>/^https?:$/.test(location.protocol);
+const pwaStand=()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}};
+const pwaIOS=()=>/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+function pwaFlag(k,v){try{const o=JSON.parse(localStorage.getItem(PWAK)||'{}');if(v===undefined)return o[k];o[k]=v;localStorage.setItem(PWAK,JSON.stringify(o))}catch(e){}}
+const vcmp=(a,b)=>{const x=String(a).split('.').map(Number),y=String(b).split('.').map(Number);for(let i=0;i<3;i++){const d=(x[i]||0)-(y[i]||0);if(d)return d>0?1:-1}return 0};
+function pwaRender(){try{const ae=document.activeElement,typing=ae&&/^(INPUT|TEXTAREA|SELECT)$/.test(ae.tagName);if(UI.view==='aplikasi'||(UI.view==='home'&&!typing&&!$('#sheet').classList.contains('open')&&!$('#full').classList.contains('open')))render()}catch(e){}}
+addEventListener('beforeinstallprompt',e=>{e.preventDefault();PWA.inst=e;pwaRender()});
+addEventListener('appinstalled',()=>{PWA.inst=null;toast('Terpasang di layar utama.');pwaRender()});
+async function pwaFetchLatest(){
+ const r=await fetch('index.html?_='+Date.now(),{cache:'no-store'});if(!r.ok)throw new Error('http '+r.status);
+ const m=(await r.text()).match(/const APP_VERSION='([0-9.]+)'/);if(!m)throw new Error('format');return m[1]}
+async function pwaCheck(manual){
+ if(PWA.busy)return;
+ if(!pwaWeb()){if(manual){PWA.msg='Cek pembaruan hanya jalan bila aplikasi dibuka lewat alamat web (https://…), bukan dari file di perangkat.';pwaRender()}return}
+ if(navigator.onLine===false){if(manual){PWA.msg='Tidak ada koneksi internet. Coba lagi saat online.';pwaRender()}return}
+ PWA.busy=true;if(manual){PWA.msg='Memeriksa…';pwaRender()}
+ try{
+  try{const reg=PWA.reg||await navigator.serviceWorker.getRegistration();if(reg)await reg.update()}catch(e){}
+  const v=await pwaFetchLatest(),was=PWA.update;PWA.latest=v;PWA.checkedAt=Date.now();pwaFlag('chk',PWA.checkedAt);
+  PWA.update=vcmp(v,APP_VERSION)>0;
+  PWA.msg=PWA.update?'Versi '+v+' tersedia.':'Sudah versi terbaru ('+APP_VERSION+').';
+  if(PWA.update&&!was&&!manual)toast('Versi '+v+' tersedia.',[{t:'Perbarui',f:()=>A.pwaapply()}]);
+ }catch(e){if(manual)PWA.msg='Gagal memeriksa. Pastikan online, lalu coba lagi.'}
+ PWA.busy=false;pwaRender()}
+function pwaInit(){
+ if(!pwaWeb()||!('serviceWorker' in navigator))return;
+ navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).then(r=>{PWA.reg=r}).catch(()=>{});
+ PWA.checkedAt=pwaFlag('chk')||0;
+ setTimeout(()=>pwaCheck(false),4000);
+ document.addEventListener('visibilitychange',()=>{if(!document.hidden&&Date.now()-PWA.checkedAt>6*3600e3)pwaCheck(false)})}
+A.pwacheck=()=>pwaCheck(true);
+A.pwaapply=async()=>{try{const r=PWA.reg||await navigator.serviceWorker.getRegistration();if(r){await r.update();if(r.waiting)r.waiting.postMessage('skip')}}catch(e){}toast('Memuat versi baru…');setTimeout(()=>location.reload(),400)};
+A.pwainstall=async()=>{if(!PWA.inst)return;PWA.inst.prompt();try{await PWA.inst.userChoice}catch(e){}PWA.inst=null;pwaRender()};
+A.pwano=()=>{pwaFlag('hint0',1);render()};
+function pwaHome(){let h='';
+ if(PWA.update)h+=`<div class="card hl"><h3>Versi ${esc(PWA.latest)} tersedia</h3><p class="muted sm">Datamu tidak terhapus saat memperbarui.</p><button class="btn s" data-a="pwaapply">Perbarui sekarang</button></div>`;
+ if(pwaWeb()&&!pwaStand()&&!pwaFlag('hint0')&&(PWA.inst||pwaIOS()))h+=`<div class="card"><h3>Pasang ke layar utama</h3><p class="muted sm">Terbuka seperti aplikasi biasa dan bisa dipakai offline.</p><div class="row">${PWA.inst?'<button class="btn s" data-a="pwainstall">Pasang</button>':'<button class="btn s" data-a="go" data-v="aplikasi">Lihat caranya</button>'}<button class="btn ghost s" data-a="pwano">Nanti</button></div></div>`;
+ return h}
+function vApp(){
+ const web=pwaWeb(),st=pwaStand(),ios=pwaIOS(),kv=(a,b)=>`<div class="kv"><span>${a}</span><b>${esc(b)}</b></div>`;
+ const mode=st?'Aplikasi terpasang':web?'Browser':'File lokal';
+ const off=!web?'Tidak berlaku (file lokal)':(navigator.serviceWorker&&navigator.serviceWorker.controller)?'Siap — tersimpan di perangkat':'Aktif setelah dibuka sekali lagi';
+ const chk=PWA.checkedAt?new Date(PWA.checkedAt).toLocaleString('id-ID',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}):'belum pernah';
+ let h=`<div class="top">${back()}</div><h1>Aplikasi &amp; pembaruan</h1>`;
+ h+=`<div class="card${PWA.update?' hl':''}"><h3>Pembaruan</h3>${kv('Versi di perangkat ini',APP_VERSION)}${PWA.latest?kv('Versi terbaru',PWA.latest):''}${kv('Terakhir dicek',chk)}${PWA.msg?`<p class="sm" style="margin:.6rem 0 0">${esc(PWA.msg)}</p>`:''}${PWA.update?'<button class="btn big" data-a="pwaapply">Perbarui sekarang</button>':''}<button class="btn ghost big" data-a="pwacheck"${PWA.busy?' disabled':''}>${PWA.busy?'Memeriksa…':'Cek pembaruan'}</button><p class="muted sm">Datamu tidak terhapus saat memperbarui. Aplikasi memeriksa sendiri sesekali saat dibuka.</p></div>`;
+ h+=`<div class="card"><h3>Pasang ke ponsel</h3>`;
+ if(!web)h+=`<p class="muted sm">Kamu membuka file langsung dari perangkat. Untuk memasang, buka aplikasi lewat alamat web-nya (lihat TUTORIAL), lalu kembali ke halaman ini.</p>`;
+ else if(st)h+=`<p>Sudah terpasang sebagai aplikasi ✅</p>`;
+ else{if(PWA.inst)h+=`<button class="btn big" data-a="pwainstall">Pasang aplikasi</button>`;
+  h+=`<p class="muted sm">${ios?'<b>iPhone/iPad (Safari):</b> ketuk Bagikan → “Tambah ke Layar Utama” → Tambah. Buka lewat ikon itu.':'<b>Android (Chrome):</b> menu ⋮ → “Instal aplikasi” atau “Tambahkan ke layar utama”.'}</p><p class="muted sm">Dari browser di dalam aplikasi lain (WhatsApp, Instagram, dll.) pemasangan tidak muncul — salin alamatnya ke Chrome/Safari.</p>`}
+ h+=`</div><div class="card"><h3>Status</h3>${kv('Mode',mode)}${kv('Offline',off)}</div>`;
+ h+=`<div class="card"><h3>Datamu</h3><p class="muted sm">Data tersimpan di browser/aplikasi pada perangkat ini, bukan di GitHub. Berganti alamat, perangkat, atau menghapus data situs = data hilang. Ekspor berkala dari menu Ekspor data, dan pulihkan lewat Impor data.</p></div>`;
+ h+=`<h3>Yang baru</h3>`+RELEASES.map(r=>`<div class="card"><p><b>${r[0]}</b> <span class="muted sm">· ${r[1]}</span></p><ul class="rel">${r[2].map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`).join('');
+ return h}
+
+/* ================= ekspor UI ================= */
+const FMTS=['CSV','ZIP berisi CSV','Excel (.xlsx)'],SEPS=['koma (,)','titik koma (;)'];
+UI.expFmt='CSV';UI.expSep=(1.5).toLocaleString().includes(',')?';':',';
+const mimeOf=n=>/\.zip$/i.test(n)?'application/zip':/\.xlsx$/i.test(n)?'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':'text/csv';
+const canShareFiles=()=>{try{return !!(navigator.share&&navigator.canShare&&navigator.canShare({files:[new File(['a'],'a.csv',{type:'text/csv'})]}))}catch(e){return false}};
+const fmtSize=n=>n<1024?n+' B':n<1048576?(n/1024).toFixed(1)+' KB':(n/1048576).toFixed(1)+' MB';
+const FHINT={'CSV':'Satu file CSV per jenis data. Di ponsel, tombol Bagikan mengirim semuanya sekaligus (ke Files, Drive, Sheets, WhatsApp). Bila ponsel tidak bisa membagikan banyak file, otomatis dijadikan satu ZIP.','ZIP berisi CSV':'Semua CSV dibungkus satu file ZIP. Praktis dikirim, tetapi perlu dibuka (ekstrak) dulu sebelum dilihat di aplikasi spreadsheet.','Excel (.xlsx)':'Satu file Excel, satu sheet per jenis data.'};
+function vEkspor(){const sel=UI.expSel||SCH.map(s=>s.f.replace('.csv','')),sh=canShareFiles();
+ let h=`<div class="top">${back()}</div><h1>Ekspor data</h1><div class="card hl"><p>Hasil ekspor berupa file CSV (bisa dibuka di Excel, Google Sheets, Numbers) atau satu file Excel. File tidak dienkripsi, jadi bisa dibaca siapa pun yang membukanya. PIN dan kunci tidak pernah ikut diekspor. File yang diekspor ada di luar kendali aplikasi.</p></div>
+ <h3>Format</h3>${chips('x_fmt',FMTS,[UI.expFmt],1)}<p class="muted sm">${esc(FHINT[UI.expFmt]||'')}</p>
+ <h3>Jenis data yang diekspor</h3>${chips('x_f',SCH.map(s=>s.f.replace('.csv','')),sel,0)}
+ <h3>Rentang</h3>${chips('x_r',['semua','30 hari terakhir','90 hari terakhir'],[UI.expRange],1)}
+ <h3>Opsi</h3>${chips('x_o',['tanpa catatan teks','BOM untuk Excel'],[...(UI.expNoText?['tanpa catatan teks']:[]),...(UI.expBom?['BOM untuk Excel']:[])],0)}
+ <p class="muted sm">“Tanpa catatan teks” mengosongkan kolom catatan, isi, jika, maka, alasan, dan sejenisnya agar aman dibagikan. “BOM untuk Excel” membuat huruf terbaca benar di Excel (hanya CSV).</p>
+ <h3>Pemisah kolom (CSV)</h3>${chips('x_s',SEPS,[UI.expSep===';'?SEPS[1]:SEPS[0]],1)}<p class="muted sm">Bila di Excel semua isi menumpuk di satu kolom, ekspor ulang dengan pilihan pemisah yang lain. Impor aplikasi ini membaca keduanya.</p>`;
+ h+=sh?`<button class="btn big" data-a="exgo" data-m="share">Ekspor &amp; bagikan / simpan</button><button class="btn ghost big" data-a="exgo" data-m="save">Ekspor &amp; unduh</button><p class="muted sm">Di ponsel, pilih Bagikan lalu “Simpan ke File”, Drive, Sheets, atau kirim ke aplikasi lain.</p>`:`<button class="btn big" data-a="exgo" data-m="save">Ekspor &amp; unduh</button><p class="muted sm">File tersimpan di folder Unduhan (Downloads) perangkat.</p>`;
+ if(UI.exOut){const o=UI.exOut;h+=`<div class="card hl"><h3>Hasil ekspor terakhir</h3>${o.items.map(x=>`<div class="fl"><span style="word-break:break-all">${esc(x.name)}</span><span class="muted">${x.rows!=null?x.rows+' baris · ':''}${fmtSize(x.blob.size)}</span></div>`).join('')}<div class="row">${sh?'<button class="btn s" data-a="exshare">Bagikan lagi</button>':''}<button class="btn ghost s" data-a="exsave">Unduh${o.items.length>1?' (ZIP)':''}</button></div><p class="muted sm">Belum terlihat? Coba “Unduh”, lalu cek folder Unduhan/Downloads atau aplikasi Files.</p></div>`}
+ h+=`<h3>Paket untuk profesional</h3><p class="muted sm">Hanya ringkasan: statistik mingguan, tinjauan mingguan, kontrak tujuan, riwayat tujuan. Tanpa catatan teks dan tanpa data mentah episode. Memakai format dan pemisah di atas.</p><button class="btn ghost big" data-a="exther">Buat paket ringkas</button>`;return h}
+function dl(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.rel='noopener';a.style.display='none';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},60000)}
+function exportItems(fmt,sel,opt,zipName){const day=today();
+ if(fmt==='xlsx'){const sheets=sel.map(sc=>({name:sc.f.replace('.csv',''),cols:sc.cols,rows:exRows(sc,opt)}));
+  sheets.push({name:'manifest',cols:C('nama_sheet,jumlah_baris,versi_skema,diekspor_pada,zona_waktu'),rows:sheets.map(x=>({nama_sheet:x.name,jumlah_baris:x.rows.length,versi_skema:4,diekspor_pada:isoTz(),zona_waktu:tzName()}))});
+  return{items:[{name:zipName+'-'+day+'.xlsx',blob:xlsxBlob(sheets),rows:sheets.slice(0,-1).reduce((a,x)=>a+x.rows.length,0)}]}}
+ const files=buildExport(sel,{...opt,forceZip:fmt==='zip'});
+ const zip={name:zipName+'-'+day+'.zip',blob:zipBlob(files)};
+ if(fmt==='zip')return{items:[{...zip,rows:files.filter(f=>f.name!=='manifest.csv').reduce((a,f)=>a+f.rows,0)}],zip};
+ return{items:files.map(f=>({name:f.name,blob:new Blob([f.data],{type:'text/csv'}),rows:f.rows})),zip}}
+async function deliver(out,mode){
+ const mk=x=>new File([x.blob],x.name,{type:mimeOf(x.name)});
+ if(mode==='share'&&canShareFiles()){
+  let files=out.items.map(mk);
+  if(!navigator.canShare({files})&&out.zip)files=[mk(out.zip)];
+  if(navigator.canShare({files})){try{await navigator.share({files});return 'shared'}catch(e){if(e&&e.name==='AbortError')return 'cancel'}}}
+ const sv=out.items.length>1&&out.zip?[out.zip]:out.items;sv.forEach(x=>dl(x.blob,x.name));return 'saved'}
+function expAfter(r){if(r==='cancel')return;S.lastExport=isoTz();save();toast(r==='shared'?'Siap dibagikan. Hapus file bila sudah tidak dipakai.':'File diunduh. Cek folder Unduhan atau aplikasi Files.')}
+function readExpUi(){UI.expSel=picked('x_f');UI.expRange=one('x_r')||'semua';UI.expFmt=one('x_fmt')||'CSV';const o=picked('x_o');UI.expNoText=o.includes('tanpa catatan teks');UI.expBom=o.includes('BOM untuk Excel');UI.expSep=(one('x_s')||'').startsWith('titik')?';':','}
+async function runExport(names,noText,range,mode,zipName){
+ const sel=SCH.filter(s=>names.includes(s.f.replace('.csv','')));if(!sel.length){toast('Pilih minimal satu jenis data');return}
+ const opt={noText,bom:UI.expBom,sep:UI.expSep,from:range==='30 hari terakhir'?addDays(today(),-29):range==='90 hari terakhir'?addDays(today(),-89):null};
+ let out;try{out=exportItems({'CSV':'csv','ZIP berisi CSV':'zip','Excel (.xlsx)':'xlsx'}[UI.expFmt]||'csv',sel,opt,zipName)}catch(e){toast('Gagal menyusun file: '+(e&&e.message||e));return}
+ UI.exOut=out;S.settings.pemisah_csv=UI.expSep;
+ const r=await deliver(out,mode);expAfter(r);if(UI.view==='ekspor')render()}
+A.exgo=el=>{readExpUi();return runExport(UI.expSel||[],UI.expNoText,UI.expRange,el.dataset.m||'save','laporan-kebiasaan')};
+A.exther=()=>{readExpUi();return runExport(['statistik_mingguan','tinjauan_mingguan','kontrak_tujuan','riwayat_tujuan'],true,'semua',canShareFiles()?'share':'save','ringkasan-kebiasaan')};
+A.exshare=async()=>{if(!UI.exOut)return;expAfter(await deliver(UI.exOut,'share'))};
+A.exsave=async()=>{if(!UI.exOut)return;expAfter(await deliver(UI.exOut,'save'))};
+
+/* ================= render ================= */
+const TABS=[['home','Beranda'],['riwayat','Riwayat'],['pola','Pola'],['rencana','Rencana'],['tinjau','Tinjau']];
+const VIEWS={home:vHome,riwayat:vRiwayat,pola:vPola,rencana:vRencana,catatan:vCatatan,tinjau:vTinjau,lainnya:vLainnya,tujuan:vTujuan,jeda:vJeda,tutupsemua:vTutup,pengetahuan:vPengetahuan,bantuan:vBantuan,tentang:vTentang,pengaturan:vPengaturan,opsi:vOpsi,ekspor:vEkspor,impor:vImpor,aplikasi:vApp};
+function render(){applyPending();applyTheme();const app=$('#app'),nav=$('#nav');
+ if(!S.onboarded){nav.style.display='none';app.innerHTML=vOnb();return}
+ nav.style.display='flex';
+ const keepNt=$('#nt_t')&&$('#nt_t').value;const v=(VIEWS[UI.view]||vHome)();const sub=!['home','riwayat','pola','rencana','tinjau'].includes(UI.view);
+ app.innerHTML=(sub?'':`<div class="top"><b>${esc(S.settings.nama_netral)}</b><span><button class="ib" data-a="hide" aria-label="Sembunyikan layar">Sembunyikan</button> <button class="ib" data-a="go" data-v="lainnya" aria-label="Menu lainnya">Lainnya${PWA.update?'<i class="dot"></i>':''}</button></span></div>`)+v;
+ if(keepNt&&$('#nt_t'))$('#nt_t').value=keepNt;
+ const TI={home:'⌂',riwayat:'☰',pola:'◔',rencana:'✦',tinjau:'✓'};nav.innerHTML=TABS.map(t=>`<button class="${UI.view===t[0]?'on':''}" data-a="tab" data-v="${t[0]}"><i>${TI[t[0]]}</i>${t[1]}</button>`).join('')}
+setInterval(()=>{if(!S.onboarded||UI.view!=='home')return;const et=$('#esctxt');if(et){const o=openEv();if(o)et.textContent=fmtMs(winMs()-(Date.now()-T(o.terakhir_update)));else render()}const el=$('#cdtxt');if(!el)return;const cd=cdLeft();if(cd>0)el.textContent=fmtMs(cd);else if(el.textContent!=='ketuk sekali'&&!$('#sheet').classList.contains('open')&&!$('#full').classList.contains('open'))render()},1000);
+applyTheme();if(hasPin())showLock();render();pwaInit();
+</script>
+</body>
+</html>
