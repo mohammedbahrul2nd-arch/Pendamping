@@ -5,7 +5,7 @@ Data tersimpan **hanya di perangkatmu** (bukan di GitHub).
 
 - Seluruh aplikasi ada di satu file: [`docs/index.html`](docs/index.html) (HTML + CSS + JS biasa, tanpa build).
 - **Panduan dari nol: [TUTORIAL.md](TUTORIAL.md)** · Riwayat perubahan: [CHANGELOG.md](CHANGELOG.md)
-- Versi saat ini: **2.0.0**
+- Versi saat ini: **2.1.0**
 
 ## Struktur
 

@@ -1,5 +1,12 @@
 # Riwayat Perubahan
 
+## 2.1.0 — 22 Okt 2026
+- **Riwayat** kini memuat catatan progres kebiasaan ("Sudah kulakukan"), aktivitas jika–maka, dan Catatanku. Filter baru: *kebiasaan* dan *catatan*. Ketuk entri untuk mengubah waktu atau menghapus (kekuatan kebiasaan dihitung ulang).
+- **Laporan** (CSV / ZIP / Excel): ditambah keterangan jam dan menit (kolom `jam_*`), `hari_kustom`, nama kebiasaan/aktivitas pada log, dan waktu pengisian check-in, tinjauan mingguan, serta eksperimen.
+- Kolom `perilaku_sasaran` dihapus dari semua laporan. Laporan `kontrak_tujuan` dan `riwayat_tujuan` dihapus. Ekspor lama yang memuatnya tetap bisa diimpor (bagian itu dilewati). Versi skema ekspor 6.
+- Menu **Tujuan saya** dihapus. Perilaku sasaran tetap: pornografi, masturbasi, orgasme. **Alasanku** dipindah ke Pengaturan. Layar awal kini 3 langkah. Data lama tidak berubah; kontrak internal tetap ada sehingga fitur lain berjalan.
+- Perbaikan: durasi eksperimen kini ikut diekspor dan diimpor.
+
 ## 2.0.0 — 22 Okt 2026
 Aplikasi diganti nama menjadi **Sinregado** (sebelumnya Pendamping). Isi mencakup semua perubahan 1.1–1.5 (kebiasaan, kerentanan saat ini, rencana jika–maka, skala 1–5, dst.) ditambah perbaikan berikut. Kunci penyimpanan tidak berubah, jadi data lama tetap terbaca di alamat yang sama.
 

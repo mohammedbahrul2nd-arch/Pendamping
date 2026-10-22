@@ -116,9 +116,9 @@ Catatan: beberapa ponsel tidak bisa membagikan banyak CSV sekaligus atau file ZI
 ### Sebagai pengguna: tombol Cek pembaruan
 **Lainnya → Aplikasi & pembaruan → Cek pembaruan.** Bila ada versi baru muncul tombol **Perbarui sekarang**. Aplikasi juga memeriksa sendiri sesekali dan memberi titik kuning di tombol **Lainnya**. Data tidak terhapus.
 
-### Pembaruan dari Pendamping 1.x ke Sinregado 2.0
+### Pembaruan dari Pendamping 1.x atau Sinregado 2.0 ke 2.1
 Tidak perlu membuat repositori baru, dan **jangan mengganti nama repositori** (alamat berubah = data lama tidak terbaca).
-1. Ekstrak `sinregado-v2.0.0.zip`.
+1. Ekstrak `sinregado-v2.1.0.zip`.
 2. Di repositori GitHub-mu, buka folder `docs` → **Add file → Upload files**. Seret **`index.html`, `sw.js`, dan `manifest.webmanifest`** dari folder `docs` hasil ekstrak (timpa yang lama). `icons/` boleh dilewati karena tidak berubah. Opsional: unggah juga `README.md`, `TUTORIAL.md`, `CHANGELOG.md` di akar repositori.
 3. **Commit changes**, tunggu Pages selesai (1–3 menit).
 4. Di HP: **Lainnya → Aplikasi & pembaruan → Cek pembaruan → Perbarui sekarang**. Data tidak terhapus.
@@ -126,7 +126,7 @@ Tidak perlu membuat repositori baru, dan **jangan mengganti nama repositori** (a
 
 ### Sebagai pemilik: merilis versi baru
 1. Di GitHub buka `docs/index.html` → ikon ✏️ **Edit** (atau **Add file → Upload files** untuk menimpa dengan file baru).
-2. Cari `const APP_VERSION='2.0.0'` dan naikkan (mis. `2.0.1`), lalu tambahkan catatan di `RELEASES` tepat di bawahnya.
+2. Cari `const APP_VERSION='2.1.0'` dan naikkan (mis. `2.1.1`), lalu tambahkan catatan di `RELEASES` tepat di bawahnya.
 3. **Commit changes**. Tunggu 1–3 menit sampai Pages selesai (tab **Actions** menampilkan *pages build and deployment* hijau).
 4. Di HP: **Cek pembaruan** → **Perbarui sekarang**.
 
